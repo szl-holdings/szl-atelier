@@ -1,0 +1,63 @@
+name: hf-space
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: hf-space-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Publish static Space SZLHOLDINGS/szl-atelier
+        env:
+          HF_TOKEN: ${{ secrets.HF_ORG_TOKEN || secrets.HF_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HF_TOKEN:-}" ]; then
+            echo "HF_ORG_TOKEN / HF_TOKEN missing — Space not published this run."
+            exit 0
+          fi
+          pip install -q "huggingface_hub>=0.26"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from huggingface_hub import HfApi
+
+          token = os.environ["HF_TOKEN"]
+          api = HfApi(token=token)
+          repo_id = "SZLHOLDINGS/szl-atelier"
+          api.create_repo(
+              repo_id=repo_id,
+              repo_type="space",
+              space_sdk="static",
+              exist_ok=True,
+              private=False,
+          )
+          root = Path(".")
+          ignore = {".git", ".github", ".gitignore"}
+          api.upload_folder(
+              folder_path=str(root),
+              repo_id=repo_id,
+              repo_type="space",
+              allow_patterns=["*.md", "*.html", "*.css", "*.js", "*.json", "*.py", "LICENSE", "kit/*", "cards/*"],
+              ignore_patterns=[".git*", ".github/*"],
+          )
+          print("published", repo_id)
+          PY
