@@ -970,9 +970,9 @@
         },
         {
           "name": "Tiled residual vs naive (atelier)",
-          "value": "~0",
+          "value": "2.22e-16",
           "evidence": "MEASURED",
-          "vs": "Not a FLOP claim vs FlashAttention"
+          "vs": "Not a FLOP claim vs FlashAttention. seed 20260721 S=8 D=4 br=4"
         }
       ],
       "files": [
@@ -1019,6 +1019,12 @@
           "name": "YARQA leak (atelier)",
           "value": "0.00",
           "evidence": "MEASURED"
+        },
+        {
+          "name": "Vendored deps (atelier)",
+          "value": "chain.py \u00b7 doctrine.py",
+          "evidence": "KERNEL",
+          "vs": "SHA-256 silhouette of SHA3-256 metal. All 12 organs import."
         }
       ],
       "files": [
@@ -1153,6 +1159,12 @@
           "name": "Lineage",
           "value": "arxiv:2309.06180 + gate",
           "evidence": "HUB"
+        },
+        {
+          "name": "Witness swap distinct pages",
+          "value": "changed",
+          "evidence": "MEASURED",
+          "vs": "same-physical unchanged; OOB fail-closed"
         }
       ],
       "files": [
@@ -1201,10 +1213,15 @@
           "evidence": "HUB"
         },
         {
-          "name": "WGM zero-axis",
+          "name": "WGM A1\u2013A4 (atelier)",
+          "value": "pass",
+          "evidence": "MEASURED",
+          "vs": "A1\u2013A5 advisory. Conjecture 1 OPEN. proven_trust false"
+        },
+        {
+          "name": "Zero-axis",
           "value": "blocks",
-          "evidence": "KERNEL",
-          "vs": "A1\u2013A5 advisory. Conjecture 1 OPEN"
+          "evidence": "MEASURED"
         }
       ],
       "files": [
@@ -1251,6 +1268,12 @@
           "name": "Status",
           "value": "deprecated surrogate",
           "evidence": "HUB"
+        },
+        {
+          "name": "RMSNorm unit residual (atelier)",
+          "value": "1.05e-5",
+          "evidence": "MEASURED",
+          "vs": "Integrity digest is SHA-256 silhouette, not SHA3-256 metal"
         }
       ],
       "files": [
@@ -1432,6 +1455,18 @@
           "name": "Doctrine v11",
           "value": "749 declarations \u00b7 14 axioms \u00b7 163 sorries",
           "evidence": "SIGNED"
+        },
+        {
+          "name": "Numeric identities (atelier)",
+          "value": "8/8 CHECKED",
+          "evidence": "MEASURED",
+          "vs": "CHECKED \u2260 PROVEN"
+        },
+        {
+          "name": "Locked-8 structural (atelier)",
+          "value": "F1 F4 F7 F11 F12 F18 F19 F22",
+          "evidence": "KERNEL",
+          "vs": "Structural silhouettes, not a Lean kernel run"
         }
       ],
       "files": [
