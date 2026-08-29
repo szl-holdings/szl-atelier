@@ -1,10 +1,10 @@
 const $ = (sel, el = document) => el.querySelector(sel);
 const esc = (s) =>
   String(s ?? "")
-    .replaceAll("&", "&")
-    .replaceAll("<", "<")
-    .replaceAll(">", ">")
-    .replaceAll('"', """);
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 
 
 let DATA = { models: [], estate: [], doctrine: "" };
