@@ -35,11 +35,11 @@ Nobody else ships this combination. That is the point of a one-of-one.
 
 ## Intended use
 
-CI doctrine triage. Retrain from forge.py.
+CI doctrine triage. Load rule_check, never pickle.
 
 ## Limitations
 
-- model.joblib not on Hub at snapshot.
+- Joblib surrogate is quarantined. rule_check is ground truth.
 - Not Nemotron. Not generative.
 
 ## Honesty

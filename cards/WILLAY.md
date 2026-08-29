@@ -40,7 +40,7 @@ Estate voice. Not a general assistant.
 ## Limitations
 
 - Adapter, not merged.
-- Card on Hub is thin — this atelier is the card.
+- Atelier MLP is a doctrine-mouth silhouette, not the 0.5B LoRA.
 
 ## Honesty
 

@@ -606,20 +606,32 @@
           "name": "Adapter",
           "value": "adapter_model.safetensors",
           "evidence": "HUB"
+        },
+        {
+          "name": "Tell/silence holdout",
+          "value": "1.00",
+          "evidence": "SYNTHETIC",
+          "vs": "CPU 5-8-2 seed 20260721. Silhouette of the 0.5B mouth, not a substitute."
+        },
+        {
+          "name": "TELL / SILENCE recall",
+          "value": "1.00 / 1.00",
+          "evidence": "SYNTHETIC"
         }
       ],
       "files": [
         "adapter_model.safetensors",
         "adapter_config.json",
         "chat_template.jinja",
-        "training_args.bin"
+        "training_args.bin",
+        "willay.npz (atelier silhouette)"
       ],
       "limitations": [
         "Adapter, not merged.",
-        "Card on Hub is thin \u2014 this atelier is the card."
+        "Atelier MLP is a doctrine-mouth silhouette, not the 0.5B LoRA."
       ],
       "intended": "Estate voice. Not a general assistant.",
-      "play": "khipu",
+      "play": "tell",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "a11oy_mini/",
@@ -651,6 +663,12 @@
           "name": "Format",
           "value": "GGUF / llama.cpp",
           "evidence": "HUB"
+        },
+        {
+          "name": "Doctrine-mouth silhouette",
+          "value": "shared with WILLAY",
+          "evidence": "SYNTHETIC",
+          "vs": "Same 5-8-2 tell/silence head. Quant is derived."
         }
       ],
       "files": [
@@ -661,7 +679,7 @@
         "Not a11oy-v19-substrate."
       ],
       "intended": "Local doctrine voice. Proposal-only if wired to tools.",
-      "play": "khipu",
+      "play": "tell",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "a11oy_mini/",
@@ -693,10 +711,27 @@
           "name": "Role",
           "value": "courier, not author",
           "evidence": "HUB"
+        },
+        {
+          "name": "CARRY/DROP holdout",
+          "value": "0.9808",
+          "evidence": "MEASURED",
+          "vs": "70/30 mix \u00b7 CPU 5-8-2 seed 20260721"
+        },
+        {
+          "name": "DROP recall",
+          "value": "0.9231",
+          "evidence": "MEASURED"
+        },
+        {
+          "name": "CARRY recall",
+          "value": "1.00",
+          "evidence": "MEASURED"
         }
       ],
       "files": [
-        "safetensors adapter"
+        "safetensors adapter",
+        "chaski.npz (atelier silhouette)"
       ],
       "limitations": [
         "proposal-only",
@@ -735,10 +770,22 @@
           "name": "Mix",
           "value": "50/50 cutting",
           "evidence": "HUB"
+        },
+        {
+          "name": "CARRY/DROP holdout",
+          "value": "0.9808",
+          "evidence": "MEASURED",
+          "vs": "50/50 mix \u00b7 CPU 5-8-2 seed 20260721"
+        },
+        {
+          "name": "CARRY recall",
+          "value": "0.96",
+          "evidence": "MEASURED"
         }
       ],
       "files": [
-        "PEFT safetensors"
+        "PEFT safetensors",
+        "chaski_5050.npz (atelier silhouette)"
       ],
       "limitations": [
         "proposal-only",
@@ -777,10 +824,17 @@
           "name": "Lineage",
           "value": "chaski \u2192 chaski-5050 \u2192 chaski-r2",
           "evidence": "HUB"
+        },
+        {
+          "name": "CARRY/DROP holdout",
+          "value": "1.00",
+          "evidence": "SYNTHETIC",
+          "vs": "35/65 drop-heavy \u00b7 CPU 5-8-2. Mix is the identity."
         }
       ],
       "files": [
-        "PEFT safetensors"
+        "PEFT safetensors",
+        "chaski_r2.npz (atelier silhouette)"
       ],
       "limitations": [
         "proposal-only"
@@ -868,7 +922,7 @@
         },
         {
           "name": "Cross-canal leak (atelier silhouette)",
-          "value": "~0",
+          "value": "0.00",
           "evidence": "MEASURED",
           "vs": "Naive softmax leaks through the partition function"
         }
@@ -963,7 +1017,7 @@
         },
         {
           "name": "YARQA leak (atelier)",
-          "value": "~0",
+          "value": "0.00",
           "evidence": "MEASURED"
         }
       ],
@@ -1056,7 +1110,7 @@
         },
         {
           "name": "Causal future_mass (atelier)",
-          "value": "~0",
+          "value": "0.00",
           "evidence": "MEASURED"
         }
       ],
@@ -1540,25 +1594,41 @@
       "benches": [
         {
           "name": "Joblib on Hub",
-          "value": "UNAVAILABLE as of 2026-08-28",
+          "value": "quarantined \u2014 not the load path",
           "evidence": "HUB"
         },
         {
+          "name": "rule_check R1 unlabeled number",
+          "value": "catches",
+          "evidence": "MEASURED"
+        },
+        {
+          "name": "rule_check R4 \u039b-as-theorem",
+          "value": "catches",
+          "evidence": "MEASURED"
+        },
+        {
+          "name": "honest unknown",
+          "value": "passes",
+          "evidence": "MEASURED"
+        },
+        {
           "name": "Scripts",
-          "value": "forge.py \u00b7 eval.py \u00b7 TRAINING_RECEIPT.json",
+          "value": "szl_nemo/rules.py \u00b7 forge.py \u00b7 eval.py",
           "evidence": "HUB"
         }
       ],
       "files": [
+        "szl_nemo/rules.py",
         "scripts/forge.py",
         "scripts/eval.py",
         "TRAINING_RECEIPT.json"
       ],
       "limitations": [
-        "model.joblib not on Hub at snapshot.",
+        "Joblib surrogate is quarantined. rule_check is ground truth.",
         "Not Nemotron. Not generative."
       ],
-      "intended": "CI doctrine triage. Retrain from forge.py.",
+      "intended": "CI doctrine triage. Load rule_check, never pickle.",
       "play": "sign",
       "github": {
         "repo": "szl-holdings/szl-nemo",
