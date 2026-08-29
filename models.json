@@ -325,7 +325,7 @@
         "Curriculum files not published."
       ],
       "intended": "Controller-bound retrieval planner. Proposal only.",
-      "play": null,
+      "play": "khipu",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "khipu/",
@@ -375,7 +375,7 @@
         "Do not cite GGUF as the signed checkpoint."
       ],
       "intended": "llama.cpp / Ollama / LM Studio. Still proposal-only.",
-      "play": null,
+      "play": "khipu",
       "github": {
         "repo": "szl-holdings/szl-serve",
         "path": "README.md",
@@ -419,7 +419,7 @@
         "Does not magically fix 2/6 until a signed eval says so."
       ],
       "intended": "Stack on the navigator. Measure abstain. Do not ship on hope.",
-      "play": null,
+      "play": "khipu",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "khipu/",
@@ -466,7 +466,7 @@
         "No signed R2 eval receipt in this atelier."
       ],
       "intended": "Continue the abstain-retrain loop. Fail closed until the receipt lands.",
-      "play": null,
+      "play": "khipu",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "khipu/",
@@ -522,7 +522,7 @@
         "Owner eval, not a public leaderboard."
       ],
       "intended": "Alloy controller inbound. Never a naked chatbot.",
-      "play": null,
+      "play": "receipt",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "receiptagent/",
@@ -569,7 +569,7 @@
         "No signed eval in this atelier."
       ],
       "intended": "Nightly receipted Unsloth loop.",
-      "play": null,
+      "play": "receipt",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "frontier/qwen35-receiptagent-v2/",
@@ -619,7 +619,7 @@
         "Card on Hub is thin \u2014 this atelier is the card."
       ],
       "intended": "Estate voice. Not a general assistant.",
-      "play": null,
+      "play": "khipu",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "a11oy_mini/",
@@ -661,7 +661,7 @@
         "Not a11oy-v19-substrate."
       ],
       "intended": "Local doctrine voice. Proposal-only if wired to tools.",
-      "play": null,
+      "play": "khipu",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "a11oy_mini/",
@@ -703,7 +703,7 @@
         "Do not treat as a VLM product card without a signed vision eval."
       ],
       "intended": "Carry signed payloads across organs.",
-      "play": null,
+      "play": "courier",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "chaski/",
@@ -1021,7 +1021,7 @@
         "Not a 1.5B."
       ],
       "intended": "Feature extraction under doctrine tags.",
-      "play": null,
+      "play": "yarqa",
       "github": {
         "repo": "szl-holdings/szl-kernels",
         "path": "README.md",
@@ -1207,7 +1207,7 @@
         "Compatibility surrogate."
       ],
       "intended": "Do not start new work here. Read the stamp.",
-      "play": null,
+      "play": "yuyay",
       "github": {
         "repo": "szl-holdings/szl-khipu",
         "path": "szl_khipu/governed_norm.py",
@@ -1510,7 +1510,7 @@
         "Not legal advice. A documentation gate."
       ],
       "intended": "Block publish when annex fields are missing.",
-      "play": null,
+      "play": "sign",
       "github": {
         "repo": "szl-holdings/szl-blocked",
         "path": "README.md",
@@ -1559,11 +1559,11 @@
         "Not Nemotron. Not generative."
       ],
       "intended": "CI doctrine triage. Retrain from forge.py.",
-      "play": null,
+      "play": "sign",
       "github": {
         "repo": "szl-holdings/szl-nemo",
-        "path": "README.md",
-        "module": "szl_nemo"
+        "path": "szl_nemo/rules.py",
+        "module": "szl_nemo.rules"
       }
     },
     {
@@ -1600,7 +1600,7 @@
         "Not a model."
       ],
       "intended": "Deploy a11oy under UDS. Do not load in transformers.",
-      "play": null,
+      "play": "seat",
       "github": {
         "repo": "szl-holdings/a11oy",
         "path": "README.md",
@@ -1641,7 +1641,7 @@
         "Not a checkpoint. Wire to GitHub kit in this atelier."
       ],
       "intended": "Canonical train entrypoint.",
-      "play": null,
+      "play": "sign",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "README.md",
@@ -1682,7 +1682,7 @@
         "No weights. No train. No bench."
       ],
       "intended": "Hold the name. Fill later with a receipt, or delete.",
-      "play": null,
+      "play": "seat",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "qantu/",
@@ -1723,7 +1723,7 @@
         "No weights."
       ],
       "intended": "Killinchu lineage placeholder.",
-      "play": null,
+      "play": "seat",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "waman/",
@@ -1764,7 +1764,7 @@
         "No weights."
       ],
       "intended": "Hold the crossing. Do not load.",
-      "play": null,
+      "play": "seat",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "chakana/",
@@ -1805,7 +1805,7 @@
         "No weights."
       ],
       "intended": "Name the encounter. Wait for the receipted design.",
-      "play": null,
+      "play": "seat",
       "github": {
         "repo": "szl-holdings/szl-forge",
         "path": "tinku/",
@@ -1846,7 +1846,7 @@
         "Not a model."
       ],
       "intended": "Hold the id.",
-      "play": null,
+      "play": "seat",
       "github": {
         "repo": "szl-holdings/.github",
         "path": "profile/README.md",
@@ -1860,9 +1860,9 @@
       "name": "NEXUS MK-II",
       "kind": "github",
       "href": "https://github.com/szl-holdings/nexus",
-      "oneLiner": "Holographic analog computer. Lorenz Frontier, Ouroboros, five organs, phosphor CRT.",
-      "cut": "Leaders ship chat UIs. We shipped a local-first holographic analog computer that never pretends to be a model.",
-      "when": "landed today",
+      "oneLiner": "Holographic analog computing workstation. Phosphor CRT, oscilloscope, tape echo, patchbay, sequencer, voice.",
+      "cut": "Leaders ship chat UIs. We shipped a local-first analog desk that never pretends to be a model.",
+      "when": "live",
       "evidence": "GitHub \u00b7 TypeScript \u00b7 Apache-2.0"
     },
     {
@@ -1872,7 +1872,7 @@
       "href": "https://github.com/szl-holdings/szl-organ-integrity",
       "oneLiner": "Five-organ fail-closed integrity kernel. Replay it. SHA-256. Energy UNAVAILABLE.",
       "cut": "Integrity is usually a dashboard. Ours is a kernel you can replay, with joules honestly missing.",
-      "when": "landed today",
+      "when": "live",
       "evidence": "GitHub \u00b7 \u039b = Conjecture 1"
     },
     {
@@ -1882,7 +1882,7 @@
       "href": "https://github.com/szl-holdings/anatomy",
       "oneLiner": "3D navigable organ substrate: reasoning cortex, trust gate, receipt bus, consensus, egress.",
       "cut": "Org charts are slides. Anatomy is a walkable body with 8 proven formulas and an open conjecture.",
-      "when": "updated today",
+      "when": "live",
       "evidence": "GitHub + Hub Space"
     },
     {
@@ -1892,7 +1892,7 @@
       "href": "https://huggingface.co/datasets/SZLHOLDINGS/killinchu-osint-corpus",
       "oneLiner": "36.2k-row OSINT corpus for the eye. A box without a row here is not an engagement.",
       "cut": "CUAS datasets usually score mAP. This one scores whether the track is receipted.",
-      "when": "updated today",
+      "when": "live",
       "evidence": "Hub dataset \u00b7 36.2k rows"
     },
     {
@@ -1902,7 +1902,7 @@
       "href": "https://huggingface.co/datasets/SZLHOLDINGS/szl-lake",
       "oneLiner": "2.44k-row lake. The estate's public memory, typed by evidence class.",
       "cut": "A lake that will not mix MEASURED with SYNTHETIC. Mixing is the sin.",
-      "when": "updated today",
+      "when": "live",
       "evidence": "Hub dataset \u00b7 2.44k rows"
     },
     {
@@ -1912,7 +1912,7 @@
       "href": "https://huggingface.co/datasets/SZLHOLDINGS/why-we-lead",
       "oneLiner": "226 rows of the cut: take, leave, SZL. The leaders page, as data.",
       "cut": "Strategy decks rot. A dataset of why we lead can be hashed.",
-      "when": "updated today",
+      "when": "live",
       "evidence": "Hub dataset \u00b7 226 rows"
     },
     {
@@ -1922,17 +1922,27 @@
       "href": "https://huggingface.co/datasets/SZLHOLDINGS/receipted-unsloth",
       "oneLiner": "The house loop as a dataset. Dataset SHA is the first line of the training receipt.",
       "cut": "Unsloth trains fast. This set makes the train reproducible without trusting the log.",
-      "when": "updated today",
+      "when": "live",
       "evidence": "Hub dataset"
     },
     {
+      "slug": "atelier-space",
+      "name": "szl-atelier Space",
+      "kind": "space",
+      "href": "https://huggingface.co/spaces/SZLHOLDINGS/szl-atelier",
+      "oneLiner": "Walk all 40 Hub models. Unique cuts. Kernel playgrounds in the browser.",
+      "cut": "Leaders ship one demo Space. We shipped the whole catalog as a walk you can fail-close.",
+      "when": "live now",
+      "evidence": "Hub Space RUNNING \u00b7 a11oy.net/atelier \u00b7 a-11-oy.com/atelier"
+    },
+    {
       "slug": "nexus-space",
-      "name": "nexus Space",
+      "name": "NEXUS Space",
       "kind": "space",
       "href": "https://huggingface.co/spaces/SZLHOLDINGS/nexus",
-      "oneLiner": "Holographic analog computer, running. Not a chatbot.",
+      "oneLiner": "The analog desk, running. Not a chatbot.",
       "cut": "A Space that is an instrument, not a demo of a 70B.",
-      "when": "updated today",
+      "when": "live",
       "evidence": "Hub Space"
     },
     {
@@ -1942,7 +1952,7 @@
       "href": "https://huggingface.co/spaces/SZLHOLDINGS/anatomy",
       "oneLiner": "Walk the five organs in a browser.",
       "cut": "The body is the product. Weights are a guest.",
-      "when": "updated today",
+      "when": "live",
       "evidence": "Hub Space"
     }
   ]

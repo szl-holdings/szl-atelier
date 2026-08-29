@@ -1,6 +1,6 @@
 # SZL Atelier kit
 
-GitHub-aligned Python for the SZLHOLDINGS Hugging Face estate. Forty Hub model ids. Canonical source: [szl-holdings/szl-khipu](https://github.com/szl-holdings/szl-khipu) and [szl-holdings/szl-forge](https://github.com/szl-holdings/szl-forge).
+GitHub-aligned Python for the SZLHOLDINGS Hugging Face estate. Forty Hub model ids. Canonical source: [szl-holdings/szl-khipu](https://github.com/szl-holdings/szl-khipu), [szl-holdings/szl-forge](https://github.com/szl-holdings/szl-forge), [szl-holdings/szl-nemo](https://github.com/szl-holdings/szl-nemo).
 
 ## Train
 
@@ -24,8 +24,30 @@ GitHub-aligned Python for the SZLHOLDINGS Hugging Face estate. Forty Hub model i
 - `kernel_smoke.py` — fail-closed assertions.
 - `forge_nemo.py` — doctrine R1–R5 triage. NOT NVIDIA NeMo. NOT Nemotron.
 
+## `kernels/` — fail-closed organs (SOFTWARE, not SGD)
+
+Vendored from GitHub. These are the load path. Not Hub joblib. Not a 1.5B retrain.
+
+| file | organ | cut |
+| --- | --- | --- |
+| `yarqa.py` | YARQA-ATTN | canal-local softmax; leak is a hard zero, not a mask |
+| `maskmod.py` | MASKMOD | causal future_mass ≈ 0 |
+| `receipt_attn.py` | receipt attention | citation mass gated by a signed receipt |
+| `ouroboros.py` | ouroboros | loop-tax on self-referential decode |
+| `block_kv.py` | block KV | deny-closed cache: blocked tokens never enter K/V |
+| `lambda_gate.py` | λ-gate | 1-D silhouette; Λ uniqueness is Conjecture 1 OPEN |
+| `governed_norm.py` | WGM | fail-closed residual; no silent pass |
+| `formulas.py` | formulas | 749/14/163 identities as code, not prose |
+| `blocked.py` | blocked | HARD_DENY > λ veto > HARD_ALLOW; output is None on BLOCK |
+| `nemo_rules.py` | szl-nemo | `rule_check()` R1–R5. Stdlib only. Joblib is quarantined. |
+
+```python
+from kernels.nemo_rules import rule_check
+ok, violated = rule_check(prompt, answer)
+```
+
 ## Cards
 
-`hf/*.md` — one polished Hub card per model id. Copy onto the Hub README. Atelier "copy Hub card" produces the same text live.
+`hf/*.md` / Space `cards/*.md` — one polished Hub card per model id.
 
 Doctrine v11 LOCKED · 749/14/163 · Λ uniqueness Conjecture 1 OPEN. Apache-2.0. Sign receipts before you call a merge a model.
