@@ -344,6 +344,20 @@ function softmax(z) {
   return e.map((v) => v / s);
 }
 
+function mlpForward(x, w1, b1, w2, b2) {
+  const hidden = b1.map((bias, j) => {
+    let s = bias;
+    for (let i = 0; i < x.length; i++) s += x[i] * w1[i][j];
+    return Math.tanh(s);
+  });
+  const logits = b2.map((bias, k) => {
+    let s = bias;
+    for (let j = 0; j < hidden.length; j++) s += hidden[j] * w2[j][k];
+    return s;
+  });
+  return softmax(logits);
+}
+
 function wgm(x) {
   if (x.some((v) => v <= 0 || !Number.isFinite(v))) return 0;
   const w = 1 / x.length;
@@ -471,17 +485,49 @@ function mountPlay(root, m) {
     run();
     return;
   }
-  if (kind === "courier") {
-    root.innerHTML = `<div class="panel"><h3 class="kicker">Chaski carries. It does not author.</h3>
-      <textarea id="p">signed dispatch: knot the run</textarea>
-      <label class="row" style="margin-top:0.75rem;align-items:center;gap:0.5rem"><input type="checkbox" id="s"> payload signed</label>
-      <div id="g"></div></div>`;
+  if (kind === "tell") {
+    const labels = ["inflate Lean", "launder GGUF", "Λ as theorem", "unlabeled %", "receipt"];
+    const init = [0.12, 0.08, 0.05, 0.1, 0.88];
+    root.innerHTML = `<div class="panel"><h3 class="kicker">WILLAY tells only what doctrine allows.</h3>
+      <div class="grid two">${labels.map((l, i) => slider("t" + i, l, init[i])).join("")}</div><div id="g"></div></div>`;
     const run = () => {
-      const signed = $("#s").checked;
-      $("#p").readOnly = signed;
-      gate($("#g"), signed ? "CARRY" : "ABSTAIN", signed, signed ? "courier may move this envelope" : "unsigned — will not invent a dispatch");
+      const x = labels.map((_, i) => {
+        const v = Number($("#t" + i).value);
+        $("#t" + i + "-v").textContent = v.toFixed(2);
+        return v;
+      });
+      const pack = NANO?.willay;
+      const p = pack ? mlpForward(x, pack.w1, pack.b1, pack.w2, pack.b2) : [0.5, 0.5];
+      const tell = p[1] > p[0];
+      const acc = pack?.holdoutAcc ?? 1;
+      gate($("#g"), tell ? "TELL" : "SILENCE", tell, `P(TELL)=${p[1].toFixed(3)} · holdout ${acc.toFixed(4)} SYNTHETIC · not a 0.5B substitute`);
     };
-    $("#s").onchange = run;
+    labels.forEach((_, i) => ($("#t" + i).oninput = run));
+    run();
+    return;
+  }
+  if (kind === "courier") {
+    const labels = ["signed", "payload", "author verb", "vision", "handle"];
+    const init = [0.82, 0.8, 0.12, 0.4, 0.75];
+    const key = m.slug === "chaski-5050" ? "chaski5050" : m.slug === "chaski-r2" ? "chaskiR2" : "chaski";
+    const pack = NANO?.[key];
+    const mix = pack?.mix ?? "courier";
+    root.innerHTML = `<div class="panel"><h3 class="kicker">Chaski carries. It does not author. Mix is the identity.</h3>
+      <p class="mono muted">${esc(mix)} · ${esc(m.slug)}</p>
+      <div class="grid two">${labels.map((l, i) => slider("c" + i, l, init[i])).join("")}</div><div id="g"></div></div>`;
+    const run = () => {
+      const x = labels.map((_, i) => {
+        const v = Number($("#c" + i).value);
+        $("#c" + i + "-v").textContent = v.toFixed(2);
+        return v;
+      });
+      const p = pack ? mlpForward(x, pack.w1, pack.b1, pack.w2, pack.b2) : [x[0] < 0.5 ? 0.8 : 0.2, x[0] < 0.5 ? 0.2 : 0.8];
+      const carry = p[1] > p[0];
+      const acc = pack?.holdoutAcc;
+      const ev = acc === 1 ? "SYNTHETIC" : "MEASURED";
+      gate($("#g"), carry ? "CARRY" : "DROP", carry, `P(CARRY)=${p[1].toFixed(3)} · holdout ${acc != null ? acc.toFixed(4) : "—"} ${ev} · authorship never the courier`);
+    };
+    labels.forEach((_, i) => ($("#c" + i).oninput = run));
     run();
     return;
   }

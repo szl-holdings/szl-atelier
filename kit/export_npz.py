@@ -73,6 +73,27 @@ def main() -> None:
         falseOpenRate=np.float64(g["falseOpenRate"]),
         seed=seed,
     )
+
+    def mlp(name: str, key: str) -> None:
+        p = src[key]
+        np.savez_compressed(
+            OUT / name,
+            w1=arr(p["w1"]),
+            b1=arr(p["b1"]),
+            w2=arr(p["w2"]),
+            b2=arr(p["b2"]),
+            holdoutAcc=np.float64(p["holdoutAcc"]),
+            seed=seed,
+        )
+
+    if "willay" in src:
+        mlp("willay.npz", "willay")
+    if "chaski" in src:
+        mlp("chaski.npz", "chaski")
+    if "chaski5050" in src:
+        mlp("chaski_5050.npz", "chaski5050")
+    if "chaskiR2" in src:
+        mlp("chaski_r2.npz", "chaskiR2")
     print("wrote", sorted(p.name for p in OUT.glob("*.npz")))
 
 
