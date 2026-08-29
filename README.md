@@ -6,7 +6,8 @@ colorTo: green
 sdk: static
 pinned: true
 license: apache-2.0
-short_description: Walk all 40 SZLHOLDINGS Hub models. Unique cuts. Fail closed.
+short_description: Walk 40 SZLHOLDINGS models. Unique cuts. Fail closed.
+app_file: index.html
 tags:
   - governed-ai
   - szl-holdings
@@ -22,10 +23,14 @@ Walk every Hugging Face model id under [SZLHOLDINGS](https://huggingface.co/SZLH
 
 YAML `emoji` is Hub metadata, not product chrome. System fonts. No Google Fonts. Gold is OPEN. Never green-as-proven. Never a fabricated joule.
 
-**Source.** [szl-holdings/szl-atelier](https://github.com/szl-holdings/szl-atelier)  
-**Kernels.** [szl-holdings/szl-khipu](https://github.com/szl-holdings/szl-khipu)  
-**Forge.** [szl-holdings/szl-forge](https://github.com/szl-holdings/szl-forge)  
-**Sibling hologram.** [SZLHOLDINGS/szl-khipu](https://huggingface.co/spaces/SZLHOLDINGS/szl-khipu) (Gradio kernels — this Space is the forty-model walk)
+**This Space is live.** Direct: [szlholdings-szl-atelier.static.hf.space](https://szlholdings-szl-atelier.static.hf.space)
+
+| Origin | Role |
+|---|---|
+| [szl-holdings/szl-atelier](https://github.com/szl-holdings/szl-atelier) | Source of this Space |
+| [a11oy.net/atelier](https://a11oy.net/atelier/) | Proof-registry copy |
+| [a-11-oy.com/atelier](https://a-11-oy.com/atelier) | Product surface |
+| [SZLHOLDINGS/szl-khipu](https://huggingface.co/spaces/SZLHOLDINGS/szl-khipu) | Sibling Gradio hologram |
 
 ## The cut
 
@@ -44,7 +49,3 @@ Anthropic taught refuse. NVIDIA taught kernels and joules. Unsloth taught cheap 
 | GGUF | derived, never the signed object |
 
 Doctrine v11 LOCKED · 749/14/163 · locked-proven 8. Apache-2.0. Copyright 2026 SZL Holdings · Stephen P. Lutar Jr. · ORCID [0009-0001-0110-4173](https://orcid.org/0009-0001-0110-4173).
-
----
-
-Public source of the SZL Atelier walk. Hugging Face Space (static): [SZLHOLDINGS/szl-atelier](https://huggingface.co/spaces/SZLHOLDINGS/szl-atelier). Sibling Gradio hologram: [SZLHOLDINGS/szl-khipu](https://huggingface.co/spaces/SZLHOLDINGS/szl-khipu).
