@@ -108,7 +108,7 @@ jobs:
           api = HfApi(token=token)
           ignore = [".git*", "tests/*", ".venv/*", "__pycache__/*", ".github/*"]
 
-          create_repo("SZLHOLDINGS/counsel", repo_type="space", space_sdk="gradio", exist_ok=True, token=token)
+          create_repo("SZLHOLDINGS/counsel", repo_type="space", space_sdk="docker", exist_ok=True, token=token)
           api.upload_folder(folder_path="counsel", repo_id="SZLHOLDINGS/counsel", repo_type="space", ignore_patterns=ignore)
           print("published SZLHOLDINGS/counsel")
 
