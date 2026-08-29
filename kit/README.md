@@ -5,7 +5,10 @@ GitHub-aligned Python for the SZLHOLDINGS Hugging Face estate. Forty Hub model i
 ## Train
 
 - `train_nano.py` — NumPy silhouettes (moons, mini-embed, tiny-khipu, 4-way gate, lambda). MEASURED.
-- `receipted_unsloth.py` — Unsloth QLoRA with a training receipt (dataset SHA, seed, loss) before merge.
+- `train_cohort.py` — CPU NumPy silhouettes for WILLAY (tell/silence) and the chaski courier lineage. Seed 20260721. `--kernels-only` re-measures organs without refitting MLPs. Does **not** GPU-retrain 0.5B / 0.8B / 1.5B.
+- `receipted_unsloth.py` — Unsloth QLoRA with a training receipt (dataset SHA, seed, loss) before merge. Owner-metal path for the Hub adapters.
+
+Holdout 1.00 is SYNTHETIC (separable by design). Non-perfect holdout is MEASURED.
 
 ## Infer
 
@@ -30,14 +33,16 @@ Vendored from GitHub. These are the load path. Not Hub joblib. Not a 1.5B retrai
 
 | file | organ | cut |
 | --- | --- | --- |
+| `chain.py` | receipt chain | SHA-256 silhouette of SHA3-256 metal. Labeled, not faked. |
+| `doctrine.py` | frozen v11 | 749/14/163. Conjecture 1 OPEN. proven_trust false. |
 | `yarqa.py` | YARQA-ATTN | canal-local softmax; leak is a hard zero, not a mask |
 | `maskmod.py` | MASKMOD | causal future_mass ≈ 0 |
-| `receipt_attn.py` | receipt attention | citation mass gated by a signed receipt |
+| `receipt_attn.py` | receipt attention | tiled residual vs naive is the honesty metric |
 | `ouroboros.py` | ouroboros | loop-tax on self-referential decode |
-| `block_kv.py` | block KV | deny-closed cache: blocked tokens never enter K/V |
-| `lambda_gate.py` | λ-gate | 1-D silhouette; Λ uniqueness is Conjecture 1 OPEN |
-| `governed_norm.py` | WGM | fail-closed residual; no silent pass |
-| `formulas.py` | formulas | 749/14/163 identities as code, not prose |
+| `block_kv.py` | block KV | paged gather + BlockWitness on swap |
+| `lambda_gate.py` | λ-gate | WGM fail-closed; Λ uniqueness is Conjecture 1 OPEN |
+| `governed_norm.py` | RMSNorm | unit residual + integrity digest |
+| `formulas.py` | formulas | numeric CHECKED, locked-8 STRUCTURAL. CHECKED ≠ PROVEN |
 | `blocked.py` | blocked | HARD_DENY > λ veto > HARD_ALLOW; output is None on BLOCK |
 | `nemo_rules.py` | szl-nemo | `rule_check()` R1–R5. Stdlib only. Joblib is quarantined. |
 

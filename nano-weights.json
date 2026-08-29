@@ -3694,6 +3694,40 @@
       3,
       6,
       8
-    ]
-  }
+    ],
+    "receiptAttnResidual": 2.220446049250313e-16,
+    "blockKvWitnessChanged": true,
+    "blockKvSamePhysicalUnchanged": true,
+    "blockKvFailClosed": true,
+    "formulasNumericOk": true,
+    "formulasNumericN": 8,
+    "formulasLocked8Ok": true,
+    "formulasLocked8N": 8,
+    "formulasLockedIds": [
+      "F1",
+      "F4",
+      "F7",
+      "F11",
+      "F12",
+      "F18",
+      "F19",
+      "F22"
+    ],
+    "formulasDigest": "929aff6e4dc11e4054a3c6777cb90d1d7ce93c38c98465ff58f78dcf2830442e",
+    "governedNormUnitRms": 1.052258339473422e-05,
+    "lambdaA1": true,
+    "lambdaA2": true,
+    "lambdaA3": true,
+    "lambdaA4": true,
+    "lambdaZeroAxis": 0.0,
+    "provenTrust": false,
+    "advisory": true,
+    "lockedDeclarations": 749,
+    "uniqueAxioms": 14,
+    "trackedSorries": 163,
+    "digestAlgNote": "This package / browser silhouette uses SHA-256. Production metal kernels use SHA3-256. Same receipt shape, different digest alg \u2014 labeled, not faked.",
+    "chainVerify": true,
+    "chainDepth": 2
+  },
+  "kernelMeasuredAt": "2026-08-29T16:51:49.774052+00:00"
 }
