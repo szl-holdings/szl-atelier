@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "release_id": "szl-atelier-docker-api-v1",
+  "manifest_type": "SOURCE_BOUND_RUNTIME_CONTRACT",
+  "lineage": {
+    "github_parent_revision": "b33f213e49356f15acd602f8fbce288bac9a7e00",
+    "huggingface_frontier_parent_revision": "87fd8312f86c4eae628f7cf63d157bf4a3d65b98",
+    "huggingface_frontier_archive_tag": "archive/hf-static-frontier-2026-08-30"
+  },
+  "catalog": {
+    "expected_records": 40,
+    "source": "models.json"
+  },
+  "runtime_contract": {
+    "language": "Python 3.12",
+    "framework": "FastAPI",
+    "port": 7860,
+    "health": "/healthz",
+    "readiness": "/readyz",
+    "build_info": "/api/build-info",
+    "receipt_verification": "/api/frontier/verify"
+  },
+  "claim_boundaries": {
+    "browser_frontier": "MEASURED_LOCAL",
+    "python_backend": "RUNTIME_WITNESS_REQUIRED",
+    "receipt_persistence": "NOT_CONFIGURED",
+    "cryptographic_signature": "NOT_PROVIDED",
+    "provider_repository_head": "MUST_BE_OBSERVED_EXTERNALLY",
+    "served_git_revision": "UNAVAILABLE_UNLESS_EXPOSED_BY_PROVIDER_ENVIRONMENT"
+  }
+}
+

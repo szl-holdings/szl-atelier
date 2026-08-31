@@ -29,7 +29,7 @@ A Hub id you can pin in a receipt: 'trained by this repo at this SHA'.
 |---|---|
 | Anthropic | No public train scripts for Claude. |
 | NVIDIA | NeMo recipes. |
-| Unsloth | The scripts wrap Unsloth. Cut is the receipt bind. |
+| Unsloth | The scripts wrap Unsloth v2 profiles. Cut is unique knobs per organ, bound in the receipt. |
 
 Nobody else ships this combination. That is the point of a one-of-one.
 

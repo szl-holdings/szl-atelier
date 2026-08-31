@@ -29,7 +29,7 @@ A courier that cannot invent the dispatch. The oldest job in the Andes, as a LoR
 |---|---|
 | Anthropic | Claude vision, minus the right to conclude. |
 | NVIDIA | NVLM / NeMo multimodal, minus the right to act. |
-| Unsloth | Adapter on Qwen3.5-0.8B. |
+| Unsloth | Attention-only LoRA on Qwen3.5-0.8B. MLP frozen so the courier cannot author. |
 
 Nobody else ships this combination. That is the point of a one-of-one.
 

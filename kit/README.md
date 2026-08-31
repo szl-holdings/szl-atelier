@@ -6,7 +6,7 @@ GitHub-aligned Python for the SZLHOLDINGS Hugging Face estate. Forty Hub model i
 
 - `train_nano.py` — NumPy silhouettes (moons, mini-embed, tiny-khipu, 4-way gate, lambda). MEASURED.
 - `train_cohort.py` — CPU NumPy silhouettes for WILLAY (tell/silence) and the chaski courier lineage. Seed 20260721. `--kernels-only` re-measures organs without refitting MLPs. Does **not** GPU-retrain 0.5B / 0.8B / 1.5B.
-- `receipted_unsloth.py` — Unsloth QLoRA with a training receipt (dataset SHA, seed, loss) before merge. Owner-metal path for the Hub adapters.
+- `receipted_unsloth.py` — Unsloth QLoRA, unique profile per organ. TAKE fused kernels / 4bit / adamw_8bit / rsLoRA. LEAVE packing=True, LoftQ, GGUF-as-model. CUT: every knob in the receipt, house seed 20260721. `--receipt-only` mints the recipe without GPU. `--list` shows the silhouettes. Owner-metal path for Hub adapters. Does **not** run here.
 
 Holdout 1.00 is SYNTHETIC (separable by design). Non-perfect holdout is MEASURED.
 

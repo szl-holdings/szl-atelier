@@ -1,122 +1,73 @@
 name: hf-space
 
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: hf-space-${{ github.repository }}
+  group: hf-space-main
   cancel-in-progress: false
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
-        with:
-          python-version: "3.12"
-      - name: Publish static Space SZLHOLDINGS/szl-atelier
-        env:
-          HF_TOKEN: ${{ secrets.HF_ORG_TOKEN || secrets.HF_TOKEN }}
-        run: |
-          set -euo pipefail
-          if [ -z "${HF_TOKEN:-}" ]; then
-            echo "HF_ORG_TOKEN / HF_TOKEN missing — Space not published this run."
-            exit 0
-          fi
-          pip install -q "huggingface_hub>=0.26"
-          python - <<'PY'
-          import os
-          from pathlib import Path
-          from huggingface_hub import HfApi
-
-          token = os.environ["HF_TOKEN"]
-          api = HfApi(token=token)
-          repo_id = "SZLHOLDINGS/szl-atelier"
-          api.create_repo(
-              repo_id=repo_id,
-              repo_type="space",
-              space_sdk="static",
-              exist_ok=True,
-              private=False,
-          )
-          root = Path(".")
-          api.upload_folder(
-              folder_path=str(root),
-              repo_id=repo_id,
-              repo_type="space",
-              allow_patterns=["*.md", "*.html", "*.css", "*.js", "*.json", "*.py", "LICENSE", "kit/*", "cards/*"],
-              ignore_patterns=[".git*", ".github/*"],
-          )
-          print("published", repo_id)
-          PY
-
-  # Sibling GitHub sources stay canonical. This job exists because szl-khipu,
-  # counsel, ayllu, and szl-experiments do not have the org token bound yet.
-  mirror-siblings:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      HF_TOKEN: ${{ secrets.HF_ORG_TOKEN || secrets.HF_TOKEN }}
+      PUBLISH_SHA: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          repository: szl-holdings/szl-khipu
-          path: khipu
+          ref: ${{ env.PUBLISH_SHA }}
+          fetch-depth: 0
+          lfs: true
           persist-credentials: false
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: szl-holdings/counsel
-          path: counsel
-          persist-credentials: false
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: szl-holdings/ayllu
-          path: ayllu
-          persist-credentials: false
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: szl-holdings/szl-experiments
-          path: experiments
-          persist-credentials: false
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.12"
-      - name: Mirror siblings onto SZLHOLDINGS
-        env:
-          HF_TOKEN: ${{ secrets.HF_ORG_TOKEN || secrets.HF_TOKEN }}
-          HF_ORG: SZLHOLDINGS
+      - name: Mirror exact tested commit to Hugging Face
+        shell: bash
         run: |
           set -euo pipefail
           if [ -z "${HF_TOKEN:-}" ]; then
-            echo "HF_ORG_TOKEN / HF_TOKEN missing — sibling Hub mirror skipped. GitHub remains source."
+            echo "::error::HF_ORG_TOKEN or HF_TOKEN is required; nothing was published."
+            exit 1
+          fi
+
+          askpass="${RUNNER_TEMP}/hf-askpass.sh"
+          cat > "${askpass}" <<'EOF'
+          #!/usr/bin/env bash
+          case "$1" in
+            *Username*) printf '%s\n' 'oauth2' ;;
+            *) printf '%s\n' "${HF_TOKEN}" ;;
+          esac
+          EOF
+          chmod 700 "${askpass}"
+          export GIT_ASKPASS="${askpass}"
+          export GIT_TERMINAL_PROMPT=0
+
+          git remote add huggingface https://huggingface.co/spaces/SZLHOLDINGS/szl-atelier
+          remote_sha="$(git ls-remote huggingface refs/heads/main | awk '{print $1}')"
+          if [ "${remote_sha}" = "${PUBLISH_SHA}" ]; then
+            echo "Hugging Face already serves repository head ${PUBLISH_SHA}."
             exit 0
           fi
-          pip install -q "huggingface_hub>=0.26"
-          python khipu/scripts/publish_hf.py
-          python - <<'PY'
-          import os
-          from huggingface_hub import HfApi, create_repo
+          if [ -n "${remote_sha}" ] && ! git merge-base --is-ancestor "${remote_sha}" "${PUBLISH_SHA}"; then
+            echo "::error::Hugging Face main diverged at ${remote_sha}; refusing a non-fast-forward publish."
+            exit 1
+          fi
 
-          token = os.environ["HF_TOKEN"]
-          api = HfApi(token=token)
-          ignore = [".git*", "tests/*", ".venv/*", "__pycache__/*", ".github/*"]
-
-          create_repo("SZLHOLDINGS/counsel", repo_type="space", space_sdk="docker", exist_ok=True, token=token)
-          api.upload_folder(folder_path="counsel", repo_id="SZLHOLDINGS/counsel", repo_type="space", ignore_patterns=ignore)
-          print("published SZLHOLDINGS/counsel")
-
-          create_repo("SZLHOLDINGS/ayllu", repo_type="space", space_sdk="docker", exist_ok=True, token=token)
-          api.upload_folder(folder_path="ayllu", repo_id="SZLHOLDINGS/ayllu", repo_type="space", ignore_patterns=ignore)
-          print("published SZLHOLDINGS/ayllu")
-
-          create_repo("SZLHOLDINGS/szl-experiments", repo_type="space", space_sdk="docker", exist_ok=True, token=token)
-          api.upload_folder(folder_path="experiments", repo_id="SZLHOLDINGS/szl-experiments", repo_type="space", ignore_patterns=ignore)
-          print("published SZLHOLDINGS/szl-experiments")
-          PY
+          git lfs push huggingface "${PUBLISH_SHA}"
+          git push huggingface "${PUBLISH_SHA}:refs/heads/main"
+          observed="$(git ls-remote huggingface refs/heads/main | awk '{print $1}')"
+          if [ "${observed}" != "${PUBLISH_SHA}" ]; then
+            echo "::error::Expected ${PUBLISH_SHA}, observed ${observed:-UNAVAILABLE}."
+            exit 1
+          fi
+          echo "Published and observed exact commit ${PUBLISH_SHA}."

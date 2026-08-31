@@ -29,7 +29,7 @@ A receipt agent you can retrain between coffee and lunch, with the same doctrine
 |---|---|
 | Anthropic | Same constitution, smaller body. |
 | NVIDIA | Small NIM-shaped thing, without NIM. |
-| Unsloth | This is the Unsloth poster: FastLanguageModel, Qwen3.5-0.8B, PEFT. |
+| Unsloth | Poster organ: FastLanguageModel + adamw_8bit + receipted knobs on Qwen3.5-0.8B. |
 
 Nobody else ships this combination. That is the point of a one-of-one.
 
