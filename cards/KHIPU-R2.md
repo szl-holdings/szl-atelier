@@ -29,7 +29,7 @@ A public retrain whose only job is to improve one metric: honest abstain under a
 |---|---|
 | Anthropic | Red-team → constitution update. We red-team → adapter. |
 | NVIDIA | Recipe re-run with a new seed and a signed delta. |
-| Unsloth | Same FastLanguageModel loop, new curriculum, new receipt. |
+| Unsloth | khipu-r2 profile: packing=false, lr=1e-4, new receipt. Do not overwrite R1. |
 
 Nobody else ships this combination. That is the point of a one-of-one.
 

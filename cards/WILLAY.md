@@ -29,7 +29,7 @@ A tiny speaker that refuses marketing. Trained on the honesty set, not a brand b
 |---|---|
 | Anthropic | Constitutional self-description. |
 | NVIDIA | System-prompt as weights. |
-| Unsloth | TRL SFT on Qwen2.5-0.5B-Instruct via HF Jobs. |
+| Unsloth | rsLoRA rank-8, attn+mlp, packing=false, max_seq=1024. Doctrine mouth. Loss-comparable SFT. |
 
 Nobody else ships this combination. That is the point of a one-of-one.
 

@@ -29,7 +29,7 @@ Retrieval that cannot hallucinate a citation. Grounding is structural.
 |---|---|
 | Anthropic | Claude abstains in prose. Khipu abstains in a schema with citedNodeIds: []. |
 | NVIDIA | NeMo retriever sees passages. Khipu sees handles only. |
-| Unsloth | QLoRA SFT, response-only loss, abstain oversampling. House loop. |
+| Unsloth | QLoRA SFT, 7 modules, packing=auto, adamw_8bit, receipted. Not retrained here. |
 
 Nobody else ships this combination. That is the point of a one-of-one.
 

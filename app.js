@@ -1,3 +1,5 @@
+import { bindFrontier, renderFrontier } from "./frontier.js";
+
 const $ = (sel, el = document) => el.querySelector(sel);
 const esc = (s) =>
   String(s ?? "")
@@ -6,6 +8,38 @@ const esc = (s) =>
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
 
+
+async function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    let timeoutId;
+    try {
+      await Promise.race([
+        navigator.clipboard.writeText(text),
+        new Promise((_, reject) => {
+          timeoutId = setTimeout(() => reject(new Error("Clipboard timed out")), 1500);
+        }),
+      ]);
+      return;
+    } catch (_err) {
+      // Fall through to the synchronous copy path while the click is active.
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  }
+
+  const field = document.createElement("textarea");
+  field.value = text;
+  field.setAttribute("readonly", "");
+  field.style.position = "fixed";
+  field.style.opacity = "0";
+  field.style.pointerEvents = "none";
+  document.body.appendChild(field);
+  field.focus();
+  field.select();
+  const copied = document.execCommand("copy");
+  field.remove();
+  if (!copied) throw new Error("Clipboard copy unavailable");
+}
 
 let DATA = { models: [], estate: [], doctrine: "" };
 let NANO = null;
@@ -36,7 +70,23 @@ const LEADERS = [
   },
 ];
 
+function failClosed(message) {
+  const app = $("#app");
+  if (app) {
+    app.innerHTML = `<section class="panel"><h1 class="hero">Startup blocked</h1><p class="lede">${esc(message)}</p></section>`;
+  }
+}
+
+async function readJson(path, label) {
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(`${label} request failed: ${response.status} ${response.statusText}`);
+  }
+  return response.json();
+}
+
 function route() {
+  if (!DATA.models.length) return render();
   const h = (location.hash || "#/walk").replace(/^#\/?/, "");
   const [page, slug] = h.split("/");
   view = page || "walk";
@@ -51,14 +101,20 @@ function route() {
 }
 
 function go(i, page = "walk") {
+  if (!DATA.models.length) return;
   idx = (i + DATA.models.length) % DATA.models.length;
   location.hash = `#/${page}/${DATA.models[idx].slug}`;
 }
 
 function render() {
   const app = $("#app");
+  if (!DATA?.models?.length) {
+    app.innerHTML = `<section class="panel"><h1 class="hero">No models loaded</h1><p class="lede">Manifest is empty or malformed. Check models.json.</p></section>`;
+    return;
+  }
   if (view === "cut") app.innerHTML = renderLeaders();
   else if (view === "bench") app.innerHTML = renderBench();
+  else if (view === "frontier") app.innerHTML = renderFrontier();
   else if (view === "new") app.innerHTML = renderNew();
   else if (view === "forge") app.innerHTML = renderForge();
   else if (view === "grid") app.innerHTML = renderGrid();
@@ -173,7 +229,7 @@ function pythonOf(m) {
     return `# ${mod} — loop_tax. ms MEASURED, overhead DERIVED, joules never invented.\nfrom szl_khipu.ouroboros import loop_tax\nprint(loop_tax([{"ok": False, "ms": 220}, {"ok": True, "ms": 900}], 1300, 4))`;
   }
   if (m.weights === "full" || m.weights === "adapter") {
-    return `# receipted Unsloth. Sign BEFORE merge. GGUF is derived.\n# github.com/szl-holdings/szl-forge  +  ${mod}\n# base = ${m.base or "Qwen/Qwen2.5-1.5B-Instruct"}\n# dataset SHA-256 + LoRA r + seed + final_loss → training_receipt.json`;
+    return `# receipted Unsloth. Sign BEFORE merge. GGUF is derived.\n# github.com/szl-holdings/szl-forge  +  ${mod}\n# base = ${m.base || "Qwen/Qwen2.5-1.5B-Instruct"}\n# dataset SHA-256 + LoRA r + seed + final_loss → training_receipt.json`;
   }
   if (m.evidence === "ROADMAP" || m.evidence === "STUB") {
     return `# ${m.name} is ${m.evidence}. There is nothing to fit.\n# Publishing the empty seat is the point. Do not load ${m.hf} as transformers.`;
@@ -320,6 +376,7 @@ function renderForge() {
 }
 
 function bind() {
+  if (view === "frontier") bindFrontier();
   document.querySelectorAll("[data-go]").forEach((b) => {
     b.addEventListener("click", () => go(Number(b.dataset.go)));
   });
@@ -327,9 +384,14 @@ function bind() {
     b.addEventListener("click", async () => {
       const m = DATA.models.find((x) => x.slug === b.dataset.copy);
       if (!m) return;
-      await navigator.clipboard.writeText(hfMarkdown(m));
-      b.textContent = "Copied";
-      setTimeout(() => (b.textContent = "Copy Hub card"), 1200);
+      try {
+        await copyText(hfMarkdown(m));
+        b.textContent = "Copied";
+      } catch (_err) {
+        b.textContent = "Copy blocked";
+      } finally {
+        setTimeout(() => (b.textContent = "Copy Hub card"), 1200);
+      }
     });
   });
   const play = $("#play");
@@ -700,13 +762,22 @@ function mountPlay(root, m) {
 }
 
 async function boot() {
-  const [models, nano] = await Promise.all([
-    fetch("./models.json").then((r) => r.json()),
-    fetch("./nano-weights.json").then((r) => r.json()).catch(() => null),
-  ]);
-  DATA = models;
-  NANO = nano;
-  window.addEventListener("hashchange", route);
-  route();
+  try {
+    const [models, nano] = await Promise.all([
+      readJson("./models.json", "models manifest"),
+      readJson("./nano-weights.json", "nano weights").catch(() => null),
+    ]);
+    DATA = {
+      models: Array.isArray(models?.models) ? models.models : [],
+      estate: Array.isArray(models?.estate) ? models.estate : [],
+      doctrine: models?.doctrine ?? "",
+    };
+    NANO = nano;
+    window.addEventListener("hashchange", route);
+    route();
+  } catch (err) {
+    console.error("[atelier] boot failure", err);
+    failClosed("Unable to load estate data (models.json). Ensure the Space build includes the static payload files.");
+  }
 }
 boot();

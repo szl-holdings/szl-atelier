@@ -29,7 +29,7 @@ An agent whose weights are physically incapable of being the actor. Authority li
 |---|---|
 | Anthropic | Claude tool-use, but the tool is always 'emit a proposal'. |
 | NVIDIA | NIM agent runtime, minus the runtime — we refuse to let the weights call. |
-| Unsloth | QLoRA on Qwen2.5-1.5B-Instruct, receipt-verified tag, signed train+eval. |
+| Unsloth | receiptagent profile: packing=false so receipt-token loss is the point. |
 
 Nobody else ships this combination. That is the point of a one-of-one.
 

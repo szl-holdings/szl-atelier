@@ -29,7 +29,7 @@ Curriculum as identity. The filename is the experiment.
 |---|---|
 | Anthropic | Balanced helpful/harmless mix, as a named checkpoint. |
 | NVIDIA | Recipe variant, published. |
-| Unsloth | LoRA on Qwen3.5-0.8B, cutting tag. |
+| Unsloth | r=16 rsLoRA attn+mlp packing=auto. Extra MLP rank so the courier is allowed to stop. |
 
 Nobody else ships this combination. That is the point of a one-of-one.
 

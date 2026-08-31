@@ -3,18 +3,23 @@ title: SZL Atelier
 emoji: 🪢
 colorFrom: gray
 colorTo: green
-sdk: static
+sdk: docker
+app_port: 7860
+suggested_hardware: cpu-basic
 pinned: true
 license: apache-2.0
 short_description: Walk 40 SZLHOLDINGS models. Unique cuts. Fail closed.
-app_file: index.html
 tags:
   - governed-ai
   - szl-holdings
   - doctrine-v11
   - model-card
   - receipts
-  - static
+  - docker
+  - fastapi
+  - python
+models: [SZLHOLDINGS/SZL-Khipu-1.5B, SZLHOLDINGS/SZL-Khipu-1.5B-GGUF, SZLHOLDINGS/SZL-Forge-1.5B-ReceiptAgent, SZLHOLDINGS/chaski, SZLHOLDINGS/MiniEmbed-Nano, SZLHOLDINGS/Moons-Nano, SZLHOLDINGS/TinyKhipu-Nano, SZLHOLDINGS/ReceiptAgent-Nano]
+datasets: [SZLHOLDINGS/szl-lake]
 ---
 
 # SZL Atelier
@@ -23,7 +28,7 @@ Walk every Hugging Face model id under [SZLHOLDINGS](https://huggingface.co/SZLH
 
 YAML `emoji` is Hub metadata, not product chrome. System fonts. No Google Fonts. Gold is OPEN. Never green-as-proven. Never a fabricated joule.
 
-**This Space is live.** Direct: [szlholdings-szl-atelier.static.hf.space](https://szlholdings-szl-atelier.static.hf.space)
+**Runtime target:** Docker on Hugging Face Spaces. Canonical surface: [SZLHOLDINGS/szl-atelier](https://huggingface.co/spaces/SZLHOLDINGS/szl-atelier).
 
 | Origin | Role |
 |---|---|
@@ -31,6 +36,12 @@ YAML `emoji` is Hub metadata, not product chrome. System fonts. No Google Fonts.
 | [a11oy.net/atelier](https://a11oy.net/atelier/) | Proof-registry copy |
 | [a-11-oy.com/atelier](https://a-11-oy.com/atelier) | Product surface |
 | [SZLHOLDINGS/szl-khipu](https://huggingface.co/spaces/SZLHOLDINGS/szl-khipu) | Sibling Gradio hologram |
+
+## Runtime contract
+
+The frontend and Python backend are served from one origin. `/healthz` proves that the FastAPI process is responding; `/readyz` fails closed unless the catalog and release manifest are present and the expected 40 records load; `/api/build-info` reports hashes for the bytes served by the container. `/api/frontier/verify` validates the structure and scope of browser-generated frontier receipts without pretending that a local measurement is a production deployment or a cryptographic signature.
+
+Receipt persistence is **NOT CONFIGURED**. Verification requests are not stored. Provider repository state and served runtime state remain separate evidence and are checked during release.
 
 ## The cut
 
@@ -41,6 +52,7 @@ Anthropic taught refuse. NVIDIA taught kernels and joules. Unsloth taught cheap 
 | Claim | Label |
 |---|---|
 | 40 Hub model ids | HUB |
+| Python API and readiness contract | RUNTIME-OBSERVED only when `/readyz` returns 200 |
 | Nano silhouettes (moons, embed, tiny-khipu, receipt, λ*) | MEASURED in this Space |
 | SZL-Khipu-1.5B plan-valid 11/11, grounding 4/5, abstain 2/6, hallu 0 | SIGNED — not retrained here |
 | MiniEmbed hit@2 0.40 | SAMPLE on five pairs. Hub analogy UNAVAILABLE |

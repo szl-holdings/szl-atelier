@@ -274,7 +274,7 @@
       "dreamed": "Retrieval that cannot hallucinate a citation. Grounding is structural.",
       "anthropic": "Claude abstains in prose. Khipu abstains in a schema with citedNodeIds: [].",
       "nvidia": "NeMo retriever sees passages. Khipu sees handles only.",
-      "unsloth": "QLoRA SFT, response-only loss, abstain oversampling. House loop.",
+      "unsloth": "QLoRA SFT, 7 modules, packing=auto, adamw_8bit, receipted. Not retrained here.",
       "weights": "full",
       "trained": true,
       "evidence": "SIGNED",
@@ -307,9 +307,10 @@
           "evidence": "SIGNED"
         },
         {
-          "name": "final train loss",
-          "value": "0.0245",
-          "evidence": "SIGNED"
+          "name": "Unsloth profile",
+          "value": "4bit \u00b7 r=16 \u00b7 7 modules \u00b7 packing=auto \u00b7 adamw_8bit",
+          "evidence": "KERNEL",
+          "vs": "Owner-metal recipe. Existing signed loss 0.0245. Not retrained in this atelier."
         }
       ],
       "files": [
@@ -437,7 +438,7 @@
       "dreamed": "A public retrain whose only job is to improve one metric: honest abstain under adversarial handles.",
       "anthropic": "Red-team \u2192 constitution update. We red-team \u2192 adapter.",
       "nvidia": "Recipe re-run with a new seed and a signed delta.",
-      "unsloth": "Same FastLanguageModel loop, new curriculum, new receipt.",
+      "unsloth": "khipu-r2 profile: packing=false, lr=1e-4, new receipt. Do not overwrite R1.",
       "weights": "adapter",
       "trained": true,
       "evidence": "HUB",
@@ -453,9 +454,10 @@
           "evidence": "SIGNED"
         },
         {
-          "name": "R2 independent eval",
-          "value": "not yet signed",
-          "evidence": "HUB"
+          "name": "Unsloth profile",
+          "value": "r=16 \u00b7 packing=false \u00b7 lr=1e-4",
+          "evidence": "KERNEL",
+          "vs": "R2 lineage. packing=false so loss is comparable to R1. Not retrained here."
         }
       ],
       "files": [
@@ -484,7 +486,7 @@
       "dreamed": "An agent whose weights are physically incapable of being the actor. Authority lives outside the tensor.",
       "anthropic": "Claude tool-use, but the tool is always 'emit a proposal'.",
       "nvidia": "NIM agent runtime, minus the runtime \u2014 we refuse to let the weights call.",
-      "unsloth": "QLoRA on Qwen2.5-1.5B-Instruct, receipt-verified tag, signed train+eval.",
+      "unsloth": "receiptagent profile: packing=false so receipt-token loss is the point.",
       "weights": "full",
       "trained": true,
       "evidence": "SIGNED",
@@ -505,9 +507,10 @@
           "evidence": "SIGNED"
         },
         {
-          "name": "Eval receipt",
-          "value": "signed",
-          "evidence": "SIGNED"
+          "name": "Unsloth profile",
+          "value": "r=16 \u00b7 7 modules \u00b7 packing=false",
+          "evidence": "KERNEL",
+          "vs": "Receipt-token loss is the point. Owner-metal recipe."
         }
       ],
       "files": [
@@ -540,7 +543,7 @@
       "dreamed": "A receipt agent you can retrain between coffee and lunch, with the same doctrine as the 1.5B.",
       "anthropic": "Same constitution, smaller body.",
       "nvidia": "Small NIM-shaped thing, without NIM.",
-      "unsloth": "This is the Unsloth poster: FastLanguageModel, Qwen3.5-0.8B, PEFT.",
+      "unsloth": "Poster organ: FastLanguageModel + adamw_8bit + receipted knobs on Qwen3.5-0.8B.",
       "weights": "adapter",
       "trained": true,
       "evidence": "HUB",
@@ -556,9 +559,10 @@
           "evidence": "HUB"
         },
         {
-          "name": "Library",
-          "value": "peft + unsloth",
-          "evidence": "HUB"
+          "name": "Unsloth profile",
+          "value": "4bit \u00b7 r=16 \u00b7 adamw_8bit \u00b7 packing=auto",
+          "evidence": "KERNEL",
+          "vs": "Nightly receipted loop. Owner-metal. Not retrained here."
         }
       ],
       "files": [
@@ -587,7 +591,7 @@
       "dreamed": "A tiny speaker that refuses marketing. Trained on the honesty set, not a brand book.",
       "anthropic": "Constitutional self-description.",
       "nvidia": "System-prompt as weights.",
-      "unsloth": "TRL SFT on Qwen2.5-0.5B-Instruct via HF Jobs.",
+      "unsloth": "rsLoRA rank-8, attn+mlp, packing=false, max_seq=1024. Doctrine mouth. Loss-comparable SFT.",
       "weights": "adapter",
       "trained": true,
       "evidence": "HUB",
@@ -599,12 +603,12 @@
       "benches": [
         {
           "name": "Trainer",
-          "value": "TRL SFT / HF Jobs",
-          "evidence": "HUB"
+          "value": "Unsloth QLoRA / HF Jobs A10G",
+          "evidence": "MEASURED"
         },
         {
           "name": "Adapter",
-          "value": "adapter_model.safetensors",
+          "value": "adapter-unsloth/adapter_model.safetensors",
           "evidence": "HUB"
         },
         {
@@ -614,16 +618,22 @@
           "vs": "CPU 5-8-2 seed 20260721. Silhouette of the 0.5B mouth, not a substitute."
         },
         {
-          "name": "TELL / SILENCE recall",
-          "value": "1.00 / 1.00",
-          "evidence": "SYNTHETIC"
+          "name": "Unsloth profile",
+          "value": "r=8 \u00b7 rsLoRA \u00b7 attn+mlp \u00b7 packing=false",
+          "evidence": "MEASURED",
+          "vs": "A10G job 2026-08-29. Unique doctrine mouth. Eval none-this-run."
+        },
+        {
+          "name": "Unsloth train loss",
+          "value": "0.840",
+          "evidence": "MEASURED",
+          "vs": "160 steps \u00b7 80 rows \u00b7 seed 20260721 \u00b7 energy UNAVAILABLE"
         }
       ],
       "files": [
+        "adapter-unsloth/adapter_model.safetensors",
+        "adapter-unsloth/training_receipt.json",
         "adapter_model.safetensors",
-        "adapter_config.json",
-        "chat_template.jinja",
-        "training_args.bin",
         "willay.npz (atelier silhouette)"
       ],
       "limitations": [
@@ -697,7 +707,7 @@
       "dreamed": "A courier that cannot invent the dispatch. The oldest job in the Andes, as a LoRA.",
       "anthropic": "Claude vision, minus the right to conclude.",
       "nvidia": "NVLM / NeMo multimodal, minus the right to act.",
-      "unsloth": "Adapter on Qwen3.5-0.8B.",
+      "unsloth": "Attention-only LoRA on Qwen3.5-0.8B. MLP frozen so the courier cannot author.",
       "weights": "adapter",
       "trained": true,
       "evidence": "HUB",
@@ -724,13 +734,21 @@
           "evidence": "MEASURED"
         },
         {
-          "name": "CARRY recall",
-          "value": "1.00",
-          "evidence": "MEASURED"
+          "name": "Unsloth profile",
+          "value": "r=8 \u00b7 rsLoRA \u00b7 attn-only q,k,v,o",
+          "evidence": "MEASURED",
+          "vs": "A10G job 2026-08-29. Unique cut: MLP frozen so the courier cannot author."
+        },
+        {
+          "name": "Unsloth train loss",
+          "value": "1.932",
+          "evidence": "MEASURED",
+          "vs": "120 steps \u00b7 45 rows \u00b7 seed 20260721 \u00b7 energy UNAVAILABLE"
         }
       ],
       "files": [
-        "safetensors adapter",
+        "adapter-unsloth/adapter_model.safetensors",
+        "adapter-unsloth/training_receipt.json",
         "chaski.npz (atelier silhouette)"
       ],
       "limitations": [
@@ -756,7 +774,7 @@
       "dreamed": "Curriculum as identity. The filename is the experiment.",
       "anthropic": "Balanced helpful/harmless mix, as a named checkpoint.",
       "nvidia": "Recipe variant, published.",
-      "unsloth": "LoRA on Qwen3.5-0.8B, cutting tag.",
+      "unsloth": "r=16 rsLoRA attn+mlp packing=auto. Extra MLP rank so the courier is allowed to stop.",
       "weights": "adapter",
       "trained": true,
       "evidence": "HUB",
@@ -778,13 +796,21 @@
           "vs": "50/50 mix \u00b7 CPU 5-8-2 seed 20260721"
         },
         {
-          "name": "CARRY recall",
-          "value": "0.96",
-          "evidence": "MEASURED"
+          "name": "Unsloth profile",
+          "value": "r=16 \u00b7 rsLoRA \u00b7 attn+mlp \u00b7 packing=auto",
+          "evidence": "MEASURED",
+          "vs": "A10G job 2026-08-29. 50/50 mix is the identity. Eval none-this-run."
+        },
+        {
+          "name": "Unsloth train loss",
+          "value": "0.559",
+          "evidence": "MEASURED",
+          "vs": "120 steps \u00b7 45 rows \u00b7 seed 20260721 \u00b7 energy UNAVAILABLE"
         }
       ],
       "files": [
-        "PEFT safetensors",
+        "adapter-unsloth/adapter_model.safetensors",
+        "adapter-unsloth/training_receipt.json",
         "chaski_5050.npz (atelier silhouette)"
       ],
       "limitations": [
@@ -810,7 +836,7 @@
       "dreamed": "A lineage you can walk. R1 stays up. R2 is the next knot.",
       "anthropic": "Versioned constitutions.",
       "nvidia": "Recipe rerun.",
-      "unsloth": "Another FastLanguageModel job.",
+      "unsloth": "r=8 rsLoRA attn-only packing=false lr=5e-5. R2 refinement. R1 stays up.",
       "weights": "adapter",
       "trained": true,
       "evidence": "HUB",
@@ -826,14 +852,21 @@
           "evidence": "HUB"
         },
         {
-          "name": "CARRY/DROP holdout",
-          "value": "1.00",
-          "evidence": "SYNTHETIC",
-          "vs": "35/65 drop-heavy \u00b7 CPU 5-8-2. Mix is the identity."
+          "name": "Unsloth profile",
+          "value": "r=8 \u00b7 attn-only \u00b7 packing=false \u00b7 lr=5e-5",
+          "evidence": "MEASURED",
+          "vs": "A10G job 2026-08-29. R2 refinement. R1 stays. Eval none-this-run."
+        },
+        {
+          "name": "Unsloth train loss",
+          "value": "2.739",
+          "evidence": "MEASURED",
+          "vs": "80 steps \u00b7 45 rows \u00b7 seed 20260721 \u00b7 energy UNAVAILABLE"
         }
       ],
       "files": [
-        "PEFT safetensors",
+        "adapter-unsloth/adapter_model.safetensors",
+        "adapter-unsloth/training_receipt.json",
         "chaski_r2.npz (atelier silhouette)"
       ],
       "limitations": [
@@ -1723,7 +1756,7 @@
       "dreamed": "A Hub id you can pin in a receipt: 'trained by this repo at this SHA'.",
       "anthropic": "No public train scripts for Claude.",
       "nvidia": "NeMo recipes.",
-      "unsloth": "The scripts wrap Unsloth. Cut is the receipt bind.",
+      "unsloth": "The scripts wrap Unsloth v2 profiles. Cut is unique knobs per organ, bound in the receipt.",
       "weights": "none",
       "trained": false,
       "evidence": "HUB",
@@ -1734,9 +1767,9 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Hub tags",
-          "value": "thin \u2014 atelier fills the card",
-          "evidence": "HUB"
+          "name": "Profiles",
+          "value": "willay \u00b7 chaski \u00b7 chaski-5050 \u00b7 chaski-r2 \u00b7 khipu \u00b7 khipu-r2 \u00b7 receiptagent",
+          "evidence": "KERNEL"
         }
       ],
       "files": [

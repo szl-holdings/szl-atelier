@@ -1,0 +1,68 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  runtime-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          lfs: true
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install contract dependencies
+        run: python -m pip install --requirement requirements-dev.txt
+      - name: Compile and test
+        run: |
+          python -m compileall -q server.py tests
+          python -m pytest -q
+      - name: Witness live HTTP contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m uvicorn server:app --host 127.0.0.1 --port 7860 > /tmp/szl-atelier.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true; cat /tmp/szl-atelier.log' EXIT
+          python - <<'PY'
+          import json
+          import time
+          import urllib.request
+
+          for attempt in range(30):
+              try:
+                  with urllib.request.urlopen("http://127.0.0.1:7860/readyz", timeout=2) as response:
+                      payload = json.load(response)
+                  if payload.get("status") == "ready" and payload.get("catalog_records") == 40:
+                      break
+              except Exception:
+                  if attempt == 29:
+                      raise
+                  time.sleep(0.5)
+          else:
+              raise RuntimeError("readiness never converged")
+
+          for path in ("/healthz", "/api/build-info", "/"):
+              with urllib.request.urlopen("http://127.0.0.1:7860" + path, timeout=3) as response:
+                  if response.status != 200:
+                      raise RuntimeError(f"{path} returned {response.status}")
+          PY
+      - name: Build Docker runtime
+        run: docker build --tag szl-atelier:${{ github.sha }} .

@@ -29,7 +29,7 @@ A lineage you can walk. R1 stays up. R2 is the next knot.
 |---|---|
 | Anthropic | Versioned constitutions. |
 | NVIDIA | Recipe rerun. |
-| Unsloth | Another FastLanguageModel job. |
+| Unsloth | r=8 rsLoRA attn-only packing=false lr=5e-5. R2 refinement. R1 stays up. |
 
 Nobody else ships this combination. That is the point of a one-of-one.
 
