@@ -8,4 +8,3 @@ tests
 *.log
 .env
 .env.*
-

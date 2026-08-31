@@ -66,4 +66,3 @@ jobs:
           PY
       - name: Build Docker runtime
         run: docker build --tag szl-atelier:${{ github.sha }} .
-

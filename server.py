@@ -285,4 +285,3 @@ def public_asset(asset_path: str):
     if not allowed or not candidate.is_file():
         raise HTTPException(status_code=404, detail="NOT_FOUND")
     return FileResponse(candidate)
-

@@ -66,4 +66,3 @@ def test_only_allowlisted_static_assets_are_served():
     assert client.get("/frontier-worker.js").status_code == 200
     assert client.get("/server.py").status_code == 404
     assert client.get("/.git/config").status_code == 404
-
