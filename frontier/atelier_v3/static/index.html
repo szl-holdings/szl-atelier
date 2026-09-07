@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#071016">
+  <title>SZL Atelier — Governed Artifact Constellation</title>
+  <meta name="description" content="Source-bound discovery of SZL models, datasets, Spaces, delivery capabilities, and research evidence.">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#catalog">Skip to artifact catalog</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <header class="shell masthead">
+    <div class="brand-block">
+      <p class="eyebrow">SZL HOLDINGS / ARTIFACT INTELLIGENCE</p>
+      <h1>Atelier</h1>
+      <p class="lede">One governed window into models, datasets, Spaces, delivery systems, and research—without erasing who owns the source.</p>
+    </div>
+    <div class="source-state" aria-live="polite">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span id="source-state">Reading source identity…</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero-grid" aria-labelledby="mission-title">
+      <div>
+        <p class="section-label">MISSION</p>
+        <h2 id="mission-title">Discovery with proof boundaries.</h2>
+      </div>
+      <p>Atelier composes public evidence. It never turns a declared slug into a measured runtime, a GitHub merge into a Hub publication, or a showcase into source authority.</p>
+    </section>
+
+    <section class="control-deck" aria-label="Catalog controls">
+      <label class="search-control">
+        <span>Search artifacts</span>
+        <input id="search" type="search" maxlength="64" autocomplete="off" placeholder="Model, Space, capability…">
+      </label>
+      <fieldset class="mode-control">
+        <legend>Audience lens</legend>
+        <div class="segmented" id="audience-modes">
+          <button type="button" data-mode="user" aria-pressed="true">User</button>
+          <button type="button" data-mode="developer" aria-pressed="false">Developer</button>
+          <button type="button" data-mode="investor" aria-pressed="false">Investor</button>
+          <button type="button" data-mode="operator" aria-pressed="false">Operator</button>
+        </div>
+      </fieldset>
+      <label class="filter-control">
+        <span>Collection</span>
+        <select id="group-filter">
+          <option value="">All collections</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="telemetry-strip" aria-label="Catalog telemetry">
+      <div><strong id="artifact-count">—</strong><span>artifacts</span></div>
+      <div><strong id="collection-count">—</strong><span>collections</span></div>
+      <div><strong>0</strong><span>write endpoints</span></div>
+      <div><strong>SHA-256</strong><span>receipt primitive</span></div>
+    </section>
+
+    <section class="constellation-panel" aria-labelledby="constellation-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">CONSTELLATION</p>
+          <h2 id="constellation-title">Explore the estate</h2>
+        </div>
+        <p id="view-description">A clear public view of what each artifact does and where its source lives.</p>
+      </div>
+      <div class="constellation" id="constellation" role="list" aria-label="Interactive artifact constellation"></div>
+    </section>
+
+    <section id="catalog" class="catalog-panel" aria-labelledby="catalog-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">EVIDENCE CATALOG</p>
+          <h2 id="catalog-title">Source-owned artifacts</h2>
+        </div>
+        <p id="result-summary" aria-live="polite">Loading catalog…</p>
+      </div>
+      <div id="catalog-grid" class="catalog-grid"></div>
+      <div id="empty-state" class="empty-state" hidden>
+        <h3>No matching artifact</h3>
+        <p>Clear a filter or try a broader source, model, or capability term.</p>
+      </div>
+    </section>
+
+    <dialog id="artifact-dialog" aria-labelledby="dialog-title">
+      <form method="dialog" class="dialog-frame">
+        <button class="dialog-close" value="close" aria-label="Close artifact detail">×</button>
+        <p class="section-label" id="dialog-kind">ARTIFACT</p>
+        <h2 id="dialog-title">Artifact</h2>
+        <p id="dialog-summary"></p>
+        <dl id="dialog-evidence" class="evidence-list"></dl>
+        <div class="dialog-actions">
+          <a id="dialog-source" class="primary-action" href="#" rel="noreferrer">Open source</a>
+          <button id="provider-readback" type="button" class="secondary-action">Measure public Hub state</button>
+        </div>
+        <pre id="provider-result" tabindex="0" hidden></pre>
+      </form>
+    </dialog>
+  </main>
+
+  <footer class="shell footer">
+    <p>GitHub remains source authority. Hugging Face remains generated artifact and runtime registry.</p>
+    <p><code>CLASSIFIED ≠ UNARCHIVED ≠ SOURCE_PR ≠ MERGED ≠ HUB_PUBLISHED ≠ RUNTIME_READY ≠ EXACT_READBACK_VERIFIED</code></p>
+  </footer>
+
+  <noscript><p class="noscript">Atelier requires JavaScript to filter the locally served catalog. The API remains available at <code>/api/catalog</code>.</p></noscript>
+</body>
+</html>
