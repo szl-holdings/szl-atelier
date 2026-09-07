@@ -13,8 +13,9 @@
   "confirmation": "PUBLISH-SZL-ATELIER-V3",
   "mapping": [
     {"source": "SPACE_README.md", "target": "README.md"},
-    {"source": "Dockerfile", "target": "Dockerfile"},
+    {"source": "SPACE_DOCKERFILE", "target": "Dockerfile"},
     {"source": "requirements.txt", "target": "requirements.txt"},
+    {"source": "run.py", "target": "run.py"},
     {"source": "app.py", "target": "app.py"},
     {"source": "catalog.py", "target": "catalog.py"},
     {"source": "static/index.html", "target": "static/index.html"},
