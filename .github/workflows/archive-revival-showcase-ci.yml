@@ -1,0 +1,144 @@
+name: Archive Revival Showcase CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "revival/**"
+      - "cards/ARCHIVE-REVIVAL-V2.md"
+      - "cards/SZL-MESH-COMMAND.md"
+      - "cards/SZL-SOVEREIGN-ROUTER.md"
+      - "cards/UDS-BUNDLE-OBSERVATORY.md"
+      - "docs/ARCHIVE_REVIVAL_SHOWCASE_V2.md"
+      - "requirements-revival-test.txt"
+      - "tests/test_archive_revival_showcase_v2.py"
+      - ".github/workflows/archive-revival-showcase-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revival/**"
+      - "cards/ARCHIVE-REVIVAL-V2.md"
+      - "cards/SZL-MESH-COMMAND.md"
+      - "cards/SZL-SOVEREIGN-ROUTER.md"
+      - "cards/UDS-BUNDLE-OBSERVATORY.md"
+      - "docs/ARCHIVE_REVIVAL_SHOWCASE_V2.md"
+      - "requirements-revival-test.txt"
+      - "tests/test_archive_revival_showcase_v2.py"
+      - ".github/workflows/archive-revival-showcase-ci.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: archive-revival-showcase-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualify:
+    name: revival/source-and-experience
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Set up exact Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12.10"
+          cache: pip
+          cache-dependency-path: requirements-revival-test.txt
+
+      - name: Install pinned test dependency
+        run: |
+          python -m pip install --requirement requirements-revival-test.txt
+          python -m pip check
+
+      - name: Run portfolio and public-experience contracts
+        run: |
+          python -I -P -m py_compile tests/test_archive_revival_showcase_v2.py
+          python -m pytest -q tests/test_archive_revival_showcase_v2.py
+
+      - name: Validate browser syntax and local static serving
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check revival/app.js
+          python -m json.tool revival/catalog.json >/dev/null
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/revival-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent --show-error \
+              http://127.0.0.1:8765/revival/ \
+              --output /tmp/revival-index.html; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent --show-error \
+            http://127.0.0.1:8765/revival/catalog.json \
+            --output /tmp/revival-catalog.json
+          cmp revival/index.html /tmp/revival-index.html
+          cmp revival/catalog.json /tmp/revival-catalog.json
+
+      - name: Verify pinned actions and mutation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          workflow = Path(
+              ".github/workflows/archive-revival-showcase-ci.yml"
+          ).read_text(encoding="utf-8")
+          uses = re.findall(
+              r"^\s*uses:\s*(\S+)\s*(?:#.*)?$",
+              workflow,
+              re.MULTILINE,
+          )
+          unpinned = [
+              value
+              for value in uses
+              if not re.fullmatch(r"[^@\s]+@[0-9a-f]{40}", value)
+          ]
+          if unpinned:
+              raise SystemExit(f"unpinned actions: {unpinned}")
+
+          script = Path("revival/app.js").read_text(encoding="utf-8")
+          forbidden = (
+              "localStorage",
+              "sessionStorage",
+              "document.cookie",
+              "WebSocket(",
+              "EventSource(",
+              "eval(",
+              "new Function(",
+              "innerHTML",
+          )
+          present = [value for value in forbidden if value in script]
+          if present:
+              raise SystemExit(f"forbidden browser capability: {present}")
+
+          required = (
+              'fetch("./catalog.json"',
+              "crypto.subtle.digest",
+              "prefers-reduced-motion: reduce",
+          )
+          missing = [value for value in required if value not in script]
+          if missing:
+              raise SystemExit(f"missing browser contract: {missing}")
+          print("showcase authority boundary: PASS")
+          PY
+
+      - name: Verify patch hygiene
+        run: git diff --check
