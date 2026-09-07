@@ -1,0 +1,52 @@
+{
+  "schema": "szl.hf-publication-contract/v1",
+  "source_repository": "szl-holdings/szl-atelier",
+  "source_ref_required": "main",
+  "package_root": "frontier/atelier_v3",
+  "target": {
+    "type": "space",
+    "repository": "SZLHOLDINGS/szl-atelier",
+    "sdk": "docker",
+    "app_port": 7860
+  },
+  "canonical_writer": ".github/workflows/hf-space.yml",
+  "confirmation": "PUBLISH-SZL-ATELIER-V3",
+  "mapping": [
+    {"source": "SPACE_README.md", "target": "README.md"},
+    {"source": "SPACE_DOCKERFILE", "target": "Dockerfile"},
+    {"source": "requirements.txt", "target": "requirements.txt"},
+    {"source": "run.py", "target": "run.py"},
+    {"source": "app.py", "target": "app.py"},
+    {"source": "catalog.py", "target": "catalog.py"},
+    {"source": "static/index.html", "target": "static/index.html"},
+    {"source": "static/app.js", "target": "static/app.js"},
+    {"source": "static/styles.css", "target": "static/styles.css"}
+  ],
+  "generated_at_publish_time": [
+    {
+      "target": "SOURCE_REVISION",
+      "content": "exact lowercase 40-character GitHub main commit SHA followed by newline"
+    },
+    {
+      "target": "PUBLICATION_RECEIPT.json",
+      "content": "source SHA, source-file SHA-256 values, target-file SHA-256 values, and Hub commit readback without credentials"
+    }
+  ],
+  "required_readback": [
+    "source main still equals approved source SHA immediately before upload",
+    "Hub commit returned by the canonical writer",
+    "all target controlled bytes equal the generated publication package",
+    "Space runtime stage is RUNNING",
+    "/healthz returns status ok",
+    "/readyz returns READY",
+    "/api/source reports the exact approved source SHA",
+    "no credential-shaped material appears in source or publication receipt"
+  ],
+  "mutation_boundary": {
+    "github_source_write": false,
+    "repository_settings_write": false,
+    "space_target_write_only": true,
+    "other_hub_repositories_write": false,
+    "secrets_recorded": false
+  }
+}
