@@ -1,0 +1,113 @@
+{
+  "schema": "szl.archive-revival-showcase/v2",
+  "title": "Archive Revival v2",
+  "governance": {
+    "repository": "szl-holdings/.github",
+    "path": "governance/archive-portfolio-v2.json",
+    "state": "CANONICAL_SOURCE_OF_DISPOSITION",
+    "portfolio_total": 34,
+    "restored_source_owners": 4,
+    "consolidation_tombstones": 24,
+    "immutable_historical_records": 6
+  },
+  "presentation": {
+    "canonical_artifact_space": "SZLHOLDINGS/szl-atelier",
+    "estate_navigation_space": "SZLHOLDINGS/szl-constellation",
+    "new_peer_spaces_created": false,
+    "source_authority": "GITHUB",
+    "hub_authority": "GENERATED_PRESENTATION_AND_RUNTIME_ONLY"
+  },
+  "source_authorities": [
+    {
+      "id": "szl-atelier",
+      "repository": "szl-holdings/szl-atelier",
+      "role": "Canonical model, dataset, Space, delivery, and research explorer",
+      "capability": "ARTIFACT_EXPLORER",
+      "source_state": "ACTIVE_SOURCE_OWNER",
+      "source_merge_evidence": [
+        "EXISTING_PROTECTED_MAIN",
+        "szl-holdings/szl-atelier#15"
+      ],
+      "standalone_hub_target": "SZLHOLDINGS/szl-atelier",
+      "hub_publication_state": "UNAVAILABLE_PENDING_EXACT_PROVIDER_READBACK",
+      "runtime_state": "UNAVAILABLE_PENDING_EXACT_RUNTIME_READBACK",
+      "accent": "atelier"
+    },
+    {
+      "id": "szl-mesh",
+      "repository": "szl-holdings/szl-mesh",
+      "role": "Deterministic disconnected-state and CRDT convergence authority",
+      "capability": "DDIL_CRDT_CONVERGENCE",
+      "source_state": "ACTIVE_SOURCE_OWNER",
+      "source_merge_evidence": "szl-holdings/szl-mesh#41",
+      "standalone_hub_target": null,
+      "presentation_surfaces": [
+        "SZLHOLDINGS/szl-atelier",
+        "SZLHOLDINGS/szl-constellation"
+      ],
+      "hub_publication_state": "NOT_APPLICABLE_NO_PEER_SPACE",
+      "runtime_state": "SOURCE_RUNTIME_NOT_PROMOTED_TO_PEER_SPACE",
+      "accent": "mesh"
+    },
+    {
+      "id": "szl-router",
+      "repository": "szl-holdings/szl-router",
+      "role": "Sovereign-first OpenAI-compatible routing and receipt authority",
+      "capability": "SOVEREIGN_INFERENCE_ROUTER",
+      "source_state": "ACTIVE_SOURCE_OWNER",
+      "source_merge_evidence": "szl-holdings/szl-router#47",
+      "standalone_hub_target": null,
+      "presentation_surfaces": [
+        "SZLHOLDINGS/szl-atelier",
+        "SZLHOLDINGS/szl-constellation"
+      ],
+      "hub_publication_state": "NOT_APPLICABLE_NO_PEER_SPACE",
+      "runtime_state": "SOURCE_RUNTIME_NOT_PROMOTED_TO_PEER_SPACE",
+      "accent": "router"
+    },
+    {
+      "id": "uds-bundles",
+      "repository": "szl-holdings/uds-bundles",
+      "role": "Repository-owned UDS and Zarf air-gap bundle authority",
+      "capability": "AIR_GAP_DELIVERY_OBSERVATORY",
+      "source_state": "ACTIVE_SOURCE_OWNER",
+      "source_merge_evidence": "szl-holdings/uds-bundles#52",
+      "standalone_hub_target": null,
+      "presentation_surfaces": [
+        "SZLHOLDINGS/szl-atelier",
+        "SZLHOLDINGS/szl-constellation"
+      ],
+      "hub_publication_state": "NOT_APPLICABLE_NO_PEER_SPACE",
+      "runtime_state": "SOURCE_RUNTIME_NOT_PROMOTED_TO_PEER_SPACE",
+      "accent": "uds"
+    }
+  ],
+  "historical_records": [
+    "evidence-typed-formula-governance",
+    "fail-closed-governed-ai-services",
+    "szl-fleet-overlay",
+    "szl-otel-mesh",
+    "szl-uds-deployment",
+    "warhacker-demo"
+  ],
+  "consolidation": {
+    "count": 24,
+    "state": "READ_ONLY_TOMBSTONES",
+    "canonical_mapping": {
+      "repository": "szl-holdings/.github",
+      "path": "governance/archive-portfolio-v2.json"
+    },
+    "source_copied_into_atelier": false,
+    "history_rewritten": false,
+    "archive_true_mutations": false
+  },
+  "truth_ladder": [
+    "CLASSIFIED",
+    "UNARCHIVED",
+    "SOURCE_PR",
+    "MERGED",
+    "HUB_PUBLISHED",
+    "RUNTIME_READY",
+    "EXACT_READBACK_VERIFIED"
+  ]
+}
