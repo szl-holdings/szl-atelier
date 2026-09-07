@@ -6,12 +6,14 @@ on:
     paths:
       - "frontier/atelier_v3/**"
       - ".github/workflows/atelier-v3.yml"
+      - ".github/workflows/hf-space.yml"
       - "FRONTIER_PLAN.md"
   push:
     branches: [main]
     paths:
       - "frontier/atelier_v3/**"
       - ".github/workflows/atelier-v3.yml"
+      - ".github/workflows/hf-space.yml"
       - "FRONTIER_PLAN.md"
   workflow_dispatch:
 
@@ -26,7 +28,7 @@ jobs:
   qualify:
     name: atelier-v3/qualify
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 18
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
@@ -44,23 +46,67 @@ jobs:
         with:
           python-version: "3.12.10"
           cache: pip
-          cache-dependency-path: frontier/atelier_v3/requirements.txt
+          cache-dependency-path: |
+            frontier/atelier_v3/requirements.txt
+            frontier/atelier_v3/requirements-publish.txt
 
       - name: Install pinned dependencies
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install --requirement frontier/atelier_v3/requirements.txt
+          python -m pip install \
+            --requirement frontier/atelier_v3/requirements.txt \
+            --requirement frontier/atelier_v3/requirements-publish.txt
 
-      - name: Prove backend and receipt contracts
+      - name: Prove backend publisher and receipt contracts
         shell: bash
+        env:
+          SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           python -m py_compile \
             frontier/atelier_v3/app.py \
             frontier/atelier_v3/catalog.py \
-            frontier/atelier_v3/tests/test_app.py
+            frontier/atelier_v3/build_publication.py \
+            frontier/atelier_v3/publish_space.py \
+            frontier/atelier_v3/run.py \
+            frontier/atelier_v3/tests/test_app.py \
+            frontier/atelier_v3/tests/test_publication.py \
+            frontier/atelier_v3/tests/test_publication_builder.py \
+            frontier/atelier_v3/tests/test_publish_space.py
           python -m pytest -q frontier/atelier_v3/tests
+
+      - name: Prove exact publication projection without provider mutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate_sha="${{ github.event.pull_request.head.sha || github.sha }}"
+          rm -rf /tmp/atelier-v3-publication
+          python frontier/atelier_v3/build_publication.py \
+            --source-sha "${candidate_sha}" \
+            --output /tmp/atelier-v3-publication
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root = Path('/tmp/atelier-v3-publication')
+          receipt = json.loads((root / 'PUBLICATION_RECEIPT.json').read_text())
+          expected = {
+              'README.md', 'Dockerfile', 'requirements.txt', 'run.py', 'app.py',
+              'catalog.py', 'static/index.html', 'static/app.js', 'static/styles.css',
+              'SOURCE_REVISION', 'PUBLICATION_RECEIPT.json',
+          }
+          observed = {p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()}
+          assert observed == expected, (sorted(expected - observed), sorted(observed - expected))
+          assert receipt['state'] == 'PACKAGE_BUILT_NOT_PUBLISHED'
+          assert receipt['target']['repository'] == 'SZLHOLDINGS/szl-atelier'
+          assert receipt['secrets_recorded'] is False
+          for path in expected - {'PUBLICATION_RECEIPT.json'}:
+              data = (root / path).read_bytes()
+              if path in receipt['target_files']:
+                  assert hashlib.sha256(data).hexdigest() == receipt['target_files'][path]['sha256']
+          print('exact publication projection: PASS')
+          PY
 
       - name: Prove local-only frontend and accessibility primitives
         shell: bash
@@ -91,39 +137,77 @@ jobs:
           missing_css = [value for value in required_css if value not in css]
           if missing_css:
               raise SystemExit(f'missing responsive contracts: {missing_css}')
-          if 'innerHTML' in js or 'insertAdjacentHTML' in js:
+          if any(sink in js for sink in ('innerHTML', 'insertAdjacentHTML', 'document.write')):
               raise SystemExit('unsafe dynamic HTML sink present')
           print('frontend qualification: PASS')
           PY
 
-      - name: Verify mutation and credential boundaries
+      - name: Verify runtime and publisher authority boundaries
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
-          source = Path('frontier/atelier_v3/app.py').read_text()
-          forbidden = (
+          app = Path('frontier/atelier_v3/app.py').read_text()
+          publisher = Path('frontier/atelier_v3/publish_space.py').read_text()
+          workflow = Path('.github/workflows/hf-space.yml').read_text()
+
+          forbidden_app = (
               'subprocess.', 'os.system(', 'eval(', 'exec(',
               '@app.post(', '@app.put(', '@app.patch(', '@app.delete(',
               'Authorization', 'HF_TOKEN', 'HUGGING_FACE_HUB_TOKEN',
           )
-          present = [value for value in forbidden if value in source]
+          present = [value for value in forbidden_app if value in app]
           if present:
               raise SystemExit(f'forbidden backend authority: {present}')
-          required = ('MAX_PROVIDER_BYTES', 'PROVIDER_TIMEOUT_SECONDS', 'NoRedirect', 'mutation_authority', 'secrets_recorded')
-          missing = [value for value in required if value not in source]
+          required_app = (
+              'MAX_PROVIDER_BYTES', 'PROVIDER_TIMEOUT_SECONDS', 'NoRedirect',
+              'SOURCE_FILE', 'mutation_authority', 'secrets_recorded',
+          )
+          missing = [value for value in required_app if value not in app]
           if missing:
               raise SystemExit(f'missing backend bounds: {missing}')
+
+          required_publisher = (
+              'TARGET: Final = "SZLHOLDINGS/szl-atelier"',
+              'space_sdk="docker"', 'parent_commit=parent', 'delete_patterns=["*"]',
+              'verify_remote_bytes', 'wait_for_runtime', 'EXACT_READBACK_VERIFIED',
+              'secrets_recorded',
+          )
+          missing = [value for value in required_publisher if value not in publisher]
+          if missing:
+              raise SystemExit(f'missing publisher controls: {missing}')
+          for forbidden in ('git push', 'subprocess.', 'os.system(', 'eval(', 'exec('):
+              if forbidden in publisher:
+                  raise SystemExit(f'forbidden publisher primitive: {forbidden}')
+
+          required_workflow = (
+              "inputs.confirmation == 'PUBLISH-SZL-ATELIER-V3'",
+              'github.event.workflow_run.event == \'push\'',
+              'git fetch --no-tags --depth=1 origin',
+              'build_publication.py', 'publish_space.py',
+              'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a',
+          )
+          missing = [value for value in required_workflow if value not in workflow]
+          if missing:
+              raise SystemExit(f'missing workflow controls: {missing}')
+          if 'git push huggingface' in workflow or 'remote add huggingface' in workflow:
+              raise SystemExit('legacy whole-repository mirror remains active')
           print('authority qualification: PASS')
           PY
 
-      - name: Build non-root container
+      - name: Build non-root source and Space containers
         shell: bash
         run: |
           set -euo pipefail
           docker build --file frontier/atelier_v3/Dockerfile --tag szl-atelier-v3:${GITHUB_SHA} .
           test "$(docker image inspect --format '{{.Config.User}}' szl-atelier-v3:${GITHUB_SHA})" = "10001:10001"
+          rm -rf /tmp/atelier-space-container
+          python frontier/atelier_v3/build_publication.py \
+            --source-sha "${{ github.event.pull_request.head.sha || github.sha }}" \
+            --output /tmp/atelier-space-container
+          docker build --file /tmp/atelier-space-container/Dockerfile --tag szl-atelier-space:${GITHUB_SHA} /tmp/atelier-space-container
+          test "$(docker image inspect --format '{{.Config.User}}' szl-atelier-space:${GITHUB_SHA})" = "10001:10001"
 
       - name: Verify clean candidate
         shell: bash

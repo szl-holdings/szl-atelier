@@ -16,7 +16,8 @@ import app as module  # noqa: E402
 client = TestClient(module.app)
 
 
-def test_health_and_readiness() -> None:
+def test_health_and_readiness(monkeypatch) -> None:
+    monkeypatch.setenv("SOURCE_REVISION", "a" * 40)
     health = client.get("/healthz")
     assert health.status_code == 200
     assert health.json() == {"status": "ok", "service": "szl-atelier-v3"}
@@ -25,6 +26,40 @@ def test_health_and_readiness() -> None:
     assert ready.status_code == 200
     assert ready.json()["status"] == "READY"
     assert ready.json()["missing"] == []
+    assert ready.json()["source"]["witness"] == "environment"
+
+
+def test_readiness_fails_closed_without_source_witness(monkeypatch, tmp_path) -> None:
+    monkeypatch.delenv("SOURCE_REVISION", raising=False)
+    monkeypatch.setattr(module, "SOURCE_FILE", tmp_path / "SOURCE_REVISION")
+    ready = client.get("/readyz")
+    assert ready.status_code == 503
+    assert ready.json()["status"] == "NOT_READY"
+    assert "SOURCE_REVISION" in ready.json()["missing"]
+
+
+def test_source_revision_file_fallback(monkeypatch, tmp_path) -> None:
+    monkeypatch.delenv("SOURCE_REVISION", raising=False)
+    source_file = tmp_path / "SOURCE_REVISION"
+    source_file.write_text("b" * 40 + "\n", encoding="ascii")
+    monkeypatch.setattr(module, "SOURCE_FILE", source_file)
+    assert module.source_revision() == {
+        "state": "MEASURED",
+        "revision": "b" * 40,
+        "witness": "SOURCE_REVISION",
+    }
+
+
+def test_malformed_source_revision_file_is_unavailable(monkeypatch, tmp_path) -> None:
+    monkeypatch.delenv("SOURCE_REVISION", raising=False)
+    source_file = tmp_path / "SOURCE_REVISION"
+    source_file.write_text("not-a-commit\n", encoding="ascii")
+    monkeypatch.setattr(module, "SOURCE_FILE", source_file)
+    assert module.source_revision() == {
+        "state": "UNAVAILABLE",
+        "revision": "UNAVAILABLE",
+        "witness": "UNAVAILABLE",
+    }
 
 
 def test_catalog_is_deterministic_and_source_owned() -> None:
@@ -77,7 +112,11 @@ def test_source_receipt_contains_no_environment_values(monkeypatch) -> None:
     text = response.text
     assert "hf_" not in text
     payload = response.json()
-    assert payload["source"] == {"state": "MEASURED", "revision": "a" * 40}
+    assert payload["source"] == {
+        "state": "MEASURED",
+        "revision": "a" * 40,
+        "witness": "environment",
+    }
     assert payload["mutation_authority"] is False
     assert payload["secrets_recorded"] is False
 
