@@ -13,12 +13,12 @@ SOURCE_FILE = Path(__file__).resolve().parent / "SOURCE_REVISION"
 
 
 def bind_source_revision() -> None:
-    """Load an exact publication-generated source SHA without executing a shell."""
+    """Load an exact lowercase publication-generated source SHA without a shell."""
 
     if os.getenv("SOURCE_REVISION", "").strip():
         return
     try:
-        value = SOURCE_FILE.read_text(encoding="utf-8").strip().lower()
+        value = SOURCE_FILE.read_text(encoding="utf-8").strip()
     except (OSError, UnicodeError):
         return
     if SHA40.fullmatch(value):
