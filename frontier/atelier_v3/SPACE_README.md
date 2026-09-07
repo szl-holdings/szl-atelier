@@ -1,13 +1,13 @@
 ---
 title: SZL Atelier
-emoji: ✦
+emoji: 🧵
 colorFrom: blue
 colorTo: green
 sdk: docker
 app_port: 7860
 pinned: true
 license: apache-2.0
-short_description: Governed, source-bound discovery of SZL models, datasets, Spaces, delivery systems, and research.
+short_description: Source-bound discovery for SZL models, data, and Spaces.
 ---
 
 # SZL Atelier
