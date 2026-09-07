@@ -101,7 +101,7 @@ def build(source_sha: str, output: Path) -> dict[str, Any]:
     contract = load_contract()
     output = output.resolve()
     if output == HERE or HERE in output.parents:
-        raise PublicationError("output must not replace the source package")
+        raise PublicationError("output overlaps the source package")
     if output.exists() and any(output.iterdir()):
         raise PublicationError("output directory must be absent or empty")
     output.parent.mkdir(parents=True, exist_ok=True)
