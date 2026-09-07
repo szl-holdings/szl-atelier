@@ -7,11 +7,12 @@
     <meta name="theme-color" content="#09090b" />
     <meta
       name="description"
-      content="Walk 40 SZLHOLDINGS models and run the local Counterfactual Receipt Lab."
+      content="Walk 40 SZLHOLDINGS models and inspect source-owned governed capabilities."
     />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./szl-holo-v2.css" data-szl-holo-space-asset="style-v2" />
-</head>
+    <link rel="stylesheet" href="./capability-fabric.css" />
+  </head>
   <body>
     <div class="shell">
       <header>
@@ -28,6 +29,37 @@
         </div>
       </header>
       <main id="app">Loading estate…</main>
+      <section
+        id="capability-fabric"
+        class="capability-fabric"
+        aria-labelledby="capability-fabric-title"
+      >
+        <div class="fabric-head">
+          <div>
+            <p class="kicker">REVIVED · SOURCE-OWNED · CONSOLIDATED</p>
+            <h2 id="capability-fabric-title">Revived Capability Fabric</h2>
+            <p>
+              Inspect the useful capabilities restored from the archived estate while
+              every backend, history, proof boundary, and publisher remains attached
+              to its canonical source repository.
+            </p>
+          </div>
+          <div id="capability-state" class="fabric-state" role="status" aria-live="polite">
+            Loading source evidence
+          </div>
+        </div>
+        <div id="capability-filters" class="fabric-controls" aria-label="Filter capabilities by audience">
+          <button type="button" data-audience="all" aria-pressed="true">All</button>
+          <button type="button" data-audience="operator" aria-pressed="false">Operator</button>
+          <button type="button" data-audience="developer" aria-pressed="false">Developer</button>
+          <button type="button" data-audience="investor" aria-pressed="false">Investor</button>
+          <button type="button" data-audience="researcher" aria-pressed="false">Researcher</button>
+        </div>
+        <div id="capability-grid" class="fabric-grid" aria-live="polite"></div>
+        <p class="fabric-truth">
+          SOURCE_MERGED ≠ HUB_PUBLISHED ≠ RUNTIME_READY ≠ EXACT_SOURCE_MATCH
+        </p>
+      </section>
       <footer class="foot">
         <a href="https://github.com/szl-holdings/szl-atelier">GitHub</a>
         <a href="https://huggingface.co/spaces/SZLHOLDINGS/szl-atelier">Hub Space</a>
@@ -37,8 +69,9 @@
         <span class="muted">Doctrine v11 · Apache-2.0</span>
       </footer>
     </div>
-  <script type="module" src="./app.js"></script>
-  <script type="module" src="./backend-status.js"></script>
+    <script type="module" src="./app.js"></script>
+    <script type="module" src="./backend-status.js"></script>
+    <script type="module" src="./capability-fabric.js"></script>
     <script src="./szl-holo-v2.js" defer data-szl-holo-space-asset="script-v2"></script>
-</body>
+  </body>
 </html>
