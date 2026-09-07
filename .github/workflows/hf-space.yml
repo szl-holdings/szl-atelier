@@ -5,6 +5,11 @@ on:
     workflows: [ci]
     types: [completed]
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type PUBLISH-SZL-ATELIER-V3 to authorize the exact main projection
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -15,59 +20,114 @@ concurrency:
 
 jobs:
   publish:
+    name: hf-space/publish-exact-v3
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_branch == 'main')
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+      (github.event_name == 'workflow_dispatch' &&
+       github.ref == 'refs/heads/main' &&
+       inputs.confirmation == 'PUBLISH-SZL-ATELIER-V3') ||
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     env:
       HF_TOKEN: ${{ secrets.HF_ORG_TOKEN || secrets.HF_TOKEN }}
       PUBLISH_SHA: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+      REPORT_PATH: reports/atelier-v3-provider-readback.json
+
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Harden runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout exact tested main commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.PUBLISH_SHA }}
-          fetch-depth: 0
-          lfs: true
+          fetch-depth: 1
           persist-credentials: false
-      - name: Mirror exact tested commit to Hugging Face
+
+      - name: Set up exact Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12.10"
+          cache: pip
+          cache-dependency-path: |
+            frontier/atelier_v3/requirements.txt
+            frontier/atelier_v3/requirements-publish.txt
+
+      - name: Prove immutable source and current protected main
         shell: bash
         run: |
           set -euo pipefail
-          if [ -z "${HF_TOKEN:-}" ]; then
-            echo "::error::HF_ORG_TOKEN or HF_TOKEN is required; nothing was published."
+          test "$(git rev-parse HEAD)" = "${PUBLISH_SHA}"
+          test "${GITHUB_REPOSITORY}" = "szl-holdings/szl-atelier"
+          test "${GITHUB_REF_NAME:-main}" = "main" || test "${GITHUB_EVENT_NAME}" = "workflow_run"
+          git fetch --no-tags --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+          observed_main="$(git rev-parse refs/remotes/origin/main)"
+          if [ "${observed_main}" != "${PUBLISH_SHA}" ]; then
+            echo "::error::Source moved: approved ${PUBLISH_SHA}, current main ${observed_main}."
             exit 1
           fi
 
-          askpass="${RUNNER_TEMP}/hf-askpass.sh"
-          cat > "${askpass}" <<'EOF'
-          #!/usr/bin/env bash
-          case "$1" in
-            *Username*) printf '%s\n' 'oauth2' ;;
-            *) printf '%s\n' "${HF_TOKEN}" ;;
-          esac
-          EOF
-          chmod 700 "${askpass}"
-          export GIT_ASKPASS="${askpass}"
-          export GIT_TERMINAL_PROMPT=0
+      - name: Install exact publication dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install \
+            --requirement frontier/atelier_v3/requirements.txt \
+            --requirement frontier/atelier_v3/requirements-publish.txt
 
-          git remote add huggingface https://huggingface.co/spaces/SZLHOLDINGS/szl-atelier
-          remote_sha="$(git ls-remote huggingface refs/heads/main | awk '{print $1}')"
-          if [ "${remote_sha}" = "${PUBLISH_SHA}" ]; then
-            echo "Hugging Face already serves repository head ${PUBLISH_SHA}."
-            exit 0
-          fi
-          if [ -n "${remote_sha}" ] && ! git merge-base --is-ancestor "${remote_sha}" "${PUBLISH_SHA}"; then
-            echo "::error::Hugging Face main diverged at ${remote_sha}; refusing a non-fast-forward publish."
-            exit 1
-          fi
+      - name: Requalify source and publication contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            frontier/atelier_v3/app.py \
+            frontier/atelier_v3/catalog.py \
+            frontier/atelier_v3/build_publication.py \
+            frontier/atelier_v3/publish_space.py \
+            frontier/atelier_v3/run.py
+          python -m pytest -q frontier/atelier_v3/tests
 
-          git lfs push huggingface "${PUBLISH_SHA}"
-          git push huggingface "${PUBLISH_SHA}:refs/heads/main"
-          observed="$(git ls-remote huggingface refs/heads/main | awk '{print $1}')"
-          if [ "${observed}" != "${PUBLISH_SHA}" ]; then
-            echo "::error::Expected ${PUBLISH_SHA}, observed ${observed:-UNAVAILABLE}."
-            exit 1
-          fi
-          echo "Published and observed exact commit ${PUBLISH_SHA}."
+      - name: Build exact secret-free Docker Space projection
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf dist/atelier-v3-space
+          mkdir -p dist reports
+          python frontier/atelier_v3/build_publication.py \
+            --source-sha "${PUBLISH_SHA}" \
+            --output dist/atelier-v3-space
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt = json.loads(Path('dist/atelier-v3-space/PUBLICATION_RECEIPT.json').read_text())
+          assert receipt['state'] == 'PACKAGE_BUILT_NOT_PUBLISHED'
+          assert receipt['source_sha'] == __import__('os').environ['PUBLISH_SHA']
+          assert receipt['target']['repository'] == 'SZLHOLDINGS/szl-atelier'
+          assert receipt['secrets_recorded'] is False
+          print('publication package: PASS')
+          PY
+
+      - name: Publish one exact target and prove Hub/runtime convergence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python frontier/atelier_v3/publish_space.py \
+            --source-sha "${PUBLISH_SHA}" \
+            --package dist/atelier-v3-space \
+            --report "${REPORT_PATH}" \
+            --timeout-seconds 1200
+
+      - name: Upload secret-free provider receipt
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v5.0.0
+        with:
+          name: atelier-v3-provider-readback-${{ env.PUBLISH_SHA }}
+          path: reports/atelier-v3-provider-readback.json
+          if-no-files-found: warn
+          retention-days: 30
