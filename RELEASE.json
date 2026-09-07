@@ -1,15 +1,24 @@
 {
-  "schema_version": "1.0",
-  "release_id": "szl-atelier-docker-api-v1",
+  "schema_version": "2.0",
+  "release_id": "szl-atelier-capability-fabric-v2",
   "manifest_type": "SOURCE_BOUND_RUNTIME_CONTRACT",
   "lineage": {
-    "github_parent_revision": "b33f213e49356f15acd602f8fbce288bac9a7e00",
+    "github_parent_revision": "70d77b364031f444277d786c7cd8cd04305f3457",
     "huggingface_frontier_parent_revision": "87fd8312f86c4eae628f7cf63d157bf4a3d65b98",
-    "huggingface_frontier_archive_tag": "archive/hf-static-frontier-2026-08-30"
+    "huggingface_frontier_archive_tag": "archive/hf-static-frontier-2026-08-30",
+    "uds_bundle_observatory_revision": "9f4f9e60e3cb9908cb93663977a840a623d96fa5",
+    "mesh_convergence_lab_revision": "e19c280d24fbb8f08d843a4087bb15d91d55a5c4"
   },
   "catalog": {
     "expected_records": 40,
     "source": "models.json"
+  },
+  "capabilities": {
+    "expected_records": 2,
+    "source": "capabilities.json",
+    "source_authority": "external_repositories",
+    "presentation_owner": "szl-holdings/szl-atelier",
+    "hub_target": "SZLHOLDINGS/szl-atelier"
   },
   "runtime_contract": {
     "language": "Python 3.12",
@@ -18,14 +27,21 @@
     "health": "/healthz",
     "readiness": "/readyz",
     "build_info": "/api/build-info",
+    "catalog": "/api/catalog",
+    "capabilities": "/api/capabilities",
     "receipt_verification": "/api/frontier/verify"
   },
   "claim_boundaries": {
     "browser_frontier": "MEASURED_LOCAL",
     "python_backend": "RUNTIME_WITNESS_REQUIRED",
+    "capability_source_revisions": "MERGED_GITHUB_SOURCE",
+    "capability_hub_publication": "UNAVAILABLE_UNTIL_CANONICAL_PUBLISHER_READBACK",
+    "capability_runtime_readiness": "UNAVAILABLE_UNTIL_HUB_RUNTIME_READBACK",
+    "capability_exact_source_match": "UNAVAILABLE_UNTIL_RUNTIME_SOURCE_READBACK",
     "receipt_persistence": "NOT_CONFIGURED",
     "cryptographic_signature": "NOT_PROVIDED",
     "provider_repository_head": "MUST_BE_OBSERVED_EXTERNALLY",
     "served_git_revision": "UNAVAILABLE_UNLESS_EXPOSED_BY_PROVIDER_ENVIRONMENT"
-  }
+  },
+  "truth_boundary": "SOURCE_MERGED != HUB_PUBLISHED != RUNTIME_READY != EXACT_SOURCE_MATCH"
 }
