@@ -16,12 +16,13 @@ from typing import Any, Final, Literal
 
 from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.responses import FileResponse, JSONResponse
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 from catalog import catalog_rows, find_artifact
 
 ROOT: Final = Path(__file__).resolve().parent
 STATIC: Final = ROOT / "static"
+SOURCE_FILE: Final = ROOT / "SOURCE_REVISION"
 CONTROLLED: Final = (
     ROOT / "app.py",
     ROOT / "catalog.py",
@@ -68,10 +69,24 @@ def receipt(value: Any) -> str:
 
 
 def source_revision() -> dict[str, str]:
-    raw = os.getenv("SOURCE_REVISION", "").strip().lower()
-    if SOURCE_RE.fullmatch(raw):
-        return {"state": "MEASURED", "revision": raw}
-    return {"state": "UNAVAILABLE", "revision": "UNAVAILABLE"}
+    """Return the exact source identity from env or the immutable package file.
+
+    Local development may provide ``SOURCE_REVISION``. The published Docker
+    projection carries ``SOURCE_REVISION`` as a file so the provider runtime
+    can prove source identity without a mutable Space secret or variable.
+    """
+
+    env_value = os.getenv("SOURCE_REVISION", "").strip().lower()
+    if SOURCE_RE.fullmatch(env_value):
+        return {"state": "MEASURED", "revision": env_value, "witness": "environment"}
+
+    try:
+        file_value = SOURCE_FILE.read_text(encoding="ascii").strip().lower()
+    except (OSError, UnicodeError):
+        file_value = ""
+    if SOURCE_RE.fullmatch(file_value):
+        return {"state": "MEASURED", "revision": file_value, "witness": "SOURCE_REVISION"}
+    return {"state": "UNAVAILABLE", "revision": "UNAVAILABLE", "witness": "UNAVAILABLE"}
 
 
 def controlled_hashes() -> dict[str, str]:
@@ -167,7 +182,7 @@ def fetch_provider(kind: str, slug: str) -> ProviderResult:
 
 app = FastAPI(
     title="SZL Atelier v3",
-    version="3.0.0",
+    version="3.0.1",
     docs_url="/api/docs",
     redoc_url=None,
     openapi_url="/api/openapi.json",
@@ -198,10 +213,13 @@ def healthz() -> dict[str, str]:
 @app.get("/readyz")
 def readyz(response: Response) -> dict[str, Any]:
     missing = [path.relative_to(ROOT).as_posix() for path in CONTROLLED if not path.is_file()]
+    source = source_revision()
+    if source["state"] != "MEASURED":
+        missing.append("SOURCE_REVISION")
     state = "READY" if not missing else "NOT_READY"
     if missing:
         response.status_code = 503
-    return {"status": state, "missing": missing, "source": source_revision()}
+    return {"status": state, "missing": missing, "source": source}
 
 
 @app.get("/api/source")
