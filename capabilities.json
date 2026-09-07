@@ -1,0 +1,85 @@
+{
+  "schema": "szl.atelier.capability-fabric/v1",
+  "status": "SOURCE_MERGED_HUB_RUNTIME_UNVERIFIED",
+  "presentation_owner": "szl-holdings/szl-atelier",
+  "source_authority_rule": "Every capability remains owned by its source repository.",
+  "items": [
+    {
+      "slug": "uds-bundle-observatory",
+      "name": "UDS Bundle Observatory",
+      "category": "air-gap-delivery",
+      "one_liner": "Inspect repository-owned UDS and Zarf bundle manifests without deployment authority.",
+      "source_repository": "szl-holdings/uds-bundles",
+      "introduced_revision": "9f4f9e60e3cb9908cb93663977a840a623d96fa5",
+      "source_pull_request": 47,
+      "source_path": "observatory",
+      "source_state": "MERGED",
+      "source_url": "https://github.com/szl-holdings/uds-bundles/tree/9f4f9e60e3cb9908cb93663977a840a623d96fa5/observatory",
+      "api": [
+        "GET /healthz",
+        "GET /readyz",
+        "GET /api/source",
+        "GET /api/bundles",
+        "GET /api/bundles/{slug}",
+        "POST /api/validate"
+      ],
+      "measured_properties": [
+        "bounded local manifest discovery",
+        "strict duplicate-key parsing",
+        "raw and canonical SHA-256 receipts",
+        "responsive local-only frontend"
+      ],
+      "excluded_authority": [
+        "cluster access",
+        "package deployment",
+        "OCI publication",
+        "signing",
+        "shell execution"
+      ],
+      "audiences": ["operator", "developer", "investor"],
+      "hub_target": "SZLHOLDINGS/szl-atelier",
+      "hub_publication_state": "UNAVAILABLE_REQUIRES_POST_MERGE_PUBLISHER_READBACK",
+      "runtime_state": "UNAVAILABLE_REQUIRES_HUB_RUNTIME_READBACK",
+      "commercial_role": "CAPABILITY_NOT_PEER_FLAGSHIP"
+    },
+    {
+      "slug": "mesh-convergence-lab",
+      "name": "Mesh Convergence Lab",
+      "category": "ddil-coordination",
+      "one_liner": "Run finite, deterministic convergence experiments over the real two-track Mesh CRDT.",
+      "source_repository": "szl-holdings/szl-mesh",
+      "introduced_revision": "e19c280d24fbb8f08d843a4087bb15d91d55a5c4",
+      "source_pull_request": 39,
+      "source_path": "lab",
+      "source_state": "MERGED",
+      "source_url": "https://github.com/szl-holdings/szl-mesh/tree/e19c280d24fbb8f08d843a4087bb15d91d55a5c4/lab",
+      "api": [
+        "GET /healthz",
+        "GET /readyz",
+        "GET /api/source",
+        "GET /api/scenarios",
+        "GET /api/scenarios/{slug}",
+        "POST /api/simulate"
+      ],
+      "measured_properties": [
+        "same-operation-set scenario convergence",
+        "replay idempotence",
+        "sample merge commutativity and associativity",
+        "authorized and observed view separation"
+      ],
+      "excluded_authority": [
+        "network transport",
+        "peer enrollment",
+        "DSSE signature verification",
+        "Byzantine fault-tolerance claim",
+        "repository mutation"
+      ],
+      "audiences": ["operator", "developer", "researcher", "investor"],
+      "hub_target": "SZLHOLDINGS/szl-atelier",
+      "hub_publication_state": "UNAVAILABLE_REQUIRES_POST_MERGE_PUBLISHER_READBACK",
+      "runtime_state": "UNAVAILABLE_REQUIRES_HUB_RUNTIME_READBACK",
+      "commercial_role": "CAPABILITY_NOT_PEER_FLAGSHIP"
+    }
+  ],
+  "truth_boundary": "SOURCE_MERGED != HUB_PUBLISHED != RUNTIME_READY != EXACT_SOURCE_MATCH"
+}
