@@ -74,3 +74,23 @@ def test_contract_has_unique_safe_paths() -> None:
         path = BUILDER.strict_relative(value, label="test")
         assert not path.is_absolute()
         assert ".." not in path.parts
+
+
+def test_space_card_metadata_matches_hub_acceptance_contract() -> None:
+    """Prevent a valid source package from failing at the Hub card parser."""
+
+    text = (ROOT / "SPACE_README.md").read_text(encoding="utf-8")
+    assert text.startswith("---\n")
+    frontmatter = text.split("---\n", 2)[1]
+    fields: dict[str, str] = {}
+    for raw_line in frontmatter.splitlines():
+        if not raw_line.strip() or ":" not in raw_line:
+            continue
+        key, value = raw_line.split(":", 1)
+        fields[key.strip()] = value.strip()
+
+    assert fields["sdk"] == "docker"
+    assert fields["app_port"] == "7860"
+    assert fields["emoji"] == "🧵"
+    assert len(fields["short_description"]) <= 60
+    assert fields["short_description"] == "Source-bound discovery for SZL models, data, and Spaces."
