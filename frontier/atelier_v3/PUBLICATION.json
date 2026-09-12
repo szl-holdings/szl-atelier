@@ -29,14 +29,16 @@
     },
     {
       "target": "PUBLICATION_RECEIPT.json",
-      "content": "source SHA, source-file SHA-256 values, target-file SHA-256 values, and Hub commit readback without credentials"
+      "content": "immutable package-preparation evidence: source SHA and file SHA-256 values; completed Hub/runtime readback belongs to the separate publisher report"
     }
   ],
   "required_readback": [
     "source main still equals approved source SHA immediately before upload",
     "Hub commit returned by the canonical writer",
+    "package receipt and controlled bytes match the qualified source checkout before provider calls",
     "all target controlled bytes equal the generated publication package",
     "Space runtime stage is RUNNING",
+    "provider head and running runtime SHA equal the returned upload commit before and after application probes",
     "/healthz returns status ok",
     "/readyz returns READY",
     "/api/source reports the exact approved source SHA",
