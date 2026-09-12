@@ -139,7 +139,7 @@ def build(source_sha: str, output: Path) -> dict[str, Any]:
             "target": contract["target"],
             "canonical_writer": contract["canonical_writer"],
             "source_files": source_files,
-            "target_files": target_files,
+            "target_files": dict(target_files),
             "hub_commit": "UNAVAILABLE_NOT_PUBLISHED",
             "runtime_ready": "UNAVAILABLE_NOT_PUBLISHED",
             "exact_readback_verified": False,

@@ -24,6 +24,8 @@ from typing import Any, Final
 from huggingface_hub import HfApi, hf_hub_download
 from huggingface_hub.errors import HfHubHTTPError
 
+from build_publication import HERE as SOURCE_ROOT, duplicate_guard, load_contract
+
 TARGET: Final = "SZLHOLDINGS/szl-atelier"
 REPO_TYPE: Final = "space"
 SOURCE_RE = re.compile(r"^[0-9a-f]{40}$")
@@ -50,6 +52,10 @@ class PublishError(RuntimeError):
     """The release cannot be completed without weakening its proof boundary."""
 
 
+class ProviderRevisionError(PublishError):
+    """The provider head changed after the upload was observed."""
+
+
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
         raise urllib.error.HTTPError(req.full_url, code, "redirect rejected", headers, fp)
@@ -74,6 +80,10 @@ def safe_write(path: Path, value: dict[str, Any]) -> None:
 
 
 def validate_package(package: Path, source_sha: str) -> dict[str, dict[str, Any]]:
+    if package.is_symlink():
+        raise PublishError("publication package is unavailable or symlinked")
+    if not SOURCE_RE.fullmatch(source_sha):
+        raise PublishError("source SHA must be exact lowercase 40-character hex")
     package = package.resolve()
     if not package.is_dir() or package.is_symlink():
         raise PublishError("publication package is unavailable or symlinked")
@@ -101,7 +111,58 @@ def validate_package(package: Path, source_sha: str) -> dict[str, dict[str, Any]
     source_value = (package / "SOURCE_REVISION").read_text(encoding="ascii").strip()
     if source_value != source_sha:
         raise PublishError("SOURCE_REVISION does not match requested source SHA")
+    validate_package_receipt(package, source_sha, files)
     return files
+
+
+def validate_package_receipt(
+    package: Path, source_sha: str, files: dict[str, dict[str, Any]]
+) -> None:
+    """Compare the preparation receipt and package to this qualified checkout."""
+    try:
+        raw = (package / "PUBLICATION_RECEIPT.json").read_bytes()
+        if len(raw) > MAX_REPORT_BYTES:
+            raise PublishError("package receipt exceeded byte limit")
+        if {"bytes": len(raw), "sha256": sha256(raw)} != files.get("PUBLICATION_RECEIPT.json"):
+            raise PublishError("package receipt changed after inventory")
+        receipt = json.loads(raw.decode("utf-8"), object_pairs_hook=duplicate_guard)
+        contract = load_contract()
+    except (OSError, ValueError, UnicodeError) as exc:
+        raise PublishError("package receipt or publication contract is invalid") from exc
+    source_files: dict[str, dict[str, Any]] = {}
+    target_files: dict[str, dict[str, Any]] = {}
+    for row in contract["mapping"]:
+        source = SOURCE_ROOT / row["source"]
+        if source.is_symlink() or not source.is_file() or not source.resolve().is_relative_to(SOURCE_ROOT):
+            raise PublishError("canonical source file is unavailable or outside the source root")
+        data = source.read_bytes()
+        measurement = {"bytes": len(data), "sha256": sha256(data)}
+        source_files[row["source"]] = measurement
+        target_files[row["target"]] = measurement
+    revision_bytes = (source_sha + "\n").encode("ascii")
+    target_files["SOURCE_REVISION"] = {
+        "bytes": len(revision_bytes), "sha256": sha256(revision_bytes)
+    }
+    measured_payload = {name: value for name, value in files.items() if name != "PUBLICATION_RECEIPT.json"}
+    if measured_payload != target_files:
+        raise PublishError("package bytes do not match the canonical source projection")
+    expected = {
+        "schema": "szl.hf-publication-package/v1",
+        "state": "PACKAGE_BUILT_NOT_PUBLISHED",
+        "source_repository": contract["source_repository"],
+        "source_sha": source_sha,
+        "target": contract["target"],
+        "canonical_writer": contract["canonical_writer"],
+        "source_files": source_files,
+        "target_files": target_files,
+        "hub_commit": "UNAVAILABLE_NOT_PUBLISHED",
+        "runtime_ready": "UNAVAILABLE_NOT_PUBLISHED",
+        "exact_readback_verified": False,
+        "secrets_recorded": False,
+    }
+    expected["package_receipt_sha256"] = sha256(canonical_bytes(expected))
+    if canonical_bytes(receipt) != canonical_bytes(expected):
+        raise PublishError("package receipt does not match the canonical preparation evidence")
 
 
 def runtime_stage(info: Any) -> str:
@@ -109,6 +170,18 @@ def runtime_stage(info: Any) -> str:
     if isinstance(runtime, dict):
         return str(runtime.get("stage") or "UNAVAILABLE")
     return str(getattr(runtime, "stage", None) or "UNAVAILABLE")
+
+
+def runtime_revision(info: Any) -> str | None:
+    runtime = getattr(info, "runtime", None)
+    raw = runtime if isinstance(runtime, dict) else getattr(runtime, "raw", None)
+    value = raw.get("sha") if isinstance(raw, dict) else None
+    return value if isinstance(value, str) and SOURCE_RE.fullmatch(value) else None
+
+
+def require_provider_revision(info: Any, hub_sha: str) -> None:
+    if getattr(info, "sha", None) != hub_sha:
+        raise ProviderRevisionError("provider head does not match the uploaded Hub commit")
 
 
 def public_base_url(info: Any) -> str:
@@ -174,7 +247,11 @@ def verify_remote_bytes(
     return sorted(remote_files), measured
 
 
-def wait_for_runtime(api: HfApi, source_sha: str, timeout_seconds: int) -> dict[str, Any]:
+def wait_for_runtime(
+    api: HfApi, source_sha: str, timeout_seconds: int, *, hub_sha: str
+) -> dict[str, Any]:
+    if not SOURCE_RE.fullmatch(source_sha) or not SOURCE_RE.fullmatch(hub_sha):
+        raise PublishError("runtime verification requires exact source and Hub commits")
     deadline = time.monotonic() + timeout_seconds
     observations: list[dict[str, Any]] = []
     last_error = "runtime not observed"
@@ -182,20 +259,24 @@ def wait_for_runtime(api: HfApi, source_sha: str, timeout_seconds: int) -> dict[
         try:
             info = api.space_info(
                 TARGET,
-                token=True,
                 expand=["sha", "runtime", "sdk", "subdomain"],
             )
+            require_provider_revision(info, hub_sha)
             stage = runtime_stage(info)
+            running_sha = runtime_revision(info)
             base_url = public_base_url(info)
             observation = {
                 "at_unix": int(time.time()),
                 "hub_sha": getattr(info, "sha", None),
+                "runtime_sha": running_sha,
                 "runtime_stage": stage,
                 "base_url": base_url,
             }
             observations.append(observation)
             observations = observations[-40:]
             if stage == "RUNNING":
+                if running_sha != hub_sha:
+                    raise PublishError("running revision is unavailable or does not match the uploaded Hub commit")
                 health = read_json(base_url + "/healthz")
                 readiness = read_json(base_url + "/readyz")
                 source = read_json(base_url + "/api/source")
@@ -206,9 +287,17 @@ def wait_for_runtime(api: HfApi, source_sha: str, timeout_seconds: int) -> dict[
                 source_value = source.get("source") if isinstance(source.get("source"), dict) else {}
                 if source_value.get("state") != "MEASURED" or source_value.get("revision") != source_sha:
                     raise PublishError("runtime source revision does not match approved GitHub source")
+                final_info = api.space_info(
+                    TARGET, expand=["sha", "runtime", "sdk", "subdomain"]
+                )
+                require_provider_revision(final_info, hub_sha)
+                if runtime_stage(final_info) != "RUNNING" or runtime_revision(final_info) != hub_sha:
+                    raise PublishError("running revision changed during application readback")
                 return {
                     "state": "EXACT_RUNTIME_READBACK_VERIFIED",
                     "runtime_stage": stage,
+                    "hub_sha": hub_sha,
+                    "runtime_sha": running_sha,
                     "base_url": base_url,
                     "health": health,
                     "readiness": readiness,
@@ -216,6 +305,8 @@ def wait_for_runtime(api: HfApi, source_sha: str, timeout_seconds: int) -> dict[
                     "observations": observations,
                 }
             last_error = f"runtime stage {stage}"
+        except ProviderRevisionError:
+            raise
         except (HfHubHTTPError, OSError, urllib.error.URLError, json.JSONDecodeError, PublishError) as exc:
             last_error = f"{type(exc).__name__}: {str(exc)[:240]}"
         time.sleep(15)
@@ -243,6 +334,8 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
     )
     before = api.space_info(TARGET, token=token, expand=["sha", "runtime", "sdk", "subdomain"])
     parent = getattr(before, "sha", None)
+    if not isinstance(parent, str) or not SOURCE_RE.fullmatch(parent):
+        raise PublishError("exact provider parent is unavailable; no upload attempted")
     commit = api.upload_folder(
         repo_id=TARGET,
         repo_type=REPO_TYPE,
@@ -259,11 +352,13 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
         or getattr(commit, "commit_id", None)
         or getattr(commit, "commit_oid", None)
     )
+    if not isinstance(content_commit, str) or not SOURCE_RE.fullmatch(content_commit):
+        raise PublishError("upload did not return an exact Hub commit")
     after = api.space_info(TARGET, token=token, expand=["sha", "runtime", "sdk", "subdomain"])
     hub_sha = str(getattr(after, "sha", None) or "")
-    if not hub_sha:
+    if not SOURCE_RE.fullmatch(hub_sha):
         raise PublishError("Hub commit readback is unavailable")
-    if content_commit and str(content_commit) != hub_sha:
+    if content_commit != hub_sha:
         raise PublishError(f"upload commit {content_commit} does not match Hub head {hub_sha}")
 
     remote_files, measured_files = verify_remote_bytes(
@@ -272,7 +367,7 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
         local_files=local_files,
         api=api,
     )
-    runtime = wait_for_runtime(api, source_sha, timeout_seconds)
+    runtime = wait_for_runtime(api, source_sha, timeout_seconds, hub_sha=hub_sha)
     result = {
         "schema": "szl.atelier-provider-readback/v1",
         "state": "EXACT_READBACK_VERIFIED",
@@ -280,6 +375,7 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
         "source_sha": source_sha,
         "target": TARGET,
         "hub_content_commit": hub_sha,
+        "package_receipt_file_sha256": local_files["PUBLICATION_RECEIPT.json"]["sha256"],
         "remote_files": remote_files,
         "measured_files": measured_files,
         "runtime": runtime,
