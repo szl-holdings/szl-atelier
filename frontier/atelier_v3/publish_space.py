@@ -13,6 +13,7 @@ import hashlib
 import json
 import os
 import re
+import stat
 import tempfile
 import time
 import urllib.error
@@ -21,7 +22,7 @@ import urllib.request
 from pathlib import Path, PurePosixPath
 from typing import Any, Final
 
-from huggingface_hub import HfApi, hf_hub_download
+from huggingface_hub import CommitOperationAdd, CommitOperationDelete, HfApi, hf_hub_download
 from huggingface_hub.errors import HfHubHTTPError
 
 from build_publication import HERE as SOURCE_ROOT, duplicate_guard, load_contract
@@ -32,6 +33,8 @@ SOURCE_RE = re.compile(r"^[0-9a-f]{40}$")
 TOKEN_RE = re.compile(r"(?:github_pat_|gh[pousr]_|hf_)[A-Za-z0-9_]{12,}")
 MAX_REPORT_BYTES: Final = 1_000_000
 MAX_HTTP_BYTES: Final = 512_000
+MAX_FROZEN_BYTES: Final = 32_000_000
+MAX_REMOTE_FILES: Final = 10_000
 EXPECTED_CORE: Final = {
     "README.md",
     "Dockerfile",
@@ -163,6 +166,96 @@ def validate_package_receipt(
     expected["package_receipt_sha256"] = sha256(canonical_bytes(expected))
     if canonical_bytes(receipt) != canonical_bytes(expected):
         raise PublishError("package receipt does not match the canonical preparation evidence")
+
+
+def _package_members(package: Path) -> set[str]:
+    """Reject non-regular entries without following producer-controlled links."""
+    if package.is_symlink() or not package.is_dir():
+        raise PublishError("publication package is unavailable or symlinked")
+    members: set[str] = set()
+    for path in package.rglob("*"):
+        mode = path.lstat().st_mode
+        if stat.S_ISLNK(mode):
+            raise PublishError("symlink is forbidden in publication package")
+        if stat.S_ISDIR(mode):
+            continue
+        if not stat.S_ISREG(mode):
+            raise PublishError("non-regular file in publication package")
+        members.add(path.relative_to(package).as_posix())
+        if len(members) > len(EXPECTED_CORE):
+            raise PublishError("package file set changed after validation")
+    return members
+
+
+def freeze_validated_package(
+    package: Path, files: dict[str, dict[str, Any]]
+) -> tuple[tuple[str, bytes], ...]:
+    """Capture the validated payload as bounded immutable bytes before any API call.
+
+    This is not a filesystem lock. Concurrent writes during capture must still
+    match the already-qualified hashes; later writes cannot affect SDK uploads
+    because no producer path is handed to the SDK.
+    """
+    if set(files) != EXPECTED_CORE:
+        raise PublishError("validated package inventory is incomplete")
+    budget = 0
+    for measurement in files.values():
+        size = measurement.get("bytes")
+        digest = measurement.get("sha256")
+        if (type(size) is not int or size < 0 or not isinstance(digest, str)
+                or not re.fullmatch(r"[0-9a-f]{64}", digest)):
+            raise PublishError("validated package measurement is invalid")
+        budget += size
+        if budget > MAX_FROZEN_BYTES:
+            raise PublishError("frozen publication package exceeded byte limit")
+    try:
+        if _package_members(package) != EXPECTED_CORE:
+            raise PublishError("package file set changed after validation")
+        package = package.resolve(strict=True)
+        frozen: list[tuple[str, bytes]] = []
+        for relative in sorted(EXPECTED_CORE):
+            path = package / relative
+            for item in (path, *path.parents):
+                if item == package:
+                    break
+                if item.is_symlink():
+                    raise PublishError("symlink is forbidden in publication package")
+            # Reject FIFO/device substitutions rather than blocking on open.
+            flags = os.O_RDONLY | getattr(os, "O_BINARY", 0)
+            flags |= getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
+            with os.fdopen(os.open(path, flags), "rb") as stream:
+                if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+                    raise PublishError("non-regular file in publication package")
+                data = stream.read(files[relative]["bytes"] + 1)
+            actual = {"bytes": len(data), "sha256": sha256(data)}
+            if actual != files[relative]:
+                raise PublishError("package bytes changed after validation")
+            frozen.append((relative, data))
+        if _package_members(package) != EXPECTED_CORE:
+            raise PublishError("package file set changed during capture")
+    except OSError as exc:
+        raise PublishError("publication package became unavailable during capture") from exc
+    return tuple(frozen)
+
+
+def remote_deletions(api: HfApi, *, parent: str, token: str) -> list[CommitOperationDelete]:
+    """Retain exact-replacement semantics, scoped to the observed parent commit."""
+    names = api.list_repo_files(TARGET, repo_type=REPO_TYPE, revision=parent, token=token)
+    if not isinstance(names, list) or len(names) > MAX_REMOTE_FILES:
+        raise PublishError("remote file inventory is invalid or outside bounds")
+    observed: set[str] = set()
+    for name in names:
+        if (not isinstance(name, str) or not name or len(name) > 1024
+                or "\\" in name or "\x00" in name or name.startswith("/")
+                or any(part in {"", ".", ".."} for part in name.split("/"))
+                or name in observed):
+            raise PublishError("remote file inventory contains an invalid path")
+        observed.add(name)
+    # Like upload_folder, preserve the provider's root .gitattributes file.
+    return [
+        CommitOperationDelete(path_in_repo=name, is_folder=False)
+        for name in sorted(observed - EXPECTED_CORE - ALLOWED_PROVIDER_EXTRAS)
+    ]
 
 
 def runtime_stage(info: Any) -> str:
@@ -323,6 +416,11 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
         raise PublishError("HF_TOKEN does not match the required credential shape")
 
     local_files = validate_package(package, source_sha)
+    frozen = freeze_validated_package(package, local_files)
+    additions = tuple(
+        CommitOperationAdd(path_in_repo=name, path_or_fileobj=data)
+        for name, data in frozen
+    )
     api = HfApi(token=token)
     api.create_repo(
         repo_id=TARGET,
@@ -336,13 +434,13 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
     parent = getattr(before, "sha", None)
     if not isinstance(parent, str) or not SOURCE_RE.fullmatch(parent):
         raise PublishError("exact provider parent is unavailable; no upload attempted")
-    commit = api.upload_folder(
+    deletions = remote_deletions(api, parent=parent, token=token)
+    commit = api.create_commit(
         repo_id=TARGET,
         repo_type=REPO_TYPE,
-        folder_path=str(package.resolve()),
+        operations=tuple(deletions) + additions,
         revision="main",
         parent_commit=parent,
-        delete_patterns=["*"],
         commit_message=f"Deploy SZL Atelier v3 from GitHub {source_sha}",
         commit_description="Source-bound package generated by frontier/atelier_v3/build_publication.py",
         token=token,

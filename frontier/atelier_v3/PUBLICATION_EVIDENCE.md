@@ -29,3 +29,24 @@ declaration, not an authenticated checkout or a deployment authorization.
 Readback proves the observations recorded during the run, not future uptime or
 independent third-party attestation. Existing credential and release holds still
 apply; this change does not rotate credentials or deploy a Space.
+
+## Upload-time byte ownership
+
+Before constructing the provider client or making its first call, the publisher
+re-reads all eleven validated files, including the preparation receipt. Each
+captured size and digest must match the canonical validation result. Capture is
+bounded to 32,000,000 aggregate bytes and rejects symlinks, non-regular files and
+observed file-set changes. A mismatched capture stops before provider mutation.
+
+The SDK receives immutable Python `bytes` through `CommitOperationAdd`, not a
+path into the producer's package. Changing, replacing or removing the package
+after capture cannot change the bytes sent in the content commit. This is not a
+filesystem lock or isolation from a compromised publisher process.
+
+The same canonical publisher still performs one parent-bound content commit.
+Deletion candidates come from the exact observed parent revision, are bounded
+to 10,000 remote files, and preserve the provider's root `.gitattributes` file.
+Controlled files are overwritten by their captured bytes; obsolete files are
+explicitly deleted. No whole-folder upload, alternate publisher or retry on an
+uncertain content-commit response is introduced. Independent remote-byte and
+runtime readback remain mandatory after that commit.

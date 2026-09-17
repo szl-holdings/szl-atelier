@@ -266,7 +266,7 @@ def test_publish_binds_completion_to_uploaded_commit_and_package(monkeypatch, tm
     def upload(**kwargs):
         calls.append(kwargs)
         return SimpleNamespace(oid=HUB)
-    api = SimpleNamespace(create_repo=lambda **_: None, space_info=lambda *a, **k: next(info_calls), upload_folder=upload)
+    api = SimpleNamespace(create_repo=lambda **_: None, space_info=lambda *a, **k: next(info_calls), create_commit=upload, list_repo_files=lambda *a, **k: [])
     monkeypatch.setenv("HF_TOKEN", "hf_" + "x" * 20)
     monkeypatch.setattr(publish_space, "HfApi", lambda **_: api)
     measured = publish_space.validate_package(package, SOURCE)
@@ -277,6 +277,9 @@ def test_publish_binds_completion_to_uploaded_commit_and_package(monkeypatch, tm
     monkeypatch.setattr(publish_space, "wait_for_runtime", wait)
     result = publish_space.publish(SOURCE, package, tmp_path / "report.json", 60)
     assert calls[0]["parent_commit"] == "c" * 40
+    operations = calls[0]["operations"]
+    assert len(operations) == len(publish_space.EXPECTED_CORE)
+    assert all(type(operation.path_or_fileobj) is bytes for operation in operations)
     assert result["hub_content_commit"] == HUB
     assert result["package_receipt_file_sha256"] == measured["PUBLICATION_RECEIPT.json"]["sha256"]
     assert json.loads((tmp_path / "report.json").read_text()) == result
