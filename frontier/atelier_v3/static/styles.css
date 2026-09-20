@@ -20,7 +20,7 @@
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  min-width: 20rem;
+  container-type: inline-size;
   background:
     radial-gradient(circle at 12% 8%, rgba(61, 199, 205, 0.12), transparent 28rem),
     radial-gradient(circle at 85% 22%, rgba(93, 133, 255, 0.11), transparent 34rem),
@@ -239,6 +239,39 @@ pre { max-width: 100%; max-height: 20rem; overflow: auto; margin-top: 1rem; padd
   .constellation { grid-template-columns: 1fr; }
   .orbit-node { min-height: 9rem; }
   .evidence-list { grid-template-columns: 1fr; }
+  .evidence-list dt { padding-bottom: 0.2rem; border-bottom: 0; }
+  .evidence-list dd { padding-top: 0.2rem; }
+}
+
+/* CSS zoom can narrow the content area without changing viewport media queries.
+   Keep the viewport rules above as a fallback, and reflow from the actual body
+   inline size when container queries are available. */
+@container (max-width: 72rem) {
+  .control-deck { grid-template-columns: 1fr 1fr; }
+  .mode-control { grid-column: 1 / -1; }
+  .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .constellation { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@container (max-width: 48rem) {
+  .shell { width: min(100% - 1.25rem, 92rem); }
+  .masthead, .section-heading { align-items: flex-start; flex-direction: column; }
+  .masthead { min-height: 0; padding-top: 3.5rem; }
+  .hero-grid, .control-deck, .footer { grid-template-columns: minmax(0, 1fr); }
+  .telemetry-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .telemetry-strip div:nth-child(2) { border-inline-end: 0; }
+  .telemetry-strip div:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+  .constellation { grid-template-columns: repeat(2, minmax(0, 1fr)); min-height: 0; }
+  .catalog-grid { grid-template-columns: minmax(0, 1fr); }
+  .artifact-card { min-height: 0; }
+  .card-summary { min-height: 0; }
+}
+
+@container (max-width: 30rem) {
+  .segmented { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .constellation { grid-template-columns: minmax(0, 1fr); }
+  .orbit-node { min-height: 9rem; }
+  .evidence-list { grid-template-columns: minmax(0, 1fr); }
   .evidence-list dt { padding-bottom: 0.2rem; border-bottom: 0; }
   .evidence-list dd { padding-top: 0.2rem; }
 }
