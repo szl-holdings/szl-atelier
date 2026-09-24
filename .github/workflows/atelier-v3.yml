@@ -29,6 +29,8 @@ jobs:
     name: atelier-v3/qualify
     runs-on: ubuntu-24.04
     timeout-minutes: 18
+    env:
+      SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
@@ -38,8 +40,16 @@ jobs:
       - name: Checkout exact candidate
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 1
+
+      - name: Prove exact source revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "${actual}" = "${SOURCE_REVISION}"
 
       - name: Set up exact Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -60,8 +70,6 @@ jobs:
 
       - name: Prove backend publisher and receipt contracts
         shell: bash
-        env:
-          SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           python -m py_compile \
@@ -80,10 +88,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          candidate_sha="${{ github.event.pull_request.head.sha || github.sha }}"
           rm -rf /tmp/atelier-v3-publication
           python frontier/atelier_v3/build_publication.py \
-            --source-sha "${candidate_sha}" \
+            --source-sha "${SOURCE_REVISION}" \
             --output /tmp/atelier-v3-publication
           python - <<'PY'
           import hashlib
@@ -203,14 +210,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          docker build --file frontier/atelier_v3/Dockerfile --tag szl-atelier-v3:${GITHUB_SHA} .
-          test "$(docker image inspect --format '{{.Config.User}}' szl-atelier-v3:${GITHUB_SHA})" = "10001:10001"
+          docker build --file frontier/atelier_v3/Dockerfile --tag "szl-atelier-v3:${SOURCE_REVISION}" .
+          test "$(docker image inspect --format '{{.Config.User}}' "szl-atelier-v3:${SOURCE_REVISION}")" = "10001:10001"
           rm -rf /tmp/atelier-space-container
           python frontier/atelier_v3/build_publication.py \
-            --source-sha "${{ github.event.pull_request.head.sha || github.sha }}" \
+            --source-sha "${SOURCE_REVISION}" \
             --output /tmp/atelier-space-container
-          docker build --file /tmp/atelier-space-container/Dockerfile --tag szl-atelier-space:${GITHUB_SHA} /tmp/atelier-space-container
-          test "$(docker image inspect --format '{{.Config.User}}' szl-atelier-space:${GITHUB_SHA})" = "10001:10001"
+          docker build --file /tmp/atelier-space-container/Dockerfile --tag "szl-atelier-space:${SOURCE_REVISION}" /tmp/atelier-space-container
+          test "$(docker image inspect --format '{{.Config.User}}' "szl-atelier-space:${SOURCE_REVISION}")" = "10001:10001"
 
       - name: Verify clean candidate
         shell: bash
