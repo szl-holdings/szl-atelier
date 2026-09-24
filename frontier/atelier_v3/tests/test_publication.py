@@ -56,6 +56,33 @@ def test_space_readme_front_matter_is_docker_only() -> None:
     assert "sdk: static" not in text
 
 
+def test_pull_request_workflows_bind_exact_source_revision() -> None:
+    repository_root = ROOT.parents[1]
+    revision_expression = "${{ github.event.pull_request.head.sha || github.sha }}"
+    workflow_paths = (
+        repository_root / ".github/workflows/ci.yml",
+        repository_root / ".github/workflows/atelier-v3.yml",
+    )
+
+    for workflow_path in workflow_paths:
+        workflow = workflow_path.read_text(encoding="utf-8")
+        assert f"SOURCE_REVISION: {revision_expression}" in workflow
+        assert f"ref: {revision_expression}" in workflow
+        assert "persist-credentials: false" in workflow
+        assert 'actual="$(git rev-parse HEAD)"' in workflow
+        assert 'test "${actual}" = "${SOURCE_REVISION}"' in workflow
+
+    root_ci = workflow_paths[0].read_text(encoding="utf-8")
+    assert 'szl-atelier:${SOURCE_REVISION}' in root_ci
+    assert 'szl-atelier:${{ github.sha }}' not in root_ci
+
+    atelier_ci = workflow_paths[1].read_text(encoding="utf-8")
+    assert 'szl-atelier-v3:${SOURCE_REVISION}' in atelier_ci
+    assert 'szl-atelier-space:${SOURCE_REVISION}' in atelier_ci
+    assert 'szl-atelier-v3:${GITHUB_SHA}' not in atelier_ci
+    assert 'szl-atelier-space:${GITHUB_SHA}' not in atelier_ci
+
+
 def test_runtime_launcher_binds_only_exact_source_sha(monkeypatch, tmp_path: Path) -> None:
     module_path = ROOT / "run.py"
     spec = importlib.util.spec_from_file_location("atelier_run", module_path)
