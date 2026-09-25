@@ -107,11 +107,18 @@ def test_unknown_and_malformed_artifacts_fail_closed() -> None:
 def test_source_receipt_contains_no_environment_values(monkeypatch) -> None:
     monkeypatch.setenv("SOURCE_REVISION", "a" * 40)
     monkeypatch.setenv("HF_TOKEN", "hf_" + "x" * 40)
-    response = client.get("/api/source")
-    assert response.status_code == 200
-    text = response.text
-    assert "hf_" not in text
-    payload = response.json()
+    paths = (
+        "/api/source",
+        "/api/build-info",
+        "/.well-known/szl-source.json",
+    )
+    responses = [client.get(path) for path in paths]
+    assert all(response.status_code == 200 for response in responses)
+    assert all(response.headers["cache-control"] == "no-store" for response in responses)
+    assert all("hf_" not in response.text for response in responses)
+
+    payload = responses[0].json()
+    assert all(response.json() == payload for response in responses[1:])
     assert payload["source"] == {
         "state": "MEASURED",
         "revision": "a" * 40,
@@ -119,6 +126,10 @@ def test_source_receipt_contains_no_environment_values(monkeypatch) -> None:
     }
     assert payload["mutation_authority"] is False
     assert payload["secrets_recorded"] is False
+
+    unsigned = dict(payload)
+    digest = unsigned.pop("receipt_sha256")
+    assert digest == module.receipt(unsigned)
 
 
 def test_security_headers_and_local_assets() -> None:

@@ -23,6 +23,8 @@ Open `http://127.0.0.1:7860`.
 | `GET /healthz` | Process liveness only |
 | `GET /readyz` | Controlled-file availability and source identity |
 | `GET /api/source` | Exact source revision, controlled-file hashes, and receipt |
+| `GET /api/build-info` | Alias of `/api/source`; returns the identical source-bound receipt |
+| `GET /.well-known/szl-source.json` | Well-known alias of `/api/source`; returns the identical source-bound receipt |
 | `GET /api/catalog` | Deterministic curated catalog with bounded filters |
 | `GET /api/catalog/{kind}/{slug}` | Exact artifact evidence; provider readback is opt-in |
 

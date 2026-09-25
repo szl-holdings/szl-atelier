@@ -36,6 +36,11 @@ KINDS: Final = {"model": "models", "dataset": "datasets", "space": "spaces"}
 MAX_PROVIDER_BYTES: Final = 512_000
 PROVIDER_TIMEOUT_SECONDS: Final = 6.0
 CACHE_TTL_SECONDS: Final = 120.0
+SOURCE_IDENTITY_PATHS: Final = {
+    "/api/source",
+    "/api/build-info",
+    "/.well-known/szl-source.json",
+}
 
 
 class ProviderResult(BaseModel):
@@ -194,7 +199,12 @@ async def security_headers(request: Request, call_next):  # noqa: ANN001
     response: Response = await call_next(request)
     response.headers.update(
         {
-            "Cache-Control": "no-store" if request.url.path.startswith("/api/") else "public, max-age=300",
+            "Cache-Control": (
+                "no-store"
+                if request.url.path.startswith("/api/")
+                or request.url.path in SOURCE_IDENTITY_PATHS
+                else "public, max-age=300"
+            ),
             "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'",
             "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
             "Referrer-Policy": "no-referrer",
@@ -222,6 +232,8 @@ def readyz(response: Response) -> dict[str, Any]:
     return {"status": state, "missing": missing, "source": source}
 
 
+@app.get("/.well-known/szl-source.json")
+@app.get("/api/build-info")
 @app.get("/api/source")
 def source() -> dict[str, Any]:
     value = {
