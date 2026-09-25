@@ -22,6 +22,10 @@ def test_build_is_deterministic_and_source_bound(tmp_path: Path) -> None:
     first = BUILDER.build(sha, first_dir)
     second = BUILDER.build(sha, second_dir)
     assert first == second
+    assert first == json.loads((first_dir / "PUBLICATION_RECEIPT.json").read_text(encoding="utf-8"))
+    returned_payload = dict(first)
+    returned_digest = returned_payload.pop("package_receipt_sha256")
+    assert returned_digest == BUILDER.digest(BUILDER.canonical_bytes(returned_payload))
     assert first["state"] == "PACKAGE_BUILT_NOT_PUBLISHED"
     assert first["source_sha"] == sha
     assert first["target"]["repository"] == "SZLHOLDINGS/szl-atelier"

@@ -13,6 +13,7 @@ import hashlib
 import json
 import os
 import re
+import stat
 import tempfile
 import time
 import urllib.error
@@ -21,8 +22,10 @@ import urllib.request
 from pathlib import Path, PurePosixPath
 from typing import Any, Final
 
-from huggingface_hub import HfApi, hf_hub_download
+from huggingface_hub import CommitOperationAdd, CommitOperationDelete, HfApi, hf_hub_download
 from huggingface_hub.errors import HfHubHTTPError
+
+from build_publication import HERE as SOURCE_ROOT, duplicate_guard, load_contract
 
 TARGET: Final = "SZLHOLDINGS/szl-atelier"
 REPO_TYPE: Final = "space"
@@ -30,6 +33,8 @@ SOURCE_RE = re.compile(r"^[0-9a-f]{40}$")
 TOKEN_RE = re.compile(r"(?:github_pat_|gh[pousr]_|hf_)[A-Za-z0-9_]{12,}")
 MAX_REPORT_BYTES: Final = 1_000_000
 MAX_HTTP_BYTES: Final = 512_000
+MAX_FROZEN_BYTES: Final = 32_000_000
+MAX_REMOTE_FILES: Final = 10_000
 EXPECTED_CORE: Final = {
     "README.md",
     "Dockerfile",
@@ -48,6 +53,10 @@ ALLOWED_PROVIDER_EXTRAS: Final = {".gitattributes"}
 
 class PublishError(RuntimeError):
     """The release cannot be completed without weakening its proof boundary."""
+
+
+class ProviderRevisionError(PublishError):
+    """The provider head changed after the upload was observed."""
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -74,6 +83,10 @@ def safe_write(path: Path, value: dict[str, Any]) -> None:
 
 
 def validate_package(package: Path, source_sha: str) -> dict[str, dict[str, Any]]:
+    if package.is_symlink():
+        raise PublishError("publication package is unavailable or symlinked")
+    if not SOURCE_RE.fullmatch(source_sha):
+        raise PublishError("source SHA must be exact lowercase 40-character hex")
     package = package.resolve()
     if not package.is_dir() or package.is_symlink():
         raise PublishError("publication package is unavailable or symlinked")
@@ -101,7 +114,148 @@ def validate_package(package: Path, source_sha: str) -> dict[str, dict[str, Any]
     source_value = (package / "SOURCE_REVISION").read_text(encoding="ascii").strip()
     if source_value != source_sha:
         raise PublishError("SOURCE_REVISION does not match requested source SHA")
+    validate_package_receipt(package, source_sha, files)
     return files
+
+
+def validate_package_receipt(
+    package: Path, source_sha: str, files: dict[str, dict[str, Any]]
+) -> None:
+    """Compare the preparation receipt and package to this qualified checkout."""
+    try:
+        raw = (package / "PUBLICATION_RECEIPT.json").read_bytes()
+        if len(raw) > MAX_REPORT_BYTES:
+            raise PublishError("package receipt exceeded byte limit")
+        if {"bytes": len(raw), "sha256": sha256(raw)} != files.get("PUBLICATION_RECEIPT.json"):
+            raise PublishError("package receipt changed after inventory")
+        receipt = json.loads(raw.decode("utf-8"), object_pairs_hook=duplicate_guard)
+        contract = load_contract()
+    except (OSError, ValueError, UnicodeError) as exc:
+        raise PublishError("package receipt or publication contract is invalid") from exc
+    source_files: dict[str, dict[str, Any]] = {}
+    target_files: dict[str, dict[str, Any]] = {}
+    for row in contract["mapping"]:
+        source = SOURCE_ROOT / row["source"]
+        if source.is_symlink() or not source.is_file() or not source.resolve().is_relative_to(SOURCE_ROOT):
+            raise PublishError("canonical source file is unavailable or outside the source root")
+        data = source.read_bytes()
+        measurement = {"bytes": len(data), "sha256": sha256(data)}
+        source_files[row["source"]] = measurement
+        target_files[row["target"]] = measurement
+    revision_bytes = (source_sha + "\n").encode("ascii")
+    target_files["SOURCE_REVISION"] = {
+        "bytes": len(revision_bytes), "sha256": sha256(revision_bytes)
+    }
+    measured_payload = {name: value for name, value in files.items() if name != "PUBLICATION_RECEIPT.json"}
+    if measured_payload != target_files:
+        raise PublishError("package bytes do not match the canonical source projection")
+    expected = {
+        "schema": "szl.hf-publication-package/v1",
+        "state": "PACKAGE_BUILT_NOT_PUBLISHED",
+        "source_repository": contract["source_repository"],
+        "source_sha": source_sha,
+        "target": contract["target"],
+        "canonical_writer": contract["canonical_writer"],
+        "source_files": source_files,
+        "target_files": target_files,
+        "hub_commit": "UNAVAILABLE_NOT_PUBLISHED",
+        "runtime_ready": "UNAVAILABLE_NOT_PUBLISHED",
+        "exact_readback_verified": False,
+        "secrets_recorded": False,
+    }
+    expected["package_receipt_sha256"] = sha256(canonical_bytes(expected))
+    if canonical_bytes(receipt) != canonical_bytes(expected):
+        raise PublishError("package receipt does not match the canonical preparation evidence")
+
+
+def _package_members(package: Path) -> set[str]:
+    """Reject non-regular entries without following producer-controlled links."""
+    if package.is_symlink() or not package.is_dir():
+        raise PublishError("publication package is unavailable or symlinked")
+    members: set[str] = set()
+    for path in package.rglob("*"):
+        mode = path.lstat().st_mode
+        if stat.S_ISLNK(mode):
+            raise PublishError("symlink is forbidden in publication package")
+        if stat.S_ISDIR(mode):
+            continue
+        if not stat.S_ISREG(mode):
+            raise PublishError("non-regular file in publication package")
+        members.add(path.relative_to(package).as_posix())
+        if len(members) > len(EXPECTED_CORE):
+            raise PublishError("package file set changed after validation")
+    return members
+
+
+def freeze_validated_package(
+    package: Path, files: dict[str, dict[str, Any]]
+) -> tuple[tuple[str, bytes], ...]:
+    """Capture the validated payload as bounded immutable bytes before any API call.
+
+    This is not a filesystem lock. Concurrent writes during capture must still
+    match the already-qualified hashes; later writes cannot affect SDK uploads
+    because no producer path is handed to the SDK.
+    """
+    if set(files) != EXPECTED_CORE:
+        raise PublishError("validated package inventory is incomplete")
+    budget = 0
+    for measurement in files.values():
+        size = measurement.get("bytes")
+        digest = measurement.get("sha256")
+        if (type(size) is not int or size < 0 or not isinstance(digest, str)
+                or not re.fullmatch(r"[0-9a-f]{64}", digest)):
+            raise PublishError("validated package measurement is invalid")
+        budget += size
+        if budget > MAX_FROZEN_BYTES:
+            raise PublishError("frozen publication package exceeded byte limit")
+    try:
+        if _package_members(package) != EXPECTED_CORE:
+            raise PublishError("package file set changed after validation")
+        package = package.resolve(strict=True)
+        frozen: list[tuple[str, bytes]] = []
+        for relative in sorted(EXPECTED_CORE):
+            path = package / relative
+            for item in (path, *path.parents):
+                if item == package:
+                    break
+                if item.is_symlink():
+                    raise PublishError("symlink is forbidden in publication package")
+            # Reject FIFO/device substitutions rather than blocking on open.
+            flags = os.O_RDONLY | getattr(os, "O_BINARY", 0)
+            flags |= getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
+            with os.fdopen(os.open(path, flags), "rb") as stream:
+                if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+                    raise PublishError("non-regular file in publication package")
+                data = stream.read(files[relative]["bytes"] + 1)
+            actual = {"bytes": len(data), "sha256": sha256(data)}
+            if actual != files[relative]:
+                raise PublishError("package bytes changed after validation")
+            frozen.append((relative, data))
+        if _package_members(package) != EXPECTED_CORE:
+            raise PublishError("package file set changed during capture")
+    except OSError as exc:
+        raise PublishError("publication package became unavailable during capture") from exc
+    return tuple(frozen)
+
+
+def remote_deletions(api: HfApi, *, parent: str, token: str) -> list[CommitOperationDelete]:
+    """Retain exact-replacement semantics, scoped to the observed parent commit."""
+    names = api.list_repo_files(TARGET, repo_type=REPO_TYPE, revision=parent, token=token)
+    if not isinstance(names, list) or len(names) > MAX_REMOTE_FILES:
+        raise PublishError("remote file inventory is invalid or outside bounds")
+    observed: set[str] = set()
+    for name in names:
+        if (not isinstance(name, str) or not name or len(name) > 1024
+                or "\\" in name or "\x00" in name or name.startswith("/")
+                or any(part in {"", ".", ".."} for part in name.split("/"))
+                or name in observed):
+            raise PublishError("remote file inventory contains an invalid path")
+        observed.add(name)
+    # Like upload_folder, preserve the provider's root .gitattributes file.
+    return [
+        CommitOperationDelete(path_in_repo=name, is_folder=False)
+        for name in sorted(observed - EXPECTED_CORE - ALLOWED_PROVIDER_EXTRAS)
+    ]
 
 
 def runtime_stage(info: Any) -> str:
@@ -109,6 +263,18 @@ def runtime_stage(info: Any) -> str:
     if isinstance(runtime, dict):
         return str(runtime.get("stage") or "UNAVAILABLE")
     return str(getattr(runtime, "stage", None) or "UNAVAILABLE")
+
+
+def runtime_revision(info: Any) -> str | None:
+    runtime = getattr(info, "runtime", None)
+    raw = runtime if isinstance(runtime, dict) else getattr(runtime, "raw", None)
+    value = raw.get("sha") if isinstance(raw, dict) else None
+    return value if isinstance(value, str) and SOURCE_RE.fullmatch(value) else None
+
+
+def require_provider_revision(info: Any, hub_sha: str) -> None:
+    if getattr(info, "sha", None) != hub_sha:
+        raise ProviderRevisionError("provider head does not match the uploaded Hub commit")
 
 
 def public_base_url(info: Any) -> str:
@@ -174,7 +340,11 @@ def verify_remote_bytes(
     return sorted(remote_files), measured
 
 
-def wait_for_runtime(api: HfApi, source_sha: str, timeout_seconds: int) -> dict[str, Any]:
+def wait_for_runtime(
+    api: HfApi, source_sha: str, timeout_seconds: int, *, hub_sha: str
+) -> dict[str, Any]:
+    if not SOURCE_RE.fullmatch(source_sha) or not SOURCE_RE.fullmatch(hub_sha):
+        raise PublishError("runtime verification requires exact source and Hub commits")
     deadline = time.monotonic() + timeout_seconds
     observations: list[dict[str, Any]] = []
     last_error = "runtime not observed"
@@ -182,20 +352,24 @@ def wait_for_runtime(api: HfApi, source_sha: str, timeout_seconds: int) -> dict[
         try:
             info = api.space_info(
                 TARGET,
-                token=True,
                 expand=["sha", "runtime", "sdk", "subdomain"],
             )
+            require_provider_revision(info, hub_sha)
             stage = runtime_stage(info)
+            running_sha = runtime_revision(info)
             base_url = public_base_url(info)
             observation = {
                 "at_unix": int(time.time()),
                 "hub_sha": getattr(info, "sha", None),
+                "runtime_sha": running_sha,
                 "runtime_stage": stage,
                 "base_url": base_url,
             }
             observations.append(observation)
             observations = observations[-40:]
             if stage == "RUNNING":
+                if running_sha != hub_sha:
+                    raise PublishError("running revision is unavailable or does not match the uploaded Hub commit")
                 health = read_json(base_url + "/healthz")
                 readiness = read_json(base_url + "/readyz")
                 source = read_json(base_url + "/api/source")
@@ -206,9 +380,17 @@ def wait_for_runtime(api: HfApi, source_sha: str, timeout_seconds: int) -> dict[
                 source_value = source.get("source") if isinstance(source.get("source"), dict) else {}
                 if source_value.get("state") != "MEASURED" or source_value.get("revision") != source_sha:
                     raise PublishError("runtime source revision does not match approved GitHub source")
+                final_info = api.space_info(
+                    TARGET, expand=["sha", "runtime", "sdk", "subdomain"]
+                )
+                require_provider_revision(final_info, hub_sha)
+                if runtime_stage(final_info) != "RUNNING" or runtime_revision(final_info) != hub_sha:
+                    raise PublishError("running revision changed during application readback")
                 return {
                     "state": "EXACT_RUNTIME_READBACK_VERIFIED",
                     "runtime_stage": stage,
+                    "hub_sha": hub_sha,
+                    "runtime_sha": running_sha,
                     "base_url": base_url,
                     "health": health,
                     "readiness": readiness,
@@ -216,6 +398,8 @@ def wait_for_runtime(api: HfApi, source_sha: str, timeout_seconds: int) -> dict[
                     "observations": observations,
                 }
             last_error = f"runtime stage {stage}"
+        except ProviderRevisionError:
+            raise
         except (HfHubHTTPError, OSError, urllib.error.URLError, json.JSONDecodeError, PublishError) as exc:
             last_error = f"{type(exc).__name__}: {str(exc)[:240]}"
         time.sleep(15)
@@ -232,6 +416,11 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
         raise PublishError("HF_TOKEN does not match the required credential shape")
 
     local_files = validate_package(package, source_sha)
+    frozen = freeze_validated_package(package, local_files)
+    additions = tuple(
+        CommitOperationAdd(path_in_repo=name, path_or_fileobj=data)
+        for name, data in frozen
+    )
     api = HfApi(token=token)
     api.create_repo(
         repo_id=TARGET,
@@ -243,13 +432,15 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
     )
     before = api.space_info(TARGET, token=token, expand=["sha", "runtime", "sdk", "subdomain"])
     parent = getattr(before, "sha", None)
-    commit = api.upload_folder(
+    if not isinstance(parent, str) or not SOURCE_RE.fullmatch(parent):
+        raise PublishError("exact provider parent is unavailable; no upload attempted")
+    deletions = remote_deletions(api, parent=parent, token=token)
+    commit = api.create_commit(
         repo_id=TARGET,
         repo_type=REPO_TYPE,
-        folder_path=str(package.resolve()),
+        operations=tuple(deletions) + additions,
         revision="main",
         parent_commit=parent,
-        delete_patterns=["*"],
         commit_message=f"Deploy SZL Atelier v3 from GitHub {source_sha}",
         commit_description="Source-bound package generated by frontier/atelier_v3/build_publication.py",
         token=token,
@@ -259,11 +450,13 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
         or getattr(commit, "commit_id", None)
         or getattr(commit, "commit_oid", None)
     )
+    if not isinstance(content_commit, str) or not SOURCE_RE.fullmatch(content_commit):
+        raise PublishError("upload did not return an exact Hub commit")
     after = api.space_info(TARGET, token=token, expand=["sha", "runtime", "sdk", "subdomain"])
     hub_sha = str(getattr(after, "sha", None) or "")
-    if not hub_sha:
+    if not SOURCE_RE.fullmatch(hub_sha):
         raise PublishError("Hub commit readback is unavailable")
-    if content_commit and str(content_commit) != hub_sha:
+    if content_commit != hub_sha:
         raise PublishError(f"upload commit {content_commit} does not match Hub head {hub_sha}")
 
     remote_files, measured_files = verify_remote_bytes(
@@ -272,7 +465,7 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
         local_files=local_files,
         api=api,
     )
-    runtime = wait_for_runtime(api, source_sha, timeout_seconds)
+    runtime = wait_for_runtime(api, source_sha, timeout_seconds, hub_sha=hub_sha)
     result = {
         "schema": "szl.atelier-provider-readback/v1",
         "state": "EXACT_READBACK_VERIFIED",
@@ -280,6 +473,7 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
         "source_sha": source_sha,
         "target": TARGET,
         "hub_content_commit": hub_sha,
+        "package_receipt_file_sha256": local_files["PUBLICATION_RECEIPT.json"]["sha256"],
         "remote_files": remote_files,
         "measured_files": measured_files,
         "runtime": runtime,
