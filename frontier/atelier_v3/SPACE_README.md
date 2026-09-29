@@ -37,3 +37,7 @@ The running application exposes:
 Public Hugging Face metadata readback is opt-in and restricted to curated `SZLHOLDINGS/...` identities. Redirects, arbitrary hosts, arbitrary paths, oversized responses, unsupported artifact kinds, malformed slugs, and mutation methods fail closed.
 
 Source authority remains in the linked GitHub repositories. SZL Constellation composes estate navigation; Atelier composes artifact evidence.
+
+## Source
+
+This Space is published from [github.com/szl-holdings/szl-atelier](https://github.com/szl-holdings/szl-atelier) (`frontier/atelier_v3`) by the committed workflow `.github/workflows/hf-space.yml`, after `ci` passes on `main`. The exact GitHub commit is in `SOURCE_REVISION`, and `PUBLICATION_RECEIPT.json` records the SHA-256 of each file published with it.

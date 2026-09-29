@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: hf-space-main
+  group: hf-write/space/SZLHOLDINGS/szl-atelier
   cancel-in-progress: false
 
 jobs:
