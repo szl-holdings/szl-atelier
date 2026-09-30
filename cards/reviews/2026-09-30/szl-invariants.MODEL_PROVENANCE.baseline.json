@@ -1,0 +1,55 @@
+{
+  "schema": "szl.model-source-attestation/v1",
+  "model": {
+    "id": "SZLHOLDINGS/szl-invariants",
+    "repository_type": "model",
+    "artifact_kind": "kernel-code-and-configuration + trained surrogate (model.joblib)",
+    "trained_weights_present": true,
+    "stdlib_only": false,
+    "torch_required": false,
+    "surrogate": {
+      "file": "model.joblib",
+      "sha256": "24fa1ef67b28e9c20f8197bf321dd7c93087465ec2ce9efa7f8fb9dae7bfc14b",
+      "role": "structural triage only — kernel remains sole ground truth",
+      "fidelity_MEASURED": {
+        "test_accuracy_all_classes": 0.9803,
+        "structural_recall": 1.0,
+        "crypto_blind_spot_sig_tamper_recall": 0.0636
+      },
+      "receipt": "TRAINING_RECEIPT.json",
+      "reverify": "python scripts/eval.py"
+    },
+    "stdlib_only_note": "kernel package itself stays stdlib-only; the OPTIONAL surrogate needs sklearn+joblib"
+  },
+  "source_of_record": {
+    "state": "VERIFIED_HF_SOURCE_OF_RECORD",
+    "platform": "huggingface",
+    "repository": "SZLHOLDINGS/szl-invariants"
+  },
+  "mirrors": {
+    "live_surface": "a11oy backbone /api/invariants (artifacts/api-server/src/routes/invariants.ts)",
+    "chain_hashing": "artifacts/api-server/src/lib/runLedger.ts + receipts.ts (sha256 canonical, ed25519/SPKI keyId)",
+    "lean_repo": "szl-holdings/lutar-lean",
+    "doi_lutar_lean": "10.5281/zenodo.20434308"
+  },
+  "verification": {
+    "tests": "14/14 passed",
+    "tests_basis": "MEASURED local python3 -m pytest run, stdlib-only, offline",
+    "falsifiability": "each invariant demonstrated to flip HOLDS -> VIOLATED under real corruption/tamper; missing capabilities stay UNAVAILABLE (never coerced to a pass)"
+  },
+  "lambda": {
+    "status": "Conjecture 1 (open) — uniqueness unproven",
+    "touched_by_this_artifact": false
+  },
+  "claims": {
+    "trained_model": "NOT_CLAIMED",
+    "reproducible_build": "NOT_CLAIMED",
+    "weights_present": "NONE"
+  },
+  "limits": [
+    "This artifact is a pure-Python offline replay of the live Alloy invariants surface — it verifies the shape and cryptographic self-consistency of a ledger export you supply, NOT the runtime correctness of any served answer.",
+    "No .bin, .safetensors, .pt, .pth, .onnx, or .gguf weight artifact is present.",
+    "Invariant #6 (ed25519) and latentVerification are UNAVAILABLE without a supplied public key; invariant #8 is UNAVAILABLE without a samples export. These are honest indeterminate states, not passes.",
+    "None of these invariants prove or upgrade Λ, which remains Conjecture 1 (open)."
+  ]
+}

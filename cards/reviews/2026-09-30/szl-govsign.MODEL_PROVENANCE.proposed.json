@@ -1,0 +1,122 @@
+{
+  "schema": "szl.model-source-attestation/v1",
+  "observed_at": "2026-07-12T00:27:14Z",
+  "model": {
+    "id": "SZLHOLDINGS/szl-govsign",
+    "repository_type": "model",
+    "artifact_kind": "kernel-code-and-configuration",
+    "trained_weights_present": false,
+    "surrogate": {
+      "file": "model.joblib",
+      "sha256": "d8e91c01adcf4b661860ecbce8029527fd8819e3951aab8b2fe48e84f8112a10",
+      "role": "STRUCTURAL validity PRE-FILTER ONLY \u2014 NEVER replaces cryptographic verification; a pre-filter PASS is NOT verified. The kernel's ECDSA-P256 verify() is the sole authority.",
+      "fidelity_MEASURED": {
+        "test_accuracy_all_classes": 0.8888,
+        "test_accuracy_structural_only": 1.0,
+        "crypto_blind_spot_sig_tamper_recall": 0.0111
+      },
+      "receipt": "TRAINING_RECEIPT.json",
+      "reverify": "python scripts/eval.py",
+      "honesty_note": "kernel stays stdlib+cryptography (crypto verification unchanged); the OPTIONAL surrogate needs sklearn+joblib and performs NO cryptographic verification.",
+      "artifact_present_at_reviewed_revision": false,
+      "availability": "ABSENT_AT_REVIEWED_REVISION",
+      "replay_status": "BLOCKED_MISSING_ARTIFACT",
+      "metrics_scope": "HISTORICAL_RECEIPT_ONLY_NOT_RERUN"
+    }
+  },
+  "source_of_record": {
+    "state": "DECLARED_CANONICAL_GITHUB_SOURCE",
+    "platform": "github",
+    "repository": "szl-holdings/szl-govsign",
+    "observed_revision": "7bff004d12347ac23ae60ffbfb78ce7f9ef15829",
+    "observed_url": "https://github.com/szl-holdings/szl-govsign/tree/7bff004d12347ac23ae60ffbfb78ce7f9ef15829",
+    "source_to_hub_release_binding": "NOT_VERIFIED_THIS_REVIEW"
+  },
+  "public_github": {
+    "state": "PUBLIC_REPOSITORY_REACHABLE_AT_REVIEW",
+    "observed_at": "2026-09-30",
+    "repository": "https://github.com/szl-holdings/szl-govsign",
+    "http_status": 200,
+    "observation_scope": "Repository reachability and exact current-head snapshot; not release parity or CI status"
+  },
+  "claims": {
+    "github_repository_parity": "NOT_VERIFIED_THIS_REVIEW",
+    "reproducible_build": "NOT_CLAIMED",
+    "trained_model": "NOT_CLAIMED_CURRENT_REVISION",
+    "serving_process_revision": "NOT_APPLICABLE_REPOSITORY_ARTIFACT",
+    "weights_present": "NONE_AT_REVIEWED_REVISION"
+  },
+  "limits": [
+    "The trained surrogate is a STRUCTURAL PRE-FILTER ONLY. Passing it is NOT cryptographic verification; only the kernel's ECDSA-P256 verify() establishes validity.",
+    "MEASURED crypto blind spot: sig-tamper recall \u2248 chance \u2014 a byte-flipped signature is structurally identical to a valid envelope and is invisible to the pre-filter (by design).",
+    "The 404 observation establishes only that no public same-name repository was reachable at the observation time; it does not make a claim about private repositories.",
+    "The attestation overlay cannot self-embed its resulting Hub commit, so the immutable artifact_base_revision is the measured pre-overlay base.",
+    "No .bin, .safetensors, .pt, .pth, .onnx, or .gguf weight artifact was present in the measured base tree."
+  ],
+  "historical_provenance_before_correction": {
+    "model": {
+      "id": "SZLHOLDINGS/szl-govsign",
+      "repository_type": "model",
+      "artifact_kind": "kernel-code-and-configuration + trained structural pre-filter (model.joblib)",
+      "trained_weights_present": true,
+      "surrogate": {
+        "file": "model.joblib",
+        "sha256": "d8e91c01adcf4b661860ecbce8029527fd8819e3951aab8b2fe48e84f8112a10",
+        "role": "STRUCTURAL validity PRE-FILTER ONLY \u2014 NEVER replaces cryptographic verification; a pre-filter PASS is NOT verified. The kernel's ECDSA-P256 verify() is the sole authority.",
+        "fidelity_MEASURED": {
+          "test_accuracy_all_classes": 0.8888,
+          "test_accuracy_structural_only": 1.0,
+          "crypto_blind_spot_sig_tamper_recall": 0.0111
+        },
+        "receipt": "TRAINING_RECEIPT.json",
+        "reverify": "python scripts/eval.py",
+        "honesty_note": "kernel stays stdlib+cryptography (crypto verification unchanged); the OPTIONAL surrogate needs sklearn+joblib and performs NO cryptographic verification."
+      }
+    },
+    "claims": {
+      "github_repository_parity": "NOT_CLAIMED",
+      "reproducible_build": "NOT_CLAIMED",
+      "trained_model": "CLAIMED \u2014 sklearn HistGradientBoostingClassifier structural pre-filter, MEASURED, receipted (does NOT perform or replace cryptographic verification)",
+      "serving_process_revision": "NOT_APPLICABLE_REPOSITORY_ARTIFACT"
+    },
+    "source_of_record": {
+      "state": "VERIFIED_HF_SOURCE_OF_RECORD",
+      "platform": "huggingface",
+      "repository": "SZLHOLDINGS/szl-govsign",
+      "artifact_base_revision": "7da2da8fe5db425609af0fddc4e93b00c05b8f74",
+      "artifact_base_state": "MEASURED_PRE_ATTESTATION_BASE",
+      "artifact_base_url": "https://huggingface.co/SZLHOLDINGS/szl-govsign/tree/7da2da8fe5db425609af0fddc4e93b00c05b8f74",
+      "file_count": 11,
+      "tree_sha256": "8ce4e93033e11e22b051c0ad38198cb0c787ad375627ee7bf8a3b3b172ed75f2",
+      "tree_hash_algorithm": "sha256 of UTF-8 path + NUL + per-file sha256 + LF, sorted by path; .cache excluded"
+    },
+    "public_github": {
+      "state": "NO_DIRECT_PUBLIC_IMPLEMENTATION_OBSERVED",
+      "same_name_candidate": "https://github.com/szl-holdings/szl-govsign",
+      "same_name_candidate_http_status": 404,
+      "card_references": [
+        "https://github.com/szl-holdings/governed-receipt-spec",
+        "https://github.com/szl-holdings/szl-papers/blob/main/PAPERS_INDEX.md"
+      ],
+      "card_reference_role": "SPECIFICATION_OR_RESEARCH_CONTEXT_NOT_BUILD_SOURCE"
+    }
+  },
+  "current_review": {
+    "schema": "szl.current-artifact-review/v1",
+    "observed_at": "2026-09-30",
+    "hf_model_revision": "13ce04b3b3e490e9bee6453df7f83fdcf0f3b5c9",
+    "hf_kernel_revision": "e498c5042c1f721a1bbd8a4b9fdaa3756001e78d",
+    "github_source_revision": "7bff004d12347ac23ae60ffbfb78ce7f9ef15829",
+    "github_source_url": "https://github.com/szl-holdings/szl-govsign/tree/7bff004d12347ac23ae60ffbfb78ce7f9ef15829",
+    "github_reachable": true,
+    "source_of_truth_role": "DECLARED_CANONICAL_GITHUB_SOURCE",
+    "historical_records_retained": true,
+    "file_presence_basis": "Hub sibling-path inventory at exact model revision",
+    "weights_downloaded": false,
+    "code_executed": false,
+    "signatures_verified": false,
+    "source_mirror_parity": "UNVERIFIED",
+    "note": "This correction records current absence without retracting or validating historical surrogate records. Revalidate parent revision and source ownership before publication.",
+    "historical_state_note": "Earlier source_of_record, public_github, model and claims states are retained under historical_provenance_before_correction. They must not be interpreted as current observations."
+  }
+}

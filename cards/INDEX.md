@@ -24,12 +24,12 @@
 - [szl-lambda-gate](./szl-lambda-gate.md) — HUB — The torch op of the 1-D silhouette. 94 Hub downloads. Surrogate tagged — we say so.
 - [szl-governed-norm](./szl-governed-norm.md) — HUB — Normalization with a version receipt. Deprecated surrogate. 204 downloads. We keep it up so the deprecation is public.
 - [governed-inference-meter](./governed-inference-meter.md) — KERNEL — NVML energy as a receipt, not a dashboard widget. Tokens per joule is an eval axis.
-- [szl-invariants](./szl-invariants.md) — KERNEL — Hash the tensor. Sign the hash. The invariant is the signature, not the blog post. 2 likes.
-- [szl-ouroboros](./szl-ouroboros.md) — KERNEL — Each retry spends authority. Infinite agent loops are a theft of the budget we named.
-- [szl-formulas](./szl-formulas.md) — KERNEL — Canonical formulas with Lean obligations and proof-status tags. Lambda-aggregate lives here as a formula, not a myth.
-- [szl-govsign](./szl-govsign.md) — KERNEL — Signing kernel. Envelopes, not screenshots of envelopes.
-- [szl-provctl](./szl-provctl.md) — KERNEL — Supply-chain controller. SLSA + in-toto. Who built it, from what, on which runner.
-- [szl-blocked](./szl-blocked.md) — KERNEL — Technical documentation kernel for Annex IV. Compliance as code, not a consultant's slide.
+- [szl-invariants](./szl-invariants.md) — KERNEL — Replay eight named receipt/ledger self-consistency checks while exposing missing evidence.
+- [szl-ouroboros](./szl-ouroboros.md) — KERNEL — Account for bounded-loop timing from supplied attempt windows and optional measured wall time.
+- [szl-formulas](./szl-formulas.md) — KERNEL — 21 formula implementations; proof labels preserved at their declared scope.
+- [szl-govsign](./szl-govsign.md) — KERNEL — Create and verify signed DSSE/in-toto-shaped governance envelopes with an explicit trust boundary.
+- [szl-provctl](./szl-provctl.md) — KERNEL — Inspect declared receipt-chain provenance graphs and construct in-toto/SLSA-shaped records.
+- [szl-blocked](./szl-blocked.md) — KERNEL — Explicit policy outcomes and receipt-chain records; companion Annex IV-style documentation drafts.
 - [szl-nemo](./szl-nemo.md) — HUB — Tfidf → LogisticRegression over doctrine rules R1–R5. Not NVIDIA NeMo. Not Nemotron. Name collision, card-corrected.
 - [a11oy-v19-substrate](./a11oy-v19-substrate.md) — HUB — Zarf / UDS operational payload for a11oy. Policy, provenance, series-a. Not a chatbot.
 - [szl-training-scripts](./szl-training-scripts.md) — HUB — The forge. Hub copy of the Unsloth-receipted training scripts. Tags were empty — this atelier is the card.
