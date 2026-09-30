@@ -1,0 +1,579 @@
+{
+  "schema": "szl.kernel-card-review/v1",
+  "reviewed_at": "2026-09-30",
+  "publisher_repository": "szl-holdings/szl-atelier",
+  "publisher_base_revision": "adba494b1d0dff9cb6ff2834b69d9d63cb9936f1",
+  "state": "SOURCE_REVIEW_ONLY_NOT_PUBLISHED",
+  "publication_authorized": false,
+  "allowed_hub_paths": [
+    "README.md",
+    "MODEL_PROVENANCE.json"
+  ],
+  "protected_hub_paths": [
+    "TRAINING_RECEIPT.json"
+  ],
+  "audit": {
+    "library_file_id": "libfile_28af9956bbdc8191baae24855c408d1a",
+    "version": 1,
+    "sha256": "31d777345ac57b5eba1c78ce341c8cb513d2f8fdfe021482b6dc99ff82b43ded"
+  },
+  "draft_packet": {
+    "library_file_id": "libfile_bd996402180c8191a2a4b19ee6a0772f",
+    "version": 1
+  },
+  "limitations": [
+    "The inventory covers listed paths at each exact revision, not every file's bytes or private assets.",
+    "Kernel code is parsed for documented API names; it is not imported or executed.",
+    "Observed Kernel Hub SHAs are not release approval or client qualification.",
+    "Current GitHub source and older published mirrors may intentionally differ; no whole-tree parity or build attestation is asserted.",
+    "These files are excluded from the existing Atelier v3 Space projection and are not an automatic Hub writer.",
+    "Hub publication requires fresh parent/review approval through the existing authorized owner, and immutable readback of the two reviewed files."
+  ],
+  "artifacts": [
+    {
+      "repo_id": "SZLHOLDINGS/szl-blocked",
+      "source": {
+        "repository": "szl-holdings/szl-blocked",
+        "revision": "96d520d51ad867ec5e0f62b5063fbe85c17cef7e",
+        "paths": [
+          "torch-ext/szl_blocked/",
+          "build/torch-universal/szl_blocked/"
+        ],
+        "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      "model": {
+        "repo_type": "model",
+        "revision": "730a238648ac69aa2a69c11428e06354c48d09e2",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "MODEL_PROVENANCE.json",
+          "OPERATIONAL.json",
+          "PROMOTION_READINESS_AUDIT.json",
+          "README.md",
+          "SECURITY.md",
+          "SZL_ESTATE_MANAGED.json",
+          "TRAINING_RECEIPT.json",
+          "bom/model-bom.cdx.json",
+          "build.toml",
+          "build/torch-universal/szl_blocked/__init__.py",
+          "build/torch-universal/szl_blocked/_chain.py",
+          "build/torch-universal/szl_blocked/_gate.py",
+          "build/torch-universal/szl_blocked/_rules.py",
+          "build/torch-universal/szl_blocked/metadata.json",
+          "build/torch-universal/szl_euaiact/__init__.py",
+          "build/torch-universal/szl_euaiact/_annex_iv.py",
+          "build/torch-universal/szl_euaiact/metadata.json",
+          "card/holo-banner.svg",
+          "scripts/eval.py",
+          "scripts/forge.py"
+        ],
+        "license_sha256": "9589109b10f273b246999e87435e92140ec68dfe8fd4db623a64ab70a81c9871"
+      },
+      "kernel": {
+        "repo_type": "kernel",
+        "revision": "b8b15cde2d3d3d7c6ef30467d6cacc6d219a1349",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "OPERATIONAL.json",
+          "README.md",
+          "build/torch-cpu/metadata.json",
+          "build/torch-cpu/szl_blocked/__init__.py",
+          "build/torch-cpu/szl_blocked/_chain.py",
+          "build/torch-cpu/szl_blocked/_gate.py",
+          "build/torch-cpu/szl_blocked/_rules.py",
+          "build/torch-cpu/szl_euaiact/__init__.py",
+          "build/torch-cpu/szl_euaiact/_annex_iv.py",
+          "build/torch-universal/metadata.json",
+          "build/torch-universal/szl_blocked/__init__.py",
+          "build/torch-universal/szl_blocked/_chain.py",
+          "build/torch-universal/szl_blocked/_gate.py",
+          "build/torch-universal/szl_blocked/_rules.py",
+          "build/torch-universal/szl_blocked/metadata.json",
+          "build/torch-universal/szl_euaiact/__init__.py",
+          "build/torch-universal/szl_euaiact/_annex_iv.py",
+          "build/torch-universal/szl_euaiact/metadata.json"
+        ],
+        "client_qualification": "NOT_PERFORMED",
+        "approved_publication": "NOT_ESTABLISHED"
+      },
+      "card": {
+        "path": "cards/szl-blocked.md",
+        "sha256": "54981f47478e243f302772f97699ae2cd7565d23d73e95ae75e9a8df6d0ff76f"
+      },
+      "baseline_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-blocked.MODEL_PROVENANCE.baseline.json",
+        "sha256": "afdb5ed6666cabf443b31f8d77e84babfcad9eceb1edc73db2ba356fbd67694a"
+      },
+      "proposed_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-blocked.MODEL_PROVENANCE.proposed.json",
+        "sha256": "42cb349fb3013fe33b65f326a82f5efa9672a320c74be44a07c79d63ee9fd2ad"
+      },
+      "protected_receipt": {
+        "path_in_repo": "TRAINING_RECEIPT.json",
+        "revision": "730a238648ac69aa2a69c11428e06354c48d09e2",
+        "sha256": "80154e6757a6a50b84b5b4a8111336d59b4e0801fb7e794eae2fb15d5eba9490",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/szl-blocked/raw/730a238648ac69aa2a69c11428e06354c48d09e2/TRAINING_RECEIPT.json",
+        "action": "PRESERVE_BYTES_NOT_A_PUBLICATION_TARGET"
+      },
+      "api_review": {
+        "source_url": "https://huggingface.co/kernels/SZLHOLDINGS/szl-blocked/raw/b8b15cde2d3d3d7c6ef30467d6cacc6d219a1349/build/torch-universal/szl_blocked/__init__.py",
+        "path": "build/torch-universal/szl_blocked/__init__.py",
+        "sha256": "6fb0f3903cc923ef04f88a9a43eef33c833171d7ee23371b30471217c7961c8b",
+        "method": "AST_ONLY_NO_IMPORT_OR_EXECUTION",
+        "documented_names": [
+          "UnifiedReceiptChain",
+          "deny_if_action_in",
+          "governed_call"
+        ]
+      }
+    },
+    {
+      "repo_id": "SZLHOLDINGS/szl-provctl",
+      "source": {
+        "repository": "szl-holdings/szl-provctl",
+        "revision": "ce4a4cd36abba999de44b774a559b6fe33cf329e",
+        "paths": [
+          "torch-ext/szl_provctl/",
+          "build/torch-universal/szl_provctl/"
+        ],
+        "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      "model": {
+        "repo_type": "model",
+        "revision": "8d2082d4b9901b1b92c9efd86113fb760a64bf1e",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "MODEL_PROVENANCE.json",
+          "PROMOTION_READINESS_AUDIT.json",
+          "README.md",
+          "SECURITY.md",
+          "SZL_ESTATE_MANAGED.json",
+          "TRAINING_RECEIPT.json",
+          "bom/model-bom.cdx.json",
+          "build.toml",
+          "build/torch-universal/szl_provctl/__init__.py",
+          "build/torch-universal/szl_provctl/_chain.py",
+          "build/torch-universal/szl_provctl/_dag.py",
+          "build/torch-universal/szl_provctl/_energy.py",
+          "build/torch-universal/szl_provctl/_interop.py",
+          "build/torch-universal/szl_provctl/metadata.json",
+          "card/holo-banner.svg",
+          "scripts/eval.py",
+          "scripts/forge.py"
+        ],
+        "license_sha256": "9589109b10f273b246999e87435e92140ec68dfe8fd4db623a64ab70a81c9871"
+      },
+      "kernel": {
+        "repo_type": "kernel",
+        "revision": "424418b95e5d3403278c53189403e098662d4a3b",
+        "listed_paths": [
+          ".gitattributes",
+          "LICENSE",
+          "README.md",
+          "build/torch-cpu/metadata.json",
+          "build/torch-cpu/szl_provctl/__init__.py",
+          "build/torch-cpu/szl_provctl/_chain.py",
+          "build/torch-cpu/szl_provctl/_dag.py",
+          "build/torch-cpu/szl_provctl/_energy.py",
+          "build/torch-cpu/szl_provctl/_interop.py",
+          "build/torch-universal/metadata.json",
+          "build/torch-universal/szl_provctl/__init__.py",
+          "build/torch-universal/szl_provctl/_chain.py",
+          "build/torch-universal/szl_provctl/_dag.py",
+          "build/torch-universal/szl_provctl/_energy.py",
+          "build/torch-universal/szl_provctl/_interop.py",
+          "build/torch-universal/szl_provctl/metadata.json"
+        ],
+        "client_qualification": "NOT_PERFORMED",
+        "approved_publication": "NOT_ESTABLISHED"
+      },
+      "card": {
+        "path": "cards/szl-provctl.md",
+        "sha256": "11971e13fdd4db2f092bf49b9929171b46ddb87b65430b399d0130ad8697e266"
+      },
+      "baseline_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-provctl.MODEL_PROVENANCE.baseline.json",
+        "sha256": "28bf866b757ab9238927baecdf0bf3d51d1b9df98ba2898a4a7e26c84fed07dd"
+      },
+      "proposed_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-provctl.MODEL_PROVENANCE.proposed.json",
+        "sha256": "f79dc7650eba3c3b820c2b519b320a4b97e5b59ce6aeb73cc3c6d37d9c698ac9"
+      },
+      "protected_receipt": {
+        "path_in_repo": "TRAINING_RECEIPT.json",
+        "revision": "8d2082d4b9901b1b92c9efd86113fb760a64bf1e",
+        "sha256": "7190ece8832e0ee9b09a8ac6845696ec901888341d3a905342a36f11756b724a",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/szl-provctl/raw/8d2082d4b9901b1b92c9efd86113fb760a64bf1e/TRAINING_RECEIPT.json",
+        "action": "PRESERVE_BYTES_NOT_A_PUBLICATION_TARGET"
+      },
+      "api_review": {
+        "source_url": "https://huggingface.co/kernels/SZLHOLDINGS/szl-provctl/raw/424418b95e5d3403278c53189403e098662d4a3b/build/torch-universal/szl_provctl/__init__.py",
+        "path": "build/torch-universal/szl_provctl/__init__.py",
+        "sha256": "cc4e8a2ad1087b20baa5de0182111ade30094ba8869276f51cfa38b70d56c682",
+        "method": "AST_ONLY_NO_IMPORT_OR_EXECUTION",
+        "documented_names": [
+          "ProvenanceDAG",
+          "UnifiedReceiptChain",
+          "verify_dag"
+        ]
+      }
+    },
+    {
+      "repo_id": "SZLHOLDINGS/szl-govsign",
+      "source": {
+        "repository": "szl-holdings/szl-govsign",
+        "revision": "7bff004d12347ac23ae60ffbfb78ce7f9ef15829",
+        "paths": [
+          "torch-ext/szl_govsign/",
+          "build/torch-universal/szl_govsign/"
+        ],
+        "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      "model": {
+        "repo_type": "model",
+        "revision": "13ce04b3b3e490e9bee6453df7f83fdcf0f3b5c9",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "MODEL_PROVENANCE.json",
+          "PROMOTION_READINESS_AUDIT.json",
+          "README.md",
+          "SECURITY.md",
+          "SZL_ESTATE_MANAGED.json",
+          "TRAINING_RECEIPT.json",
+          "bom/model-bom.cdx.json",
+          "build.toml",
+          "build/torch-universal/szl_govsign/__init__.py",
+          "build/torch-universal/szl_govsign/envelope.py",
+          "build/torch-universal/szl_govsign/metadata.json",
+          "build/torch-universal/szl_govsign/pae.py",
+          "build/torch-universal/szl_govsign/predicate.py",
+          "build/torch-universal/szl_govsign/selfcheck.py",
+          "card/holo-banner.svg",
+          "scripts/eval.py",
+          "scripts/forge.py"
+        ],
+        "license_sha256": "9589109b10f273b246999e87435e92140ec68dfe8fd4db623a64ab70a81c9871"
+      },
+      "kernel": {
+        "repo_type": "kernel",
+        "revision": "e498c5042c1f721a1bbd8a4b9fdaa3756001e78d",
+        "listed_paths": [
+          ".gitattributes",
+          "LICENSE",
+          "README.md",
+          "build/torch-cpu/metadata.json",
+          "build/torch-cpu/szl_govsign/__init__.py",
+          "build/torch-cpu/szl_govsign/envelope.py",
+          "build/torch-cpu/szl_govsign/pae.py",
+          "build/torch-cpu/szl_govsign/predicate.py",
+          "build/torch-cpu/szl_govsign/selfcheck.py",
+          "build/torch-universal/metadata.json",
+          "build/torch-universal/szl_govsign/__init__.py",
+          "build/torch-universal/szl_govsign/envelope.py",
+          "build/torch-universal/szl_govsign/metadata.json",
+          "build/torch-universal/szl_govsign/pae.py",
+          "build/torch-universal/szl_govsign/predicate.py",
+          "build/torch-universal/szl_govsign/selfcheck.py"
+        ],
+        "client_qualification": "NOT_PERFORMED",
+        "approved_publication": "NOT_ESTABLISHED"
+      },
+      "card": {
+        "path": "cards/szl-govsign.md",
+        "sha256": "cc0fbcbaceae44edf2e6beec1fc3481cfe3ac6f67c527454316e362d397bd116"
+      },
+      "baseline_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-govsign.MODEL_PROVENANCE.baseline.json",
+        "sha256": "ad6fedcfd255db0d109c8dc522bd107df50da25ac4174cb68c01586ad916059d"
+      },
+      "proposed_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-govsign.MODEL_PROVENANCE.proposed.json",
+        "sha256": "5722d482f5b8bbb036a65bf705481063f2c88df1b52058fcb1d5ea8c2b005261"
+      },
+      "protected_receipt": {
+        "path_in_repo": "TRAINING_RECEIPT.json",
+        "revision": "13ce04b3b3e490e9bee6453df7f83fdcf0f3b5c9",
+        "sha256": "e4a311e7ede5d025aaec9468ef3270747e3d274fd884703779ebb0398d45bbc8",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/szl-govsign/raw/13ce04b3b3e490e9bee6453df7f83fdcf0f3b5c9/TRAINING_RECEIPT.json",
+        "action": "PRESERVE_BYTES_NOT_A_PUBLICATION_TARGET"
+      },
+      "api_review": {
+        "source_url": "https://huggingface.co/kernels/SZLHOLDINGS/szl-govsign/raw/e498c5042c1f721a1bbd8a4b9fdaa3756001e78d/build/torch-universal/szl_govsign/__init__.py",
+        "path": "build/torch-universal/szl_govsign/__init__.py",
+        "sha256": "2ae78794cc48efa871696820cffcd615b70f8a740af2567d5b402b18245c7287",
+        "method": "AST_ONLY_NO_IMPORT_OR_EXECUTION",
+        "documented_names": [
+          "selfcheck"
+        ]
+      }
+    },
+    {
+      "repo_id": "SZLHOLDINGS/szl-invariants",
+      "source": {
+        "repository": "szl-holdings/szl-invariants",
+        "revision": "e9621c5d95e1b6a336981346e473980cfe2d037b",
+        "paths": [
+          "torch-ext/szl_invariants/",
+          "build/torch-universal/szl_invariants/"
+        ],
+        "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      "model": {
+        "repo_type": "model",
+        "revision": "4ba2b95956cb8a836e7c9f5886b3da778c667f1a",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "MODEL_PROVENANCE.json",
+          "OPERATIONAL.json",
+          "PROMOTION_READINESS_AUDIT.json",
+          "README.md",
+          "SECURITY.md",
+          "SZL_ESTATE_MANAGED.json",
+          "TRAINING_RECEIPT.json",
+          "bom/model-bom.cdx.json",
+          "build.toml",
+          "build/torch-universal/szl_invariants/__init__.py",
+          "build/torch-universal/szl_invariants/metadata.json",
+          "card/holo-banner.svg",
+          "scripts/eval.py",
+          "scripts/forge.py",
+          "tests/test_invariants.py"
+        ],
+        "license_sha256": "acf6ce407174b791ceddc263dfc7b1e3ea16579cec3e0caca3d4469e6ccf544b"
+      },
+      "kernel": {
+        "repo_type": "kernel",
+        "revision": "78d04afef253e526326d6b0f4e944fa3d4b1990c",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "OPERATIONAL.json",
+          "README.md",
+          "build/torch-cpu/metadata.json",
+          "build/torch-cpu/szl_invariants/__init__.py",
+          "build/torch-universal/metadata.json",
+          "build/torch-universal/szl_invariants/__init__.py",
+          "build/torch-universal/szl_invariants/metadata.json"
+        ],
+        "client_qualification": "NOT_PERFORMED",
+        "approved_publication": "NOT_ESTABLISHED"
+      },
+      "card": {
+        "path": "cards/szl-invariants.md",
+        "sha256": "507d3df2348f33159ef12de3f939550bd91fc7aa521fa12820b33ac23f718622"
+      },
+      "baseline_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-invariants.MODEL_PROVENANCE.baseline.json",
+        "sha256": "61d363ab86cfb19410ecbebd4477e9cd235dfac3ee4bd49913fac2b41d0044dc"
+      },
+      "proposed_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-invariants.MODEL_PROVENANCE.proposed.json",
+        "sha256": "acdad7581fbd99471925fdb621a983716400eb7b07d4f2ff9a5a7006497d9bca"
+      },
+      "protected_receipt": {
+        "path_in_repo": "TRAINING_RECEIPT.json",
+        "revision": "4ba2b95956cb8a836e7c9f5886b3da778c667f1a",
+        "sha256": "a379b7a1fcbaf767d64b348485085e2b5fe34f93da5687a90ade4f3e06f9cee9",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/szl-invariants/raw/4ba2b95956cb8a836e7c9f5886b3da778c667f1a/TRAINING_RECEIPT.json",
+        "action": "PRESERVE_BYTES_NOT_A_PUBLICATION_TARGET"
+      },
+      "api_review": {
+        "source_url": "https://huggingface.co/kernels/SZLHOLDINGS/szl-invariants/raw/78d04afef253e526326d6b0f4e944fa3d4b1990c/build/torch-universal/szl_invariants/__init__.py",
+        "path": "build/torch-universal/szl_invariants/__init__.py",
+        "sha256": "7a26a1f41f3686035c25ef9c871400fa902f6cc54fc00da7f158109f714792e5",
+        "method": "AST_ONLY_NO_IMPORT_OR_EXECUTION",
+        "documented_names": [
+          "load_jsonl",
+          "run_invariants"
+        ]
+      }
+    },
+    {
+      "repo_id": "SZLHOLDINGS/szl-ouroboros",
+      "source": {
+        "repository": "szl-holdings/szl-ouroboros",
+        "revision": "f4c9df3840a84c767b7e5fa1c29aa25f00cc0457",
+        "paths": [
+          "torch-ext/szl_ouroboros/",
+          "build/torch-universal/szl_ouroboros/"
+        ],
+        "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      "model": {
+        "repo_type": "model",
+        "revision": "91e68d606a6273dd46db600f83938e61322b2b37",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "MODEL_PROVENANCE.json",
+          "OPERATIONAL.json",
+          "PROMOTION_READINESS_AUDIT.json",
+          "README.md",
+          "SECURITY.md",
+          "SZL_ESTATE_MANAGED.json",
+          "TRAINING_RECEIPT.json",
+          "bom/model-bom.cdx.json",
+          "build.toml",
+          "build/torch-universal/szl_ouroboros/__init__.py",
+          "build/torch-universal/szl_ouroboros/metadata.json",
+          "card/holo-banner.svg",
+          "og-card.png",
+          "ouroboros.py",
+          "scripts/eval.py",
+          "scripts/forge.py",
+          "tests/test_ouroboros.py"
+        ],
+        "license_sha256": "acf6ce407174b791ceddc263dfc7b1e3ea16579cec3e0caca3d4469e6ccf544b"
+      },
+      "kernel": {
+        "repo_type": "kernel",
+        "revision": "194970667faa1292ce09c7ae5880a1918f5cddeb",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "OPERATIONAL.json",
+          "README.md",
+          "build/torch-cpu/metadata.json",
+          "build/torch-cpu/szl_ouroboros/__init__.py",
+          "build/torch-universal/metadata.json",
+          "build/torch-universal/szl_ouroboros/__init__.py",
+          "build/torch-universal/szl_ouroboros/metadata.json"
+        ],
+        "client_qualification": "NOT_PERFORMED",
+        "approved_publication": "NOT_ESTABLISHED"
+      },
+      "card": {
+        "path": "cards/szl-ouroboros.md",
+        "sha256": "c82cf445dc380e789e29b50b50ddb16d9e4ed5daa54574aff0a2379feebee60c"
+      },
+      "baseline_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-ouroboros.MODEL_PROVENANCE.baseline.json",
+        "sha256": "21d6b40206b36821aa82c493f2f706fe2e2e4206841680194e23f5fc33b43786"
+      },
+      "proposed_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-ouroboros.MODEL_PROVENANCE.proposed.json",
+        "sha256": "c5c34d1ae1826fbfa3de9f9272fd0e292bcade9d7bcbe8f7cffb929a8f14d740"
+      },
+      "protected_receipt": {
+        "path_in_repo": "TRAINING_RECEIPT.json",
+        "revision": "91e68d606a6273dd46db600f83938e61322b2b37",
+        "sha256": "ee4e9913c1e8f4eafeb5c041d968d27b24579cb7dc5e83023df682667863083e",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/szl-ouroboros/raw/91e68d606a6273dd46db600f83938e61322b2b37/TRAINING_RECEIPT.json",
+        "action": "PRESERVE_BYTES_NOT_A_PUBLICATION_TARGET"
+      },
+      "api_review": {
+        "source_url": "https://huggingface.co/kernels/SZLHOLDINGS/szl-ouroboros/raw/194970667faa1292ce09c7ae5880a1918f5cddeb/build/torch-universal/szl_ouroboros/__init__.py",
+        "path": "build/torch-universal/szl_ouroboros/__init__.py",
+        "sha256": "d06754c5fc50fae574d46b7a94f189be66984b612c2a08cec620e12ec59c84fc",
+        "method": "AST_ONLY_NO_IMPORT_OR_EXECUTION",
+        "documented_names": [
+          "build_loop_trace"
+        ]
+      }
+    },
+    {
+      "repo_id": "SZLHOLDINGS/szl-formulas",
+      "source": {
+        "repository": "szl-holdings/szl-formulas",
+        "revision": "65c800b59249f27559de575bc66f5054fa585fa5",
+        "paths": [
+          "torch-ext/szl_formulas/",
+          "build/torch-universal/szl_formulas/"
+        ],
+        "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      "model": {
+        "repo_type": "model",
+        "revision": "5e4519bb648c47bc7eb4aea4ba5fe80d92570883",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "MODEL_PROVENANCE.json",
+          "OPERATIONAL.json",
+          "PROMOTION_READINESS_AUDIT.json",
+          "README.md",
+          "SECURITY.md",
+          "SZL_ESTATE_MANAGED.json",
+          "TRAINING_RECEIPT.json",
+          "bom/model-bom.cdx.json",
+          "build.toml",
+          "build/torch-universal/szl_formulas/__init__.py",
+          "build/torch-universal/szl_formulas/_composer.py",
+          "build/torch-universal/szl_formulas/_formulas.py",
+          "build/torch-universal/szl_formulas/metadata.json",
+          "card/holo-banner.svg",
+          "scripts/eval.py",
+          "scripts/forge.py",
+          "tests/test_formulas.py"
+        ],
+        "license_sha256": "acf6ce407174b791ceddc263dfc7b1e3ea16579cec3e0caca3d4469e6ccf544b"
+      },
+      "kernel": {
+        "repo_type": "kernel",
+        "revision": "636339753ea625bd27fd35a992699dba635c1cbb",
+        "listed_paths": [
+          ".gitattributes",
+          "BENCH.laptop-blackwell.json",
+          "LICENSE",
+          "OPERATIONAL.json",
+          "README.md",
+          "build/torch-cpu/metadata.json",
+          "build/torch-cpu/szl_formulas/__init__.py",
+          "build/torch-cpu/szl_formulas/_composer.py",
+          "build/torch-cpu/szl_formulas/_formulas.py",
+          "build/torch-universal/metadata.json",
+          "build/torch-universal/szl_formulas/__init__.py",
+          "build/torch-universal/szl_formulas/_composer.py",
+          "build/torch-universal/szl_formulas/_formulas.py",
+          "build/torch-universal/szl_formulas/metadata.json"
+        ],
+        "client_qualification": "NOT_PERFORMED",
+        "approved_publication": "NOT_ESTABLISHED"
+      },
+      "card": {
+        "path": "cards/szl-formulas.md",
+        "sha256": "2ed3984ecfc15bc8e52be84c0c8348b4deca238c6a928edec3803e499c09622d"
+      },
+      "baseline_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-formulas.MODEL_PROVENANCE.baseline.json",
+        "sha256": "9d556d9adb7c8e3347785b7d2e9664c61d190b0ede920c64cab8f4069aaf8682"
+      },
+      "proposed_provenance": {
+        "path": "cards/reviews/2026-09-30/szl-formulas.MODEL_PROVENANCE.proposed.json",
+        "sha256": "a7d02aa15029e65565d717754de8cd82a5c566809adbb70f62a004c005ec9ac0"
+      },
+      "protected_receipt": {
+        "path_in_repo": "TRAINING_RECEIPT.json",
+        "revision": "5e4519bb648c47bc7eb4aea4ba5fe80d92570883",
+        "sha256": "786586f1f5f8136ca78e665fa78b69e7e4299a25b21ed2800e5fecb142f39fb7",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/szl-formulas/raw/5e4519bb648c47bc7eb4aea4ba5fe80d92570883/TRAINING_RECEIPT.json",
+        "action": "PRESERVE_BYTES_NOT_A_PUBLICATION_TARGET"
+      },
+      "api_review": {
+        "source_url": "https://huggingface.co/kernels/SZLHOLDINGS/szl-formulas/raw/636339753ea625bd27fd35a992699dba635c1cbb/build/torch-universal/szl_formulas/__init__.py",
+        "path": "build/torch-universal/szl_formulas/__init__.py",
+        "sha256": "1ca761f2b9916ca1dc068d44e31c250bc4bd8478c358cee42ec6ddcd97f179a5",
+        "method": "AST_ONLY_NO_IMPORT_OR_EXECUTION",
+        "documented_names": [
+          "LOCKED_PROVEN_FORMULA_IDS",
+          "lambda_status",
+          "registry_count"
+        ]
+      }
+    }
+  ]
+}

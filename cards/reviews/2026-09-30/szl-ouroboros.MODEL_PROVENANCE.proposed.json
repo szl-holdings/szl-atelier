@@ -1,0 +1,126 @@
+{
+  "schema": "szl.model-source-attestation/v1",
+  "model": {
+    "id": "SZLHOLDINGS/szl-ouroboros",
+    "repository_type": "model",
+    "artifact_kind": "kernel-code-and-configuration",
+    "trained_weights_present": false,
+    "stdlib_only": false,
+    "torch_required": false,
+    "surrogate": {
+      "file": "model.joblib",
+      "sha256": "6c4067810eb508dfb61f3cfaf84b6db81cf2f7c78286f02e786205e0b014ac65",
+      "role": "loop-tax regressor (predicts kernel-derived overheadMs) \u2014 kernel remains sole ground truth",
+      "fidelity_MEASURED": {
+        "held_out_MAE_ms": 15.5853,
+        "held_out_R2": 0.9822,
+        "held_out_target_std_ms": 191.079
+      },
+      "receipt": "TRAINING_RECEIPT.json",
+      "reverify": "python scripts/eval.py",
+      "artifact_present_at_reviewed_revision": false,
+      "availability": "ABSENT_AT_REVIEWED_REVISION",
+      "replay_status": "BLOCKED_MISSING_ARTIFACT",
+      "metrics_scope": "HISTORICAL_RECEIPT_ONLY_NOT_RERUN"
+    },
+    "stdlib_only_note": "kernel package itself stays stdlib-only; the OPTIONAL surrogate needs sklearn+joblib"
+  },
+  "source_of_record": {
+    "state": "DECLARED_CANONICAL_GITHUB_SOURCE",
+    "platform": "github",
+    "repository": "szl-holdings/szl-ouroboros",
+    "observed_revision": "f4c9df3840a84c767b7e5fa1c29aa25f00cc0457",
+    "observed_url": "https://github.com/szl-holdings/szl-ouroboros/tree/f4c9df3840a84c767b7e5fa1c29aa25f00cc0457",
+    "source_to_hub_release_binding": "NOT_VERIFIED_THIS_REVIEW"
+  },
+  "mirrors": {
+    "live_surface": "a11oy backbone loop tax (artifacts/api-server/src/lib/backbone.ts buildLoopTrace/sumAttemptMs/peakAttemptMs/deadHopMs)",
+    "timing_basis": "LOOP_TIMING_BASIS carried verbatim from backbone.ts",
+    "lean_repo": "szl-holdings/lutar-lean",
+    "doi_lutar_lean": "10.5281/zenodo.20434308"
+  },
+  "verification": {
+    "tests": "13/13 passed",
+    "tests_basis": "MEASURED local python3 -m pytest run, stdlib-only, offline",
+    "falsifiability": "arithmetic is falsifiable (a wrong split flips the asserts); an unmeasured wall yields overheadMs=None (UNAVAILABLE, not fabricated); a missing latency raises; a budget violation is surfaced"
+  },
+  "lambda": {
+    "status": "Conjecture 1 (open) \u2014 uniqueness unproven",
+    "touched_by_this_artifact": false
+  },
+  "claims": {
+    "trained_model": "NOT_CLAIMED_CURRENT_REVISION",
+    "reproducible_build": "NOT_CLAIMED",
+    "weights_present": "NONE_AT_REVIEWED_REVISION",
+    "github_repository_parity": "NOT_VERIFIED_THIS_REVIEW"
+  },
+  "limits": [
+    "The trained surrogate APPROXIMATES the kernel's DERIVED overheadMs from trace shape; it does NOT replace the kernel's exact arithmetic, which remains authoritative.",
+    "Runs with an unmeasured wall (overheadMs=None / UNAVAILABLE) are dropped from training \u2014 never fabricated.",
+    "modelMs and peakAttemptMs are MEASURED (upstream wall windows); overheadMs, serializationTaxMs and deadHopMs are DERIVED arithmetic on those measurements \u2014 never new claims.",
+    "serializationTaxMs is a COUNTERFACTUAL (what a perfectly-parallel loop could save), never a realized saving \u2014 Alloy's loop is strictly sequential.",
+    "deadHopMs is an upper bound only \u2014 Alloy does not prefetch.",
+    "overheadMs is UNAVAILABLE (None) when the run wall was not measured \u2014 never fabricated.",
+    "No .bin, .safetensors, .pt, .pth, .onnx, or .gguf weight artifact is present.",
+    "Loop-tax accounting does not prove or upgrade \u039b, which remains Conjecture 1 (open)."
+  ],
+  "historical_provenance_before_correction": {
+    "model": {
+      "id": "SZLHOLDINGS/szl-ouroboros",
+      "repository_type": "model",
+      "artifact_kind": "kernel-code-and-configuration + trained surrogate (model.joblib)",
+      "trained_weights_present": true,
+      "stdlib_only": false,
+      "torch_required": false,
+      "surrogate": {
+        "file": "model.joblib",
+        "sha256": "6c4067810eb508dfb61f3cfaf84b6db81cf2f7c78286f02e786205e0b014ac65",
+        "role": "loop-tax regressor (predicts kernel-derived overheadMs) \u2014 kernel remains sole ground truth",
+        "fidelity_MEASURED": {
+          "held_out_MAE_ms": 15.5853,
+          "held_out_R2": 0.9822,
+          "held_out_target_std_ms": 191.079
+        },
+        "receipt": "TRAINING_RECEIPT.json",
+        "reverify": "python scripts/eval.py"
+      },
+      "stdlib_only_note": "kernel package itself stays stdlib-only; the OPTIONAL surrogate needs sklearn+joblib"
+    },
+    "claims": {
+      "trained_model": "CLAIMED \u2014 sklearn HistGradientBoostingRegressor, MEASURED, receipted",
+      "reproducible_build": "NOT_CLAIMED",
+      "weights_present": "model.joblib (sklearn surrogate; kernel stays weightless)"
+    },
+    "source_of_record": {
+      "state": "VERIFIED_HF_SOURCE_OF_RECORD",
+      "platform": "huggingface",
+      "repository": "SZLHOLDINGS/szl-ouroboros"
+    },
+    "public_github": {}
+  },
+  "current_review": {
+    "schema": "szl.current-artifact-review/v1",
+    "observed_at": "2026-09-30",
+    "hf_model_revision": "91e68d606a6273dd46db600f83938e61322b2b37",
+    "hf_kernel_revision": "194970667faa1292ce09c7ae5880a1918f5cddeb",
+    "github_source_revision": "f4c9df3840a84c767b7e5fa1c29aa25f00cc0457",
+    "github_source_url": "https://github.com/szl-holdings/szl-ouroboros/tree/f4c9df3840a84c767b7e5fa1c29aa25f00cc0457",
+    "github_reachable": true,
+    "source_of_truth_role": "DECLARED_CANONICAL_GITHUB_SOURCE",
+    "historical_records_retained": true,
+    "file_presence_basis": "Hub sibling-path inventory at exact model revision",
+    "weights_downloaded": false,
+    "code_executed": false,
+    "signatures_verified": false,
+    "source_mirror_parity": "UNVERIFIED",
+    "note": "This correction records current absence without retracting or validating historical surrogate records. Revalidate parent revision and source ownership before publication.",
+    "historical_state_note": "Earlier source_of_record, public_github, model and claims states are retained under historical_provenance_before_correction. They must not be interpreted as current observations."
+  },
+  "public_github": {
+    "state": "PUBLIC_REPOSITORY_REACHABLE_AT_REVIEW",
+    "observed_at": "2026-09-30",
+    "repository": "https://github.com/szl-holdings/szl-ouroboros",
+    "http_status": 200,
+    "observation_scope": "Repository reachability and exact current-head snapshot; not release parity or CI status"
+  }
+}

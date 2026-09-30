@@ -1,0 +1,152 @@
+{
+  "schema": "szl.model-source-attestation/v1",
+  "model": {
+    "id": "SZLHOLDINGS/szl-formulas",
+    "repository_type": "model",
+    "artifact_kind": "kernel-code-and-configuration",
+    "trained_weights_present": false,
+    "stdlib_only": false,
+    "torch_required": false,
+    "surrogate": {
+      "file": "model.joblib",
+      "sha256": "94cca70dc950fa957c0931ee80240c4369cab0ff8446ffbfedb483c3e2907698",
+      "role": "21-class formula identifier from call-trace observables \u2014 kernel remains sole ground truth",
+      "fidelity_MEASURED": {
+        "test_accuracy_21_class": 0.9709,
+        "mean_per_class_recall": 0.9709,
+        "blind_spot_classes_recall_lt_0.90": {
+          "bohr_complementarity_floor": 0.7778,
+          "fisher_rao_distance": 0.8889,
+          "pinsker_kl_bound": 0.8833,
+          "schur_concave_lambda_two_axis": 0.85
+        }
+      },
+      "receipt": "TRAINING_RECEIPT.json",
+      "reverify": "python scripts/eval.py",
+      "artifact_present_at_reviewed_revision": false,
+      "availability": "ABSENT_AT_REVIEWED_REVISION",
+      "replay_status": "BLOCKED_MISSING_ARTIFACT",
+      "metrics_scope": "HISTORICAL_RECEIPT_ONLY_NOT_RERUN"
+    },
+    "stdlib_only_note": "kernel package itself stays stdlib-only; the OPTIONAL surrogate needs sklearn+joblib"
+  },
+  "source_of_record": {
+    "state": "DECLARED_CANONICAL_GITHUB_SOURCE",
+    "platform": "github",
+    "repository": "szl-holdings/szl-formulas",
+    "observed_revision": "65c800b59249f27559de575bc66f5054fa585fa5",
+    "observed_url": "https://github.com/szl-holdings/szl-formulas/tree/65c800b59249f27559de575bc66f5054fa585fa5",
+    "source_to_hub_release_binding": "NOT_VERIFIED_THIS_REVIEW"
+  },
+  "mirrors": {
+    "canonical_dataset": "SZLHOLDINGS/canonical-formulas-v1 (code/python/formulas.py + composer.py)",
+    "lean_repo": "szl-holdings/lutar-lean",
+    "doi_lutar_lean": "10.5281/zenodo.20434308",
+    "doi_concept": "10.5281/zenodo.19944926"
+  },
+  "verification": {
+    "tests": "17/17 passed",
+    "tests_basis": "MEASURED local python3 -m pytest run, stdlib-only, offline",
+    "falsifiability": "registry must be exactly 21; locked-proven set must be exactly 8; PROOF_STATUS must match the dataset verbatim and raises on unknown names; \u039b zero-pins on a zero axis; a tampered receipt fails verify_chain; a sub-floor \u039b halts the governed loop"
+  },
+  "proof_status": {
+    "policy": "mirrored VERBATIM from SZLHOLDINGS/canonical-formulas-v1 (PROVEN/AXIOM/SORRY/CONJECTURE)",
+    "obligation_vs_locked": "a per-formula PROVEN(...) tag is an obligation-level label, NOT membership in the locked-proven canonical set",
+    "locked_proven_count": 8,
+    "locked_proven_ids": [
+      "F1",
+      "F4",
+      "F7",
+      "F11",
+      "F12",
+      "F18",
+      "F19",
+      "F22"
+    ],
+    "locked_count_theorem": "locked_count_eight (no-axiom, szl-holdings/lutar-lean PROVEN_FORMULAS.md)",
+    "f_number_to_registry_mapping": "UNKNOWN \u2014 lutar-lean corpus (>=22 formulas) is a separate numbering; mapping onto these 21 registry entries is NOT asserted here (never fabricated)"
+  },
+  "lambda": {
+    "status": "Conjecture 1 (open) \u2014 uniqueness unproven (Uniqueness.lean:120 sorry)",
+    "definition": "weighted geometric mean (D2)",
+    "composer_role": "ADVISORY only \u2014 non-compensatory roll-up, NOT proven trust"
+  },
+  "claims": {
+    "trained_model": "NOT_CLAIMED_CURRENT_REVISION",
+    "reproducible_build": "NOT_CLAIMED",
+    "weights_present": "NONE_AT_REVIEWED_REVISION",
+    "github_repository_parity": "NOT_VERIFIED_THIS_REVIEW"
+  },
+  "limits": [
+    "The trained surrogate is a fast formula IDENTIFIER from trace shape; it does NOT replace the kernel's real evaluators, which remain authoritative for formula identity.",
+    "Some formulas share an argument+output observable signature and are confusable from trace shape alone; these blind spots are MEASURED and stated in TRAINING_RECEIPT.json.",
+    "The 21 formulas are pure/no-I/O; the composer performs no network access.",
+    "PROOF_STATUS labels are the dataset's obligation-level declarations, not upgraded here.",
+    "Locked-proven canonical set is fixed at exactly 8 and never inflated.",
+    "The composer's \u039b roll-up does not prove or upgrade \u039b, which stays Conjecture 1 (open)."
+  ],
+  "historical_provenance_before_correction": {
+    "model": {
+      "id": "SZLHOLDINGS/szl-formulas",
+      "repository_type": "model",
+      "artifact_kind": "kernel-code-and-configuration + trained surrogate (model.joblib)",
+      "trained_weights_present": true,
+      "stdlib_only": false,
+      "torch_required": false,
+      "surrogate": {
+        "file": "model.joblib",
+        "sha256": "94cca70dc950fa957c0931ee80240c4369cab0ff8446ffbfedb483c3e2907698",
+        "role": "21-class formula identifier from call-trace observables \u2014 kernel remains sole ground truth",
+        "fidelity_MEASURED": {
+          "test_accuracy_21_class": 0.9709,
+          "mean_per_class_recall": 0.9709,
+          "blind_spot_classes_recall_lt_0.90": {
+            "bohr_complementarity_floor": 0.7778,
+            "fisher_rao_distance": 0.8889,
+            "pinsker_kl_bound": 0.8833,
+            "schur_concave_lambda_two_axis": 0.85
+          }
+        },
+        "receipt": "TRAINING_RECEIPT.json",
+        "reverify": "python scripts/eval.py"
+      },
+      "stdlib_only_note": "kernel package itself stays stdlib-only; the OPTIONAL surrogate needs sklearn+joblib"
+    },
+    "claims": {
+      "trained_model": "CLAIMED \u2014 sklearn HistGradientBoostingClassifier, MEASURED, receipted",
+      "reproducible_build": "NOT_CLAIMED",
+      "weights_present": "model.joblib (sklearn surrogate; kernel stays weightless)"
+    },
+    "source_of_record": {
+      "state": "VERIFIED_HF_SOURCE_OF_RECORD",
+      "platform": "huggingface",
+      "repository": "SZLHOLDINGS/szl-formulas"
+    },
+    "public_github": {}
+  },
+  "current_review": {
+    "schema": "szl.current-artifact-review/v1",
+    "observed_at": "2026-09-30",
+    "hf_model_revision": "5e4519bb648c47bc7eb4aea4ba5fe80d92570883",
+    "hf_kernel_revision": "636339753ea625bd27fd35a992699dba635c1cbb",
+    "github_source_revision": "65c800b59249f27559de575bc66f5054fa585fa5",
+    "github_source_url": "https://github.com/szl-holdings/szl-formulas/tree/65c800b59249f27559de575bc66f5054fa585fa5",
+    "github_reachable": true,
+    "source_of_truth_role": "DECLARED_CANONICAL_GITHUB_SOURCE",
+    "historical_records_retained": true,
+    "file_presence_basis": "Hub sibling-path inventory at exact model revision",
+    "weights_downloaded": false,
+    "code_executed": false,
+    "signatures_verified": false,
+    "source_mirror_parity": "UNVERIFIED",
+    "note": "This correction records current absence without retracting or validating historical surrogate records. Revalidate parent revision and source ownership before publication.",
+    "historical_state_note": "Earlier source_of_record, public_github, model and claims states are retained under historical_provenance_before_correction. They must not be interpreted as current observations."
+  },
+  "public_github": {
+    "state": "PUBLIC_REPOSITORY_REACHABLE_AT_REVIEW",
+    "observed_at": "2026-09-30",
+    "repository": "https://github.com/szl-holdings/szl-formulas",
+    "http_status": 200,
+    "observation_scope": "Repository reachability and exact current-head snapshot; not release parity or CI status"
+  }
+}

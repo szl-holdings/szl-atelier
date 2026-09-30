@@ -1375,14 +1375,14 @@
       "hf": "SZLHOLDINGS/szl-invariants",
       "name": "szl-invariants",
       "family": "governance",
-      "kind": "Ed25519 invariant kernel",
-      "oneLiner": "Hash the tensor. Sign the hash. The invariant is the signature, not the blog post. 2 likes.",
-      "cut": "Checksums are optional. Ours are the product. If the signature fails, the model is not the model.",
-      "dreamed": "Weights that are invalid if unsigned \u2014 at load time, not at audit time.",
-      "anthropic": "Trust, but here we verify.",
-      "nvidia": "Supply-chain (signed containers) applied to tensors.",
-      "unsloth": "After merge, sign. Not during QLoRA.",
-      "weights": "kernel",
+      "kind": "Offline ledger self-consistency kernel",
+      "oneLiner": "Replay eight named receipt/ledger self-consistency checks while exposing missing evidence.",
+      "cut": "Checks a supplied receipt/ledger export and optional sample lineage against eight named self-consistency checks.",
+      "dreamed": "Missing public keys or samples remain unavailable evidence; this offline replay does not enforce a model loading gate.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
+      "weights": "none",
       "trained": false,
       "evidence": "KERNEL",
       "downloads": 0,
@@ -1392,27 +1392,28 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Scheme",
-          "value": "Ed25519 over tensor hashes",
-          "evidence": "KERNEL"
-        },
-        {
-          "name": "DOI",
-          "value": "10.5281/zenodo.19944926",
-          "evidence": "HUB"
+          "name": "Evaluation in this catalog review",
+          "value": "NOT RERUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "kernel"
+        "https://github.com/szl-holdings/szl-invariants/blob/e9621c5d95e1b6a336981346e473980cfe2d037b/torch-ext/szl_invariants/__init__.py",
+        "https://github.com/szl-holdings/szl-invariants/blob/e9621c5d95e1b6a336981346e473980cfe2d037b/LICENSE",
+        "https://huggingface.co/SZLHOLDINGS/szl-invariants/blob/4ba2b95956cb8a836e7c9f5886b3da778c667f1a/TRAINING_RECEIPT.json"
       ],
       "limitations": [
-        "Proves integrity and origin, never accuracy."
+        "An export self-consistency report does not establish served-answer correctness or runtime enforcement.",
+        "Required public keys and sample evidence must be supplied; missing evidence is not a pass.",
+        "No trained weights or model.joblib are listed at the reviewed model-mirror revision; historical TRAINING_RECEIPT.json remains evidence of its recorded run, with surrogate replay blocked by the missing artifact.",
+        "GitHub source, model mirror, and first-class kernel revisions are distinct; byte parity, a reproducible build, approved publication, and deployed process identity are not established by this catalog review.",
+        "Use remote Python only after reviewing the exact kernel revision, verified publication evidence, and the client qualified for that release."
       ],
-      "intended": "Load-time invariant check.",
-      "play": "sign",
+      "intended": "Offline inspection of authorized software-run exports with independently supplied public keys and optional lineage samples.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-invariants",
-        "path": "README.md",
+        "path": "torch-ext/szl_invariants/__init__.py",
         "module": "szl_invariants"
       }
     },
@@ -1421,14 +1422,14 @@
       "hf": "SZLHOLDINGS/szl-ouroboros",
       "name": "szl-ouroboros",
       "family": "governance",
-      "kind": "Loop-tax kernel",
-      "oneLiner": "Each retry spends authority. Infinite agent loops are a theft of the budget we named.",
-      "cut": "Agent frameworks retry until success. We tax the loop. Success that costs all remaining \u03bb is a failure.",
-      "dreamed": "A runtime that cannot grind a gate into dust.",
-      "anthropic": "Don't jailbreak yourself by persistence.",
-      "nvidia": "Scheduler quota, but for authority.",
-      "unsloth": "No.",
-      "weights": "kernel",
+      "kind": "Offline loop-trace accounting kernel",
+      "oneLiner": "Account for bounded-loop timing from supplied attempt windows and optional measured wall time.",
+      "cut": "Reconstructs bounded-loop traces and derives timing fields from supplied attempt windows and an optional measured wall time.",
+      "dreamed": "Measured inputs, derived arithmetic, and counterfactual quantities remain separate; trace accounting does not enforce a retry guard.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
+      "weights": "none",
       "trained": false,
       "evidence": "KERNEL",
       "downloads": 0,
@@ -1438,29 +1439,29 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Rule",
-          "value": "loop-tax / non-increasing authority",
-          "evidence": "KERNEL"
-        },
-        {
-          "name": "Self-check modelMs",
-          "value": "1120 MEASURED",
-          "evidence": "KERNEL",
-          "vs": "overhead 180 DERIVED \u00b7 joules never invented"
+          "name": "Evaluation in this catalog review",
+          "value": "NOT RERUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "kernel"
+        "https://github.com/szl-holdings/szl-ouroboros/blob/f4c9df3840a84c767b7e5fa1c29aa25f00cc0457/torch-ext/szl_ouroboros/__init__.py",
+        "https://github.com/szl-holdings/szl-ouroboros/blob/f4c9df3840a84c767b7e5fa1c29aa25f00cc0457/LICENSE",
+        "https://huggingface.co/SZLHOLDINGS/szl-ouroboros/blob/91e68d606a6273dd46db600f83938e61322b2b37/TRAINING_RECEIPT.json"
       ],
       "limitations": [
-        "Kernel. Pair with governed-agent-bench."
+        "No runtime retry enforcement, production latency, acceleration, or energy measurement is established by trace accounting.",
+        "An unmeasured run wall leaves overhead unavailable; serialization tax is counterfactual and dead-hop time is an upper bound.",
+        "No trained weights or model.joblib are listed at the reviewed model-mirror revision; historical TRAINING_RECEIPT.json remains evidence of its recorded run, with surrogate replay blocked by the missing artifact.",
+        "GitHub source, model mirror, and first-class kernel revisions are distinct; byte parity, a reproducible build, approved publication, and deployed process identity are not established by this catalog review.",
+        "Use remote Python only after reviewing the exact kernel revision, verified publication evidence, and the client qualified for that release."
       ],
-      "intended": "Wrap agent retries.",
-      "play": "ouroboros",
+      "intended": "Offline performance accounting for benign software retry workflows.",
+      "play": null,
       "github": {
-        "repo": "szl-holdings/szl-khipu",
-        "path": "szl_khipu/ouroboros.py",
-        "module": "szl_khipu.ouroboros"
+        "repo": "szl-holdings/szl-ouroboros",
+        "path": "torch-ext/szl_ouroboros/__init__.py",
+        "module": "szl_ouroboros"
       }
     },
     {
@@ -1468,14 +1469,14 @@
       "hf": "SZLHOLDINGS/szl-formulas",
       "name": "szl-formulas",
       "family": "governance",
-      "kind": "Lean-bound formulas",
-      "oneLiner": "Canonical formulas with Lean obligations and proof-status tags. Lambda-aggregate lives here as a formula, not a myth.",
-      "cut": "Papers have appendices. We have a kernel of formulas whose sorry-count is public (Doctrine v11: 749 / 14 / 163).",
-      "dreamed": "A formula registry that cannot drift from the Lean tree.",
-      "anthropic": "Written principles, but ours compile.",
-      "nvidia": "Recipe as code.",
-      "unsloth": "No.",
-      "weights": "kernel",
+      "kind": "Formula implementation and proof-label kernel",
+      "oneLiner": "21 formula implementations; proof labels preserved at their declared scope.",
+      "cut": "Provides a pure-Python formula registry and composition package with declared proof-status metadata.",
+      "dreamed": "Eight separately named canonical proof identifiers are preserved; their F-number mapping onto the 21-entry registry is UNKNOWN.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
+      "weights": "none",
       "trained": false,
       "evidence": "KERNEL",
       "downloads": 0,
@@ -1485,34 +1486,29 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Doctrine v11",
-          "value": "749 declarations \u00b7 14 axioms \u00b7 163 sorries",
-          "evidence": "SIGNED"
-        },
-        {
-          "name": "Numeric identities (atelier)",
-          "value": "8/8 CHECKED",
-          "evidence": "MEASURED",
-          "vs": "CHECKED \u2260 PROVEN"
-        },
-        {
-          "name": "Locked-8 structural (atelier)",
-          "value": "F1 F4 F7 F11 F12 F18 F19 F22",
-          "evidence": "KERNEL",
-          "vs": "Structural silhouettes, not a Lean kernel run"
+          "name": "Evaluation in this catalog review",
+          "value": "NOT RERUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "kernel"
+        "https://github.com/szl-holdings/szl-formulas/blob/65c800b59249f27559de575bc66f5054fa585fa5/torch-ext/szl_formulas/__init__.py",
+        "https://github.com/szl-holdings/szl-formulas/blob/65c800b59249f27559de575bc66f5054fa585fa5/LICENSE",
+        "https://huggingface.co/SZLHOLDINGS/szl-formulas/blob/5e4519bb648c47bc7eb4aea4ba5fe80d92570883/TRAINING_RECEIPT.json"
       ],
       "limitations": [
-        "\u039b uniqueness is Conjecture 1 \u2014 NOT a theorem."
+        "A per-obligation proof label does not establish membership in the separate canonical proof set.",
+        "The registry-to-formal F-number mapping is UNKNOWN; no automatic Lean-tree parity is claimed.",
+        "Lambda uniqueness remains Conjecture 1 (open), and the composition roll-up is advisory.",
+        "No trained weights or model.joblib are listed at the reviewed model-mirror revision; historical TRAINING_RECEIPT.json remains evidence of its recorded run, with surrogate replay blocked by the missing artifact.",
+        "GitHub source, model mirror, and first-class kernel revisions are distinct; byte parity, a reproducible build, approved publication, and deployed process identity are not established by this catalog review.",
+        "Use remote Python only after reviewing the exact kernel revision, verified publication evidence, and the client qualified for that release."
       ],
-      "intended": "Import formulas. Check proof-status before citing.",
-      "play": "formulas",
+      "intended": "Research and inspection of numerical formula implementations and the exact scope and assumptions of their proof labels.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-formulas",
-        "path": "README.md",
+        "path": "torch-ext/szl_formulas/__init__.py",
         "module": "szl_formulas"
       }
     },
@@ -1521,14 +1517,14 @@
       "hf": "SZLHOLDINGS/szl-govsign",
       "name": "szl-govsign",
       "family": "governance",
-      "kind": "DSSE / in-toto",
-      "oneLiner": "Signing kernel. Envelopes, not screenshots of envelopes.",
-      "cut": "Attestation as a library, not a PDF.",
-      "dreamed": "Every organ speaks DSSE.",
-      "anthropic": "No equivalent public kernel.",
-      "nvidia": "Signed containers / in-toto in supply chain.",
-      "unsloth": "No.",
-      "weights": "kernel",
+      "kind": "ECDSA P-256 envelope kernel",
+      "oneLiner": "Create and verify signed DSSE/in-toto-shaped governance envelopes with an explicit trust boundary.",
+      "cut": "Creates and verifies ECDSA P-256 signatures over DSSE/in-toto-shaped envelopes containing an SZL governance predicate.",
+      "dreamed": "Public-key trust is supplied independently; a signature check establishes only the properties actually verified.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
+      "weights": "none",
       "trained": false,
       "evidence": "KERNEL",
       "downloads": 0,
@@ -1538,22 +1534,28 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Formats",
-          "value": "DSSE \u00b7 in-toto",
-          "evidence": "KERNEL"
+          "name": "Evaluation in this catalog review",
+          "value": "NOT RERUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "kernel"
+        "https://github.com/szl-holdings/szl-govsign/blob/7bff004d12347ac23ae60ffbfb78ce7f9ef15829/torch-ext/szl_govsign/__init__.py",
+        "https://github.com/szl-holdings/szl-govsign/blob/7bff004d12347ac23ae60ffbfb78ce7f9ef15829/LICENSE",
+        "https://huggingface.co/SZLHOLDINGS/szl-govsign/blob/13ce04b3b3e490e9bee6453df7f83fdcf0f3b5c9/TRAINING_RECEIPT.json"
       ],
       "limitations": [
-        "Kernel."
+        "Signature validity does not by itself establish signer trust, policy compliance, or model quality.",
+        "Historical structural-surrogate measurements do not establish cryptographic verification.",
+        "No trained weights or model.joblib are listed at the reviewed model-mirror revision; historical TRAINING_RECEIPT.json remains evidence of its recorded run, with surrogate replay blocked by the missing artifact.",
+        "GitHub source, model mirror, and first-class kernel revisions are distinct; byte parity, a reproducible build, approved publication, and deployed process identity are not established by this catalog review.",
+        "Use remote Python only after reviewing the exact kernel revision, verified publication evidence, and the client qualified for that release."
       ],
-      "intended": "Sign receipts. Verify offline.",
-      "play": "sign",
+      "intended": "Signed software provenance receipt research and offline verification of exact envelopes.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-govsign",
-        "path": "README.md",
+        "path": "torch-ext/szl_govsign/__init__.py",
         "module": "szl_govsign"
       }
     },
@@ -1562,14 +1564,14 @@
       "hf": "SZLHOLDINGS/szl-provctl",
       "name": "szl-provctl",
       "family": "governance",
-      "kind": "SLSA provenance",
-      "oneLiner": "Supply-chain controller. SLSA + in-toto. Who built it, from what, on which runner.",
-      "cut": "Model cards skip the builder. We treat the builder as part of the model.",
-      "dreamed": "A weight that is invalid without its provenance predicate.",
-      "anthropic": "No public SLSA for Claude weights.",
-      "nvidia": "NGC signed images \u2014 take, then apply to LoRAs.",
-      "unsloth": "After the job, attach SLSA. Unsloth does not.",
-      "weights": "kernel",
+      "kind": "Receipt provenance graph kernel",
+      "oneLiner": "Inspect declared receipt-chain provenance graphs and construct in-toto/SLSA-shaped records.",
+      "cut": "Traverses supplied receipt-chain graphs and provides helpers for in-toto Statement v1 and SLSA provenance v1-shaped records.",
+      "dreamed": "Declared relationships and exported statement structure require independent verification by the consuming system.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
+      "weights": "none",
       "trained": false,
       "evidence": "KERNEL",
       "downloads": 0,
@@ -1579,22 +1581,28 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Frameworks",
-          "value": "SLSA \u00b7 in-toto",
-          "evidence": "KERNEL"
+          "name": "Evaluation in this catalog review",
+          "value": "NOT RERUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "kernel"
+        "https://github.com/szl-holdings/szl-provctl/blob/ce4a4cd36abba999de44b774a559b6fe33cf329e/torch-ext/szl_provctl/__init__.py",
+        "https://github.com/szl-holdings/szl-provctl/blob/ce4a4cd36abba999de44b774a559b6fe33cf329e/LICENSE",
+        "https://huggingface.co/SZLHOLDINGS/szl-provctl/blob/8d2082d4b9901b1b92c9efd86113fb760a64bf1e/TRAINING_RECEIPT.json"
       ],
       "limitations": [
-        "Kernel."
+        "Constructing a provenance record does not establish SLSA certification, signer trust, or automatic publication enforcement.",
+        "Missing dependency and graph failure paths require review before integration.",
+        "No trained weights or model.joblib are listed at the reviewed model-mirror revision; historical TRAINING_RECEIPT.json remains evidence of its recorded run, with surrogate replay blocked by the missing artifact.",
+        "GitHub source, model mirror, and first-class kernel revisions are distinct; byte parity, a reproducible build, approved publication, and deployed process identity are not established by this catalog review.",
+        "Use remote Python only after reviewing the exact kernel revision, verified publication evidence, and the client qualified for that release."
       ],
-      "intended": "CI predicate for every publish.",
-      "play": "sign",
+      "intended": "Offline inspection of software-run relationships and experimental provenance record construction.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-provctl",
-        "path": "README.md",
+        "path": "torch-ext/szl_provctl/__init__.py",
         "module": "szl_provctl"
       }
     },
@@ -1603,14 +1611,14 @@
       "hf": "SZLHOLDINGS/szl-blocked",
       "name": "szl-blocked",
       "family": "governance",
-      "kind": "EU AI Act Annex IV",
-      "oneLiner": "Technical documentation kernel for Annex IV. Compliance as code, not a consultant's slide.",
-      "cut": "People write Annex IV in Word. We keep a kernel that refuses to publish if the annex fields are empty.",
-      "dreamed": "A blocked publish \u2014 the name is the feature.",
-      "anthropic": "Policy docs. We want a gate.",
-      "nvidia": "Enterprise compliance packs.",
-      "unsloth": "No.",
-      "weights": "kernel",
+      "kind": "Software policy-gate kernel",
+      "oneLiner": "Explicit policy outcomes and receipt-chain records; companion Annex IV-style documentation drafts.",
+      "cut": "Applies a supplied policy before calling a function and records the outcome in a receipt chain.",
+      "dreamed": "The companion szl_euaiact package generates documentation drafts; policy selection and integration remain the caller's responsibility.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
+      "weights": "none",
       "trained": false,
       "evidence": "KERNEL",
       "downloads": 0,
@@ -1620,22 +1628,28 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Target",
-          "value": "EU AI Act Annex IV",
-          "evidence": "HUB"
+          "name": "Evaluation in this catalog review",
+          "value": "NOT RERUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "kernel"
+        "https://github.com/szl-holdings/szl-blocked/blob/96d520d51ad867ec5e0f62b5063fbe85c17cef7e/torch-ext/szl_blocked/__init__.py",
+        "https://github.com/szl-holdings/szl-blocked/blob/96d520d51ad867ec5e0f62b5063fbe85c17cef7e/LICENSE",
+        "https://huggingface.co/SZLHOLDINGS/szl-blocked/blob/730a238648ac69aa2a69c11428e06354c48d09e2/TRAINING_RECEIPT.json"
       ],
       "limitations": [
-        "Not legal advice. A documentation gate."
+        "Documentation structure does not establish regulatory compliance.",
+        "Limited software maturity; this package is not a complete product qualification.",
+        "No trained weights or model.joblib are listed at the reviewed model-mirror revision; historical TRAINING_RECEIPT.json remains evidence of its recorded run, with surrogate replay blocked by the missing artifact.",
+        "GitHub source, model mirror, and first-class kernel revisions are distinct; byte parity, a reproducible build, approved publication, and deployed process identity are not established by this catalog review.",
+        "Use remote Python only after reviewing the exact kernel revision, verified publication evidence, and the client qualified for that release."
       ],
-      "intended": "Block publish when annex fields are missing.",
-      "play": "sign",
+      "intended": "Local software policy-gate and documentation research with explicit policies and tested denial paths.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-blocked",
-        "path": "README.md",
+        "path": "torch-ext/szl_blocked/__init__.py",
         "module": "szl_blocked"
       }
     },

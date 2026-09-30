@@ -1,0 +1,126 @@
+{
+  "schema": "szl.model-source-attestation/v1",
+  "observed_at": "2026-07-12T00:27:14Z",
+  "model": {
+    "id": "SZLHOLDINGS/szl-blocked",
+    "repository_type": "model",
+    "artifact_kind": "kernel-code-and-configuration",
+    "trained_weights_present": false,
+    "surrogate": {
+      "file": "model.joblib",
+      "sha256": "15f0537cd323aff977ff3d5abec065f1144693fe0ab99d5cbd0961fe3b8e7610",
+      "role": "BLOCK/ALLOW decision triage only \u2014 kernel policy chain remains sole ground truth",
+      "fidelity_MEASURED": {
+        "fidelity_vs_kernel_heldout": 0.9977,
+        "per_class_recall": {
+          "ALLOW": 0.9963,
+          "BLOCK_HARD": 1.0,
+          "BLOCK_ADVISORY": 0.9846
+        }
+      },
+      "receipt": "TRAINING_RECEIPT.json",
+      "reverify": "python scripts/eval.py",
+      "artifact_present_at_reviewed_revision": false,
+      "availability": "ABSENT_AT_REVIEWED_REVISION",
+      "replay_status": "BLOCKED_MISSING_ARTIFACT",
+      "metrics_scope": "HISTORICAL_RECEIPT_ONLY_NOT_RERUN"
+    },
+    "stdlib_only_note": "kernel package itself stays stdlib-only; the OPTIONAL surrogate needs sklearn+joblib"
+  },
+  "source_of_record": {
+    "state": "DECLARED_CANONICAL_GITHUB_SOURCE",
+    "platform": "github",
+    "repository": "szl-holdings/szl-blocked",
+    "observed_revision": "96d520d51ad867ec5e0f62b5063fbe85c17cef7e",
+    "observed_url": "https://github.com/szl-holdings/szl-blocked/tree/96d520d51ad867ec5e0f62b5063fbe85c17cef7e",
+    "source_to_hub_release_binding": "NOT_VERIFIED_THIS_REVIEW"
+  },
+  "public_github": {
+    "state": "PUBLIC_REPOSITORY_REACHABLE_AT_REVIEW",
+    "observed_at": "2026-09-30",
+    "repository": "https://github.com/szl-holdings/szl-blocked",
+    "http_status": 200,
+    "observation_scope": "Repository reachability and exact current-head snapshot; not release parity or CI status"
+  },
+  "claims": {
+    "github_repository_parity": "NOT_VERIFIED_THIS_REVIEW",
+    "reproducible_build": "NOT_CLAIMED",
+    "trained_model": "NOT_CLAIMED_CURRENT_REVISION",
+    "serving_process_revision": "NOT_APPLICABLE_REPOSITORY_ARTIFACT",
+    "weights_present": "NONE_AT_REVIEWED_REVISION"
+  },
+  "limits": [
+    "The 404 observation establishes only that no public same-name repository was reachable at the observation time; it does not make a claim about private repositories.",
+    "The attestation overlay cannot self-embed its resulting Hub commit, so the immutable artifact_base_revision is the measured pre-overlay base.",
+    "No .bin, .safetensors, .pt, .pth, .onnx, or .gguf weight artifact was present in the measured base tree."
+  ],
+  "historical_provenance_before_correction": {
+    "model": {
+      "id": "SZLHOLDINGS/szl-blocked",
+      "repository_type": "model",
+      "artifact_kind": "kernel-code-and-configuration",
+      "trained_weights_present": true,
+      "surrogate": {
+        "file": "model.joblib",
+        "sha256": "15f0537cd323aff977ff3d5abec065f1144693fe0ab99d5cbd0961fe3b8e7610",
+        "role": "BLOCK/ALLOW decision triage only \u2014 kernel policy chain remains sole ground truth",
+        "fidelity_MEASURED": {
+          "fidelity_vs_kernel_heldout": 0.9977,
+          "per_class_recall": {
+            "ALLOW": 0.9963,
+            "BLOCK_HARD": 1.0,
+            "BLOCK_ADVISORY": 0.9846
+          }
+        },
+        "receipt": "TRAINING_RECEIPT.json",
+        "reverify": "python scripts/eval.py"
+      },
+      "stdlib_only_note": "kernel package itself stays stdlib-only; the OPTIONAL surrogate needs sklearn+joblib"
+    },
+    "claims": {
+      "github_repository_parity": "NOT_CLAIMED",
+      "reproducible_build": "NOT_CLAIMED",
+      "trained_model": "SURROGATE_PRESENT_MEASURED_FIDELITY",
+      "serving_process_revision": "NOT_APPLICABLE_REPOSITORY_ARTIFACT"
+    },
+    "source_of_record": {
+      "state": "VERIFIED_HF_SOURCE_OF_RECORD",
+      "platform": "huggingface",
+      "repository": "SZLHOLDINGS/szl-blocked",
+      "artifact_base_revision": "ea595bfe2898425365cf71da5edf9901d4de525c",
+      "artifact_base_state": "MEASURED_PRE_ATTESTATION_BASE",
+      "artifact_base_url": "https://huggingface.co/SZLHOLDINGS/szl-blocked/tree/ea595bfe2898425365cf71da5edf9901d4de525c",
+      "file_count": 13,
+      "tree_sha256": "149cfe5686ffcff20fd726ba7488afaf7d652401b3a00af193077ae226b9e3bc",
+      "tree_hash_algorithm": "sha256 of UTF-8 path + NUL + per-file sha256 + LF, sorted by path; .cache excluded"
+    },
+    "public_github": {
+      "state": "NO_DIRECT_PUBLIC_IMPLEMENTATION_OBSERVED",
+      "same_name_candidate": "https://github.com/szl-holdings/szl-blocked",
+      "same_name_candidate_http_status": 404,
+      "card_references": [
+        "https://github.com/szl-holdings/governed-receipt-spec",
+        "https://github.com/szl-holdings/szl-papers/blob/main/PAPERS_INDEX.md"
+      ],
+      "card_reference_role": "SPECIFICATION_OR_RESEARCH_CONTEXT_NOT_BUILD_SOURCE"
+    }
+  },
+  "current_review": {
+    "schema": "szl.current-artifact-review/v1",
+    "observed_at": "2026-09-30",
+    "hf_model_revision": "730a238648ac69aa2a69c11428e06354c48d09e2",
+    "hf_kernel_revision": "b8b15cde2d3d3d7c6ef30467d6cacc6d219a1349",
+    "github_source_revision": "96d520d51ad867ec5e0f62b5063fbe85c17cef7e",
+    "github_source_url": "https://github.com/szl-holdings/szl-blocked/tree/96d520d51ad867ec5e0f62b5063fbe85c17cef7e",
+    "github_reachable": true,
+    "source_of_truth_role": "DECLARED_CANONICAL_GITHUB_SOURCE",
+    "historical_records_retained": true,
+    "file_presence_basis": "Hub sibling-path inventory at exact model revision",
+    "weights_downloaded": false,
+    "code_executed": false,
+    "signatures_verified": false,
+    "source_mirror_parity": "UNVERIFIED",
+    "note": "This correction records current absence without retracting or validating historical surrogate records. Revalidate parent revision and source ownership before publication.",
+    "historical_state_note": "Earlier source_of_record, public_github, model and claims states are retained under historical_provenance_before_correction. They must not be interpreted as current observations."
+  }
+}

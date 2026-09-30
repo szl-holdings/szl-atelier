@@ -1,0 +1,9 @@
+# Keep hash-bound review card bytes stable across Windows/Linux checkouts.
+szl-blocked.md text eol=lf
+szl-provctl.md text eol=lf
+szl-govsign.md text eol=lf
+szl-invariants.md text eol=lf
+szl-ouroboros.md text eol=lf
+szl-formulas.md text eol=lf
+# Preserve the exact captured provider JSON bytes and proposed payload bytes.
+reviews/2026-09-30/*.json -text
