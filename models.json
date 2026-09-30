@@ -268,16 +268,16 @@
       "hf": "SZLHOLDINGS/SZL-Khipu-1.5B",
       "name": "SZL-Khipu-1.5B",
       "family": "navigator",
-      "kind": "Qwen2.5 QLoRA, merged",
-      "oneLiner": "A 1.5B brain navigator that plans over handles, never over document text. NAVIGATE or ABSTAIN in khipu.schema.json.",
-      "cut": "The model is blind to content. Citations cannot be invented from memory because memory never saw the nodes. That is a capability nobody else wants, and we trained it.",
-      "dreamed": "Retrieval that cannot hallucinate a citation. Grounding is structural.",
-      "anthropic": "Claude abstains in prose. Khipu abstains in a schema with citedNodeIds: [].",
-      "nvidia": "NeMo retriever sees passages. Khipu sees handles only.",
-      "unsloth": "QLoRA SFT, 7 modules, packing=auto, adamw_8bit, receipted. Not retrained here.",
+      "kind": "Proposal-only Qwen2.5 retrieval planner",
+      "oneLiner": "Proposal-only retrieval plans over supplied synthetic handles; the historical 2/6 abstention blocker remains visible.",
+      "cut": "An external controller must reject citations outside the offered candidates and independently gate execution.",
+      "dreamed": "The owner-run 11-case evaluation observed zero hallucinated citations; this result describes only those named cases.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
       "weights": "full",
       "trained": true,
-      "evidence": "SIGNED",
+      "evidence": "HUB",
       "downloads": 242,
       "likes": 1,
       "base": "Qwen/Qwen2.5-1.5B-Instruct",
@@ -285,51 +285,56 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "plan-valid",
+          "name": "2026-07-14 owner-run plan validity",
           "value": "11/11",
-          "evidence": "SIGNED",
-          "vs": "Owner synthetic harness"
+          "evidence": "REPORTED"
         },
         {
-          "name": "grounding",
+          "name": "2026-07-14 owner-run grounding",
           "value": "4/5",
-          "evidence": "SIGNED"
+          "evidence": "REPORTED"
         },
         {
-          "name": "abstain",
-          "value": "2/6",
-          "evidence": "SIGNED",
-          "vs": "Known blocker. R2 exists because of this."
+          "name": "2026-07-14 owner-run abstention",
+          "value": "2/6 (BLOCKER)",
+          "evidence": "REPORTED"
         },
         {
-          "name": "hallucinated citations",
-          "value": "0",
-          "evidence": "SIGNED"
+          "name": "2026-07-14 hallucinated citations",
+          "value": "0 on the 11 named cases",
+          "evidence": "REPORTED"
         },
         {
-          "name": "Unsloth profile",
-          "value": "4bit \u00b7 r=16 \u00b7 7 modules \u00b7 packing=auto \u00b7 adamw_8bit",
-          "evidence": "KERNEL",
-          "vs": "Owner-metal recipe. Existing signed loss 0.0245. Not retrained in this atelier."
+          "name": "2026-09-24 Q4_K_M rerun",
+          "value": "Same aggregate counts on reused cases",
+          "evidence": "REPORTED",
+          "vs": "Separate derived artifact; no broad equivalence claim."
+        },
+        {
+          "name": "New evaluation in this card review",
+          "value": "NOT RUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "model.safetensors 3.09 GB",
-        "adapter/adapter_model.safetensors 148 MB",
-        "training_receipt.signed.json",
-        "eval_receipt.signed.json",
-        "khipu.schema.json"
+        "https://github.com/szl-holdings/szl-forge/blob/5b3dfdf9beafe0d6d1e6043ca005ec4b17c45204/khipu/card/README.md",
+        "https://huggingface.co/SZLHOLDINGS/SZL-Khipu-1.5B/blob/724d251459cc987f33985c5799f5f3a9e02f4cd2/eval_receipt.signed.json",
+        "https://huggingface.co/SZLHOLDINGS/SZL-Khipu-1.5B/blob/724d251459cc987f33985c5799f5f3a9e02f4cd2/training_receipt.signed.json",
+        "https://huggingface.co/SZLHOLDINGS/SZL-Khipu-1.5B/blob/724d251459cc987f33985c5799f5f3a9e02f4cd2/szl-source-binding.json"
       ],
       "limitations": [
-        "Abstain 2/6 \u2014 do not deploy autonomous.",
-        "Eval is owner synthetic, not third-party.",
-        "Curriculum files not published."
+        "The owner-run evaluation dated 2026-07-14 reports plan validity 11/11, grounding 4/5, abstention 2/6 and zero hallucinated citations on a small synthetic harness.",
+        "Abstention 2/6 remains a blocker for autonomous or high-stakes use; no general citation, factuality or safety guarantee is established.",
+        "The signed safetensors digests hash sorted filenames plus bytes. They are distinct from individual-file LFS digests and do not cover derived GGUF files.",
+        "The 2026-09-24 owner-reported Q4_K_M rerun matched aggregate counts on the same 11 named cases; it does not establish general behavior equivalence.",
+        "The reviewed README has changed since its retained source-binding record. This review creates no replacement binding or release qualification.",
+        "This card review performs no model evaluation, weight validation, new source binding, release/client qualification, publication, or runtime verification."
       ],
-      "intended": "Controller-bound retrieval planner. Proposal only.",
-      "play": "khipu",
+      "intended": "Controller-bound retrieval-planning research over supplied candidates; model output remains a proposal.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-forge",
-        "path": "khipu/",
+        "path": "khipu/card/README.md",
         "module": "szl_forge.khipu"
       }
     },
@@ -537,13 +542,13 @@
       "hf": "SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2",
       "name": "szl-receiptagent-qwen35-0.8b-v2",
       "family": "receipt",
-      "kind": "Unsloth LoRA on Qwen3.5-0.8B",
-      "oneLiner": "The house loop on a 0.8B Qwen3.5. Small enough to iterate. Still proposal-only.",
-      "cut": "Everyone fine-tunes 8B because it looks serious. We fine-tune 0.8B because the receipt loop should be cheap enough to run every night.",
-      "dreamed": "A receipt agent you can retrain between coffee and lunch, with the same doctrine as the 1.5B.",
-      "anthropic": "Same constitution, smaller body.",
-      "nvidia": "Small NIM-shaped thing, without NIM.",
-      "unsloth": "Poster organ: FastLanguageModel + adamw_8bit + receipted knobs on Qwen3.5-0.8B.",
+      "kind": "PEFT adapter with separately scoped derived merge",
+      "oneLiner": "Proposal-only ReceiptAgent adapter with historical signed contract evidence and separate derived-merge limits.",
+      "cut": "Retained owner-run evidence reports 5/5 JSON-contract drafts and 6/6 refusal-prefix checks on committed held-out files.",
+      "dreamed": "Those contract counts are bounded acceptance results, not semantic truth, factual accuracy, broad capability, or autonomy qualification.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
       "weights": "adapter",
       "trained": true,
       "evidence": "HUB",
@@ -554,29 +559,46 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Base",
-          "value": "Qwen3.5-0.8B",
-          "evidence": "HUB"
+          "name": "Historical owner-run JSON contract",
+          "value": "5/5 drafts",
+          "evidence": "REPORTED",
+          "vs": "Retained release evidence; schema acceptance, not semantic truth."
         },
         {
-          "name": "Unsloth profile",
-          "value": "4bit \u00b7 r=16 \u00b7 adamw_8bit \u00b7 packing=auto",
-          "evidence": "KERNEL",
-          "vs": "Nightly receipted loop. Owner-metal. Not retrained here."
+          "name": "Historical owner-run refusals",
+          "value": "6/6 refusal prefixes",
+          "evidence": "REPORTED"
+        },
+        {
+          "name": "Historical publication (2026-07-29)",
+          "value": "26 intended files at 7a0d9ef; publicationEligible=true, autonomyEligible=false",
+          "evidence": "REPORTED"
+        },
+        {
+          "name": "New evaluation in this card review",
+          "value": "NOT RUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "adapter safetensors"
+        "https://github.com/szl-holdings/szl-forge/blob/5b3dfdf9beafe0d6d1e6043ca005ec4b17c45204/frontier/qwen35-receiptagent-v2/MODEL_CARD.md",
+        "https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2/blob/9f71de39861898e752602a2332ef7ca1e0df87a7/publication.json",
+        "https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2/blob/9f71de39861898e752602a2332ef7ca1e0df87a7/receipts/eval_receipt.signed.json",
+        "https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2/blob/9f71de39861898e752602a2332ef7ca1e0df87a7/reports/eval-report.json"
       ],
       "limitations": [
-        "Adapter only. Load on the disclosed base.",
-        "No signed eval in this atelier."
+        "The retained publication verified 26 intended files at historical release 7a0d9efdebe92ea3b5b26b97cc722c6b5afde621 on 2026-07-29; it does not attest every later file or current head.",
+        "Historical publicationEligible=true remains a bounded release record; autonomyEligible=false remains controlling. This review grants no new publication eligibility.",
+        "Schema and refusal-prefix acceptance do not establish semantic correctness or factual accuracy.",
+        "The separate salvaged-merge/ runtime form has separately scoped evidence; adapter results do not automatically qualify it.",
+        "Signed receipts and their reported byte readback were not independently reverified in this card review.",
+        "This card review performs no model evaluation, weight validation, new source binding, release/client qualification, publication, or runtime verification."
       ],
-      "intended": "Nightly receipted Unsloth loop.",
-      "play": "receipt",
+      "intended": "Research on proposal-only structured drafting, with external validation, human approval, execution and authoritative receipt minting.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-forge",
-        "path": "frontier/qwen35-receiptagent-v2/",
+        "path": "frontier/qwen35-receiptagent-v2/MODEL_CARD.md",
         "module": "szl_forge.frontier.qwen35_v2"
       }
     },
@@ -653,13 +675,13 @@
       "hf": "SZLHOLDINGS/A11OY-MINI",
       "name": "A11OY-MINI",
       "family": "doctrine",
-      "kind": "GGUF mini",
-      "oneLiner": "The command-center personality in a pocket quant. Doctrine v11, series-a tagged, still conversational.",
-      "cut": "A11oy is a Space and a substrate. The mini is the voice you can actually load. Not the organ. Not the mesh.",
-      "dreamed": "A governed command voice that fits in llama.cpp.",
-      "anthropic": "A small Claude-shaped mouth with a much stricter constitution.",
-      "nvidia": "A NIM-less local runtime.",
-      "unsloth": "GGUF path.",
+      "kind": "Derived GGUF family with unqualified projector",
+      "oneLiner": "Derived Chaski GGUF artifacts with dated envelope checks, observed semantic failures, and HOLD disposition.",
+      "cut": "Legacy Chaski GGUFs, the Chaski-R2 Q4_K_M text artifact and its BF16 projector have distinct lineage and qualification limits.",
+      "dreamed": "The 2026-09-24 owner-local envelope result is 5/5 drafts and 6/6 refusal prefixes; the 2026-09-25 qualitative review records semantic failures.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
       "weights": "gguf",
       "trained": true,
       "evidence": "HUB",
@@ -670,29 +692,45 @@
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Format",
-          "value": "GGUF / llama.cpp",
-          "evidence": "HUB"
+          "name": "2026-09-24 owner-local envelope",
+          "value": "5/5 drafts; 6/6 refusal prefixes",
+          "evidence": "REPORTED",
+          "vs": "Bounded checker only; unsigned honest record, no semantic pass."
         },
         {
-          "name": "Doctrine-mouth silhouette",
-          "value": "shared with WILLAY",
-          "evidence": "SYNTHETIC",
-          "vs": "Same 5-8-2 tell/silence head. Quant is derived."
+          "name": "2026-09-25 qualitative semantic review",
+          "value": "SEMANTIC_FAILURES_OBSERVED; semantic pass rate unavailable",
+          "evidence": "REPORTED"
+        },
+        {
+          "name": "Disposition",
+          "value": "HOLD; publication=false; autonomy=false",
+          "evidence": "REPORTED"
+        },
+        {
+          "name": "New evaluation in this card review",
+          "value": "NOT RUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "GGUF"
+        "https://github.com/szl-holdings/szl-forge/blob/5b3dfdf9beafe0d6d1e6043ca005ec4b17c45204/a11oy-mini/card/README.md",
+        "https://huggingface.co/SZLHOLDINGS/A11OY-MINI/blob/7ea56236ea7988b3915b5ef07548cb2c3930a3cf/evidence/2026-09-24-native-cuda/receipt.json",
+        "https://huggingface.co/SZLHOLDINGS/A11OY-MINI/blob/7ea56236ea7988b3915b5ef07548cb2c3930a3cf/evidence/2026-09-24-native-cuda/semantic_review.json"
       ],
       "limitations": [
-        "Derived quant.",
-        "Not a11oy-v19-substrate."
+        "HOLD; publication_eligible=false; autonomy_eligible=false; promotion_effect=NONE in the retained native observation and semantic review.",
+        "The 2026-09-25 qualitative review found artifact-presence-as-evaluation, training-loss-as-evaluation and unsupported job-state claims. No semantic pass rate is established.",
+        "Legacy GGUFs retain deprecated failed-parent lineage. R2 text checks do not qualify the BF16 vision projector or vision use.",
+        "The Sept 17 unbound gate, Sept 24 artifact-bound observation and current documentation snapshot are separate evidence identities.",
+        "Apache-2.0 is declared; no standalone LICENSE file is listed at the reviewed model revision. Artifact license coverage was not independently verified.",
+        "This card review performs no model evaluation, weight validation, new source binding, release/client qualification, publication, or runtime verification."
       ],
-      "intended": "Local doctrine voice. Proposal-only if wired to tools.",
-      "play": "tell",
+      "intended": "Inspection of retained research artifacts and evidence; the documented disposition remains HOLD, without production or autonomy qualification.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-forge",
-        "path": "a11oy_mini/",
+        "path": "a11oy-mini/card/README.md",
         "module": "szl_forge.a11oy_mini"
       }
     },
@@ -1079,42 +1117,59 @@
       "hf": "SZLHOLDINGS/szl-kernels",
       "name": "szl-kernels",
       "family": "kernel",
-      "kind": "Feature-extraction suite",
-      "oneLiner": "The older suite. Feature-extraction tagged. 199 Hub downloads. Embeddings with a provenance habit.",
-      "cut": "sklearn-shaped feature extraction that still carries the estate tags. Not MiniEmbed-Nano (64\u00d712). Not BGE.",
-      "dreamed": "A boring kernel pack that reviewers can actually run.",
-      "anthropic": "Small, named, limited.",
-      "nvidia": "Suite packaging.",
-      "unsloth": "No.",
-      "weights": "kernel",
-      "trained": false,
+      "kind": "Reference kernels plus PPMI/SVD embedding table",
+      "oneLiner": "Reference governance kernels with a separate 3290-by-128 in-domain PPMI/SVD embedding companion.",
+      "cut": "The software suite and learned embedding table are distinct artifacts with separate evidence limits.",
+      "dreamed": "Historical test and embedding-sanity records do not establish current runtime readiness, downstream retrieval quality, or acceleration.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
+      "weights": "numpy",
+      "trained": true,
       "evidence": "HUB",
       "downloads": 199,
       "likes": 0,
       "base": null,
-      "params": null,
+      "params": "3290 x 128 companion table",
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Hub downloads",
-          "value": "199",
-          "evidence": "HUB"
+          "name": "Historical Python tests (2026-08-29)",
+          "value": "29 passed; Windows fullgraph compile failures recorded",
+          "evidence": "REPORTED",
+          "vs": "Named historical environment; not current runtime verification."
         },
         {
-          "name": "Pipeline",
-          "value": "feature-extraction",
-          "evidence": "HUB"
+          "name": "Embedding scope",
+          "value": "3290 terms x 128 dimensions; intrinsic sanity only",
+          "evidence": "REPORTED"
+        },
+        {
+          "name": "Energy in this review",
+          "value": "UNAVAILABLE",
+          "evidence": "UNAVAILABLE"
+        },
+        {
+          "name": "New evaluation in this card review",
+          "value": "NOT RUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "kernels"
+        "https://github.com/szl-holdings/szl-kernels/blob/7b59de18d35b1edca3c54a4647fb324b918563a8/README.md",
+        "https://huggingface.co/SZLHOLDINGS/szl-kernels/blob/f67a26a8141b1436ee2d1de64fb202c493981a2d/TRAINING_RECEIPT.json",
+        "https://huggingface.co/SZLHOLDINGS/szl-kernels/blob/f67a26a8141b1436ee2d1de64fb202c493981a2d/publication.json"
       ],
       "limitations": [
-        "Not MiniEmbed-Nano.",
-        "Not a 1.5B."
+        "The suite is software; trained=true describes only the separate PPMI/SVD embedding companion.",
+        "Intrinsic nearest-neighbour sanity is not a downstream retrieval benchmark or general-purpose embedding qualification.",
+        "Energy needs an actual supported metering receipt. An illustrative number cannot be labelled MEASURED; unavailable energy remains unavailable.",
+        "Historical 29-test/import records and Windows torch.compile failures remain dated observations; tests and model evaluation were not rerun for this card review.",
+        "The retained publication binds an earlier declared file set. It does not bind the subsequently changed README; no replacement source binding is asserted.",
+        "This card review performs no model evaluation, weight validation, new source binding, release/client qualification, publication, or runtime verification."
       ],
-      "intended": "Feature extraction under doctrine tags.",
-      "play": "yarqa",
+      "intended": "Research and inspection of reference software and bounded in-domain embedding behavior.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-kernels",
         "path": "README.md",
@@ -1658,64 +1713,61 @@
       "hf": "SZLHOLDINGS/szl-nemo",
       "name": "szl-nemo",
       "family": "governance",
-      "kind": "sklearn doctrine triage",
-      "oneLiner": "Tfidf \u2192 LogisticRegression over doctrine rules R1\u2013R5. Not NVIDIA NeMo. Not Nemotron. Name collision, card-corrected.",
-      "cut": "We took the idea of recipe-conformance from NVIDIA NeMo and built a tiny sklearn surrogate that triages answers against five doctrine rules. Then we stripped the misleading nemotron tags. Honesty over SEO.",
-      "dreamed": "A 10-millisecond 'does this answer violate doctrine?' that CI can run on every card.",
-      "anthropic": "Constitutional classifier, tiny.",
-      "nvidia": "Silhouette of NeMo recipe-conformance. Cut: sklearn, disclosed, not a Nemotron.",
-      "unsloth": "No.",
+      "kind": "Historical scripts and receipt mirror",
+      "oneLiner": "Historical recipe-conformance records; the scorer and its generator remain quarantined.",
+      "cut": "This Hub snapshot is a historical scripts-and-receipt mirror, while current canonical development is deterministic witness software.",
+      "dreamed": "The complete newer GitHub package is not established as shipped by this sparse Hub snapshot.",
+      "anthropic": "",
+      "nvidia": "",
+      "unsloth": "",
       "weights": "none",
-      "trained": true,
+      "trained": false,
       "evidence": "HUB",
       "downloads": 5,
       "likes": 0,
       "base": null,
-      "params": "Tfidf+LR",
+      "params": null,
       "license": "Apache-2.0",
       "benches": [
         {
-          "name": "Joblib on Hub",
-          "value": "quarantined \u2014 not the load path",
-          "evidence": "HUB"
+          "name": "Historical scorer fidelity",
+          "value": "1.0 (receipt-reported; quarantined)",
+          "evidence": "REPORTED"
         },
         {
-          "name": "rule_check R1 unlabeled number",
-          "value": "catches",
-          "evidence": "MEASURED"
+          "name": "Historical paraphrase set",
+          "value": "0.8333, N=12 (receipt-reported)",
+          "evidence": "REPORTED"
         },
         {
-          "name": "rule_check R4 \u039b-as-theorem",
-          "value": "catches",
-          "evidence": "MEASURED"
+          "name": "Current latency/evaluation",
+          "value": "UNAVAILABLE; no rerun",
+          "evidence": "UNAVAILABLE"
         },
         {
-          "name": "honest unknown",
-          "value": "passes",
-          "evidence": "MEASURED"
-        },
-        {
-          "name": "Scripts",
-          "value": "szl_nemo/rules.py \u00b7 forge.py \u00b7 eval.py",
-          "evidence": "HUB"
+          "name": "New evaluation in this card review",
+          "value": "NOT RUN",
+          "evidence": "UNAVAILABLE"
         }
       ],
       "files": [
-        "szl_nemo/rules.py",
-        "scripts/forge.py",
-        "scripts/eval.py",
-        "TRAINING_RECEIPT.json"
+        "https://github.com/szl-holdings/szl-nemo/blob/3860c3cb92cf5dee7f7f15635e878713330b219c/README.md",
+        "https://huggingface.co/SZLHOLDINGS/szl-nemo/blob/56c429886bf5ea98826bf99b27313626d70f01cc/TRAINING_RECEIPT.json",
+        "https://huggingface.co/SZLHOLDINGS/szl-nemo/blob/56c429886bf5ea98826bf99b27313626d70f01cc/PROMOTION_READINESS_AUDIT.json"
       ],
       "limitations": [
-        "Joblib surrogate is quarantined. rule_check is ground truth.",
-        "Not Nemotron. Not generative."
+        "Historical TF-IDF/logistic-regression scorer and generator are quarantined. No approved model.joblib runtime, retraining, or publication path is recommended.",
+        "Historical receipt-reported fidelity 1.0 and paraphrase result 0.8333 on N=12 do not establish current model quality; replay is blocked by the absent scorer artifact.",
+        "No 10 ms latency, comparative capability, Nemotron checkpoint, hosted model, or deployment readiness is established.",
+        "Current canonical deterministic R1-R5 and E1-E10 APIs and tests remain source-only until a source-bound Hub publication is verified.",
+        "This card review performs no model evaluation, weight validation, new source binding, release/client qualification, publication, or runtime verification."
       ],
-      "intended": "CI doctrine triage. Load rule_check, never pickle.",
-      "play": "sign",
+      "intended": "Inspection of historical recipe-conformance evidence and separately reviewed canonical software.",
+      "play": null,
       "github": {
         "repo": "szl-holdings/szl-nemo",
-        "path": "szl_nemo/rules.py",
-        "module": "szl_nemo.rules"
+        "path": "README.md",
+        "module": "szl_nemo"
       }
     },
     {

@@ -11,46 +11,44 @@ tags:
 
 # szl-kernels
 
-The older suite. Feature-extraction tagged. 199 Hub downloads. Embeddings with a provenance habit.
+**Reference governance kernels with a separate 3290-by-128 in-domain PPMI/SVD embedding companion.**
 
-**Family.** kernel · **Evidence.** HUB · **Weights.** kernel
+The software suite and learned embedding table are distinct artifacts with separate evidence limits. Historical test and embedding-sanity records do not establish current runtime readiness, downstream retrieval quality, or acceleration.
 
-Hub: [SZLHOLDINGS/szl-kernels](https://huggingface.co/SZLHOLDINGS/szl-kernels)
+Review snapshot: **2026-09-30 UTC**. This is a documentation review. No new model evaluation, weight download, inference, signature verification, provider publication, runtime check, or release/client qualification was performed.
 
-## The cut
+## Artifact and source identity
 
-sklearn-shaped feature extraction that still carries the estate tags. Not MiniEmbed-Nano (64×12). Not BGE.
+- Reviewed [model-card snapshot](https://huggingface.co/SZLHOLDINGS/szl-kernels/tree/f67a26a8141b1436ee2d1de64fb202c493981a2d): `f67a26a8141b1436ee2d1de64fb202c493981a2d`.
+- [Canonical source-card/software snapshot](https://github.com/szl-holdings/szl-kernels/blob/7b59de18d35b1edca3c54a4647fb324b918563a8/README.md): `szl-holdings/szl-kernels@7b59de18d35b1edca3c54a4647fb324b918563a8`. This is a source reference, not an attestation of Hub package parity or an approved runtime release.
+- Reference Python suite; separate vectors.npz, vocab.json and config.json embedding companion.
+- The model mirror is not a hosted Transformers feature-extraction contract.
 
-A boring kernel pack that reviewers can actually run.
+## Retained evidence and disposition
 
-### Silhouette → leave → SZL
+The model card records 29 tests passing on 2026-08-29 in its named Windows environment and separately records torch.compile fullgraph failures. These historical outcomes are retained, with no current green-test claim.
 
-| Leader | Take, then tweak |
-|---|---|
-| Anthropic | Small, named, limited. |
-| NVIDIA | Suite packaging. |
-| Unsloth | No. |
+The embedding receipt reports an in-domain PPMI/SVD table and intrinsic nearest-neighbour sanity. No downstream retrieval benchmark, general embedding quality, bit-identical retraining, GPU speedup, or energy value is established here.
 
-Nobody else ships this combination. That is the point of a one-of-one.
+Evidence files at the reviewed immutable model revision:
 
-## Intended use
+- [TRAINING_RECEIPT.json](https://huggingface.co/SZLHOLDINGS/szl-kernels/blob/f67a26a8141b1436ee2d1de64fb202c493981a2d/TRAINING_RECEIPT.json)
+- [publication.json](https://huggingface.co/SZLHOLDINGS/szl-kernels/blob/f67a26a8141b1436ee2d1de64fb202c493981a2d/publication.json)
 
-Feature extraction under doctrine tags.
+## Intended use and limits
 
-## Limitations
+Research and inspection of reference software and bounded in-domain embedding behavior.
 
-- Not MiniEmbed-Nano.
-- Not a 1.5B.
+- The suite is software; trained=true describes only the separate PPMI/SVD embedding companion.
+- Intrinsic nearest-neighbour sanity is not a downstream retrieval benchmark or general-purpose embedding qualification.
+- Energy needs an actual supported metering receipt. An illustrative number cannot be labelled MEASURED; unavailable energy remains unavailable.
+- Historical 29-test/import records and Windows torch.compile failures remain dated observations; tests and model evaluation were not rerun for this card review.
+- The retained publication binds an earlier declared file set. It does not bind the subsequently changed README; no replacement source binding is asserted.
 
-## Honesty
+The source, model mirror, historical release, derived artifact, and served runtime are separate identities. A public file, a card edit, a matching aggregate result, or a recorded signature is not a new deployment or eligibility decision. Follow each retained record to its named revision and scope.
 
-| Claim | Label |
-|---|---|
-| This card's numbers | HUB |
-| Energy / joules | UNAVAILABLE unless a signed meter says MEASURED |
-| Λ uniqueness | Conjecture 1 OPEN — not a theorem |
-| GGUF as the signed object | FALSE |
+## License
 
-Doctrine v11 LOCKED · 749 declarations · 14 axioms · 163 sorries · locked-proven 8.
+Apache-2.0 is declared in repository metadata. A [LICENSE file](https://huggingface.co/SZLHOLDINGS/szl-kernels/blob/f67a26a8141b1436ee2d1de64fb202c493981a2d/LICENSE) is listed at the reviewed model revision; this review does not determine upstream or downstream license coverage.
 
-Apache-2.0. Copyright 2026 SZL Holdings · Stephen P. Lutar Jr. · ORCID [0009-0001-0110-4173](https://orcid.org/0009-0001-0110-4173).
+Lambda uniqueness remains Conjecture 1 (open). Historical receipts and failed outcomes are retained; this review does not upgrade them.

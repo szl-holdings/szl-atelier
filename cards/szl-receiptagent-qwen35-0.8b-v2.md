@@ -11,46 +11,45 @@ tags:
 
 # szl-receiptagent-qwen35-0.8b-v2
 
-The house loop on a 0.8B Qwen3.5. Small enough to iterate. Still proposal-only.
+**Proposal-only ReceiptAgent adapter with historical signed contract evidence and separate derived-merge limits.**
 
-**Family.** receipt · **Evidence.** HUB · **Weights.** adapter · **Params.** LoRA on 0.8B · **Base.** Qwen/Qwen3.5-0.8B
+Retained owner-run evidence reports 5/5 JSON-contract drafts and 6/6 refusal-prefix checks on committed held-out files. Those contract counts are bounded acceptance results, not semantic truth, factual accuracy, broad capability, or autonomy qualification.
 
-Hub: [SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2](https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2)
+Review snapshot: **2026-09-30 UTC**. This is a documentation review. No new model evaluation, weight download, inference, signature verification, provider publication, runtime check, or release/client qualification was performed.
 
-## The cut
+## Artifact and source identity
 
-Everyone fine-tunes 8B because it looks serious. We fine-tune 0.8B because the receipt loop should be cheap enough to run every night.
+- Reviewed [model-card snapshot](https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2/tree/9f71de39861898e752602a2332ef7ca1e0df87a7): `9f71de39861898e752602a2332ef7ca1e0df87a7`.
+- [Canonical source-card/software snapshot](https://github.com/szl-holdings/szl-forge/blob/5b3dfdf9beafe0d6d1e6043ca005ec4b17c45204/frontier/qwen35-receiptagent-v2/MODEL_CARD.md): `szl-holdings/szl-forge@5b3dfdf9beafe0d6d1e6043ca005ec4b17c45204`. This is a source reference, not an attestation of Hub package parity or an approved runtime release.
+- Root PEFT LoRA adapter and a separate salvaged-merge/ derived runtime form.
+- The canonical training record uses Unsloth FastVisionModel; this card does not provide a qualified loader or base/client revision.
 
-A receipt agent you can retrain between coffee and lunch, with the same doctrine as the 1.5B.
+## Retained evidence and disposition
 
-### Silhouette → leave → SZL
+The retained owner-run held-out record reports **5/5 JSON-contract drafts** and **6/6 adversarial refusal-prefix checks**, with signed receipts. Contract and prefix success do not establish semantic correctness or factual accuracy.
 
-| Leader | Take, then tweak |
-|---|---|
-| Anthropic | Same constitution, smaller body. |
-| NVIDIA | Small NIM-shaped thing, without NIM. |
-| Unsloth | Poster organ: FastLanguageModel + adamw_8bit + receipted knobs on Qwen3.5-0.8B. |
+[publication.json](https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2/blob/9f71de39861898e752602a2332ef7ca1e0df87a7/publication.json) records verification on **2026-07-29** for release `7a0d9efdebe92ea3b5b26b97cc722c6b5afde621`: 26 intended files, `publicationEligible=true`, `autonomyEligible=false`. The source merge is `1973b86c3db066fd065ec974594aabfe0ac32099`. This is historical bounded publication evidence, not a claim about every later file or the current card head. Signatures, full weight readback and inference were not rerun here.
 
-Nobody else ships this combination. That is the point of a one-of-one.
+Evidence files at the reviewed immutable model revision:
 
-## Intended use
+- [publication.json](https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2/blob/9f71de39861898e752602a2332ef7ca1e0df87a7/publication.json)
+- [receipts/eval_receipt.signed.json](https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2/blob/9f71de39861898e752602a2332ef7ca1e0df87a7/receipts/eval_receipt.signed.json)
+- [reports/eval-report.json](https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2/blob/9f71de39861898e752602a2332ef7ca1e0df87a7/reports/eval-report.json)
 
-Nightly receipted Unsloth loop.
+## Intended use and limits
 
-## Limitations
+Research on proposal-only structured drafting, with external validation, human approval, execution and authoritative receipt minting.
 
-- Adapter only. Load on the disclosed base.
-- No signed eval in this atelier.
+- The retained publication verified 26 intended files at historical release 7a0d9efdebe92ea3b5b26b97cc722c6b5afde621 on 2026-07-29; it does not attest every later file or current head.
+- Historical publicationEligible=true remains a bounded release record; autonomyEligible=false remains controlling. This review grants no new publication eligibility.
+- Schema and refusal-prefix acceptance do not establish semantic correctness or factual accuracy.
+- The separate salvaged-merge/ runtime form has separately scoped evidence; adapter results do not automatically qualify it.
+- Signed receipts and their reported byte readback were not independently reverified in this card review.
 
-## Honesty
+The source, model mirror, historical release, derived artifact, and served runtime are separate identities. A public file, a card edit, a matching aggregate result, or a recorded signature is not a new deployment or eligibility decision. Follow each retained record to its named revision and scope.
 
-| Claim | Label |
-|---|---|
-| This card's numbers | HUB |
-| Energy / joules | UNAVAILABLE unless a signed meter says MEASURED |
-| Λ uniqueness | Conjecture 1 OPEN — not a theorem |
-| GGUF as the signed object | FALSE |
+## License
 
-Doctrine v11 LOCKED · 749 declarations · 14 axioms · 163 sorries · locked-proven 8.
+Apache-2.0 is declared in repository metadata. A [LICENSE file](https://huggingface.co/SZLHOLDINGS/szl-receiptagent-qwen35-0.8b-v2/blob/9f71de39861898e752602a2332ef7ca1e0df87a7/LICENSE) is listed at the reviewed model revision; this review does not determine upstream or downstream license coverage.
 
-Apache-2.0. Copyright 2026 SZL Holdings · Stephen P. Lutar Jr. · ORCID [0009-0001-0110-4173](https://orcid.org/0009-0001-0110-4173).
+Lambda uniqueness remains Conjecture 1 (open). Historical receipts and failed outcomes are retained; this review does not upgrade them.
