@@ -197,6 +197,10 @@ app = FastAPI(
 @app.middleware("http")
 async def security_headers(request: Request, call_next):  # noqa: ANN001
     response: Response = await call_next(request)
+    # The public Space shell is embedded by the exact Hub origin. API and
+    # asset responses retain the deny policy; no arbitrary site may frame it.
+    shell = request.url.path == "/" and response.status_code == 200
+    frame_ancestors = "'self' https://huggingface.co" if shell else "'none'"
     response.headers.update(
         {
             "Cache-Control": (
@@ -205,13 +209,14 @@ async def security_headers(request: Request, call_next):  # noqa: ANN001
                 or request.url.path in SOURCE_IDENTITY_PATHS
                 else "public, max-age=300"
             ),
-            "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'",
+            "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors " + frame_ancestors + "; form-action 'none'",
             "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
             "Referrer-Policy": "no-referrer",
             "X-Content-Type-Options": "nosniff",
-            "X-Frame-Options": "DENY",
         }
     )
+    if not shell:
+        response.headers["X-Frame-Options"] = "DENY"
     return response
 
 

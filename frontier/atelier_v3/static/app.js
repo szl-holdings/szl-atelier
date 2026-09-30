@@ -7,6 +7,7 @@ const state = {
   group: '',
   query: '',
   selected: null,
+  catalogStatus: 'loading',
 };
 
 const modeCopy = {
@@ -78,6 +79,13 @@ function artifactButton(item, compact = false) {
 }
 
 function render() {
+  if (state.catalogStatus !== 'ready') {
+    byId('result-summary').textContent = state.catalogStatus === 'unavailable' ? 'Catalog unavailable' : 'Loading catalog.';
+    byId('catalog-error').hidden = state.catalogStatus !== 'unavailable';
+    byId('empty-state').hidden = true;
+    return;
+  }
+  byId('catalog-error').hidden = true;
   const items = filteredItems();
   grid.replaceChildren(...items.map((item) => artifactButton(item)));
   constellation.replaceChildren(...items.slice(0, 12).map((item) => artifactButton(item, true)));
@@ -101,7 +109,15 @@ function safeSourceUrl(repository) {
     : 'https://github.com/szl-holdings';
 }
 
+let providerRequest = null;
+
+function cancelProviderReadback() {
+  if (providerRequest) providerRequest.abort();
+  providerRequest = null;
+}
+
 function openArtifact(item) {
+  cancelProviderReadback();
   state.selected = item;
   byId('dialog-kind').textContent = `${item.group} / ${item.kind}`.toUpperCase();
   byId('dialog-title').textContent = item.title;
@@ -125,6 +141,10 @@ function openArtifact(item) {
 async function measureProvider() {
   const item = state.selected;
   if (!item || !item.hub_slug) return;
+  cancelProviderReadback();
+  const request = new AbortController();
+  providerRequest = request;
+  const isCurrent = () => providerRequest === request && state.selected === item && dialog.open;
   providerButton.disabled = true;
   providerButton.textContent = 'Measuring…';
   providerResult.hidden = false;
@@ -134,15 +154,22 @@ async function measureProvider() {
       method: 'GET',
       credentials: 'same-origin',
       headers: { Accept: 'application/json' },
+      signal: request.signal,
     });
     const payload = await response.json();
+    if (!isCurrent()) return;
     if (!response.ok) throw new Error(payload.detail || `HTTP ${response.status}`);
     providerResult.textContent = JSON.stringify(payload.provider, null, 2);
   } catch (error) {
-    providerResult.textContent = JSON.stringify({ state: 'UNAVAILABLE', error: String(error.message || error) }, null, 2);
+    if (isCurrent()) {
+      providerResult.textContent = JSON.stringify({ state: 'UNAVAILABLE', error: String(error.message || error) }, null, 2);
+    }
   } finally {
-    providerButton.disabled = false;
-    providerButton.textContent = 'Measure again';
+    if (isCurrent()) {
+      providerRequest = null;
+      providerButton.disabled = false;
+      providerButton.textContent = 'Measure again';
+    }
   }
 }
 
@@ -165,7 +192,9 @@ async function loadCatalog() {
     const response = await fetch('/api/catalog', { headers: { Accept: 'application/json' }, credentials: 'same-origin' });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
-    state.items = Array.isArray(payload.items) ? payload.items : [];
+    if (!Array.isArray(payload.items)) throw new Error('Catalog items unavailable');
+    state.items = payload.items;
+    state.catalogStatus = 'ready';
     const groups = [...new Set(state.items.map((item) => item.group))].sort();
     const select = byId('group-filter');
     groups.forEach((group) => {
@@ -176,8 +205,8 @@ async function loadCatalog() {
     });
     render();
   } catch (_error) {
-    byId('result-summary').textContent = 'Catalog unavailable';
-    byId('empty-state').hidden = false;
+    state.catalogStatus = 'unavailable';
+    render();
   }
 }
 
@@ -202,6 +231,8 @@ byId('audience-modes').addEventListener('click', (event) => {
 });
 
 providerButton.addEventListener('click', measureProvider);
+dialog.addEventListener('close', cancelProviderReadback);
+dialog.addEventListener('cancel', cancelProviderReadback);
 dialog.addEventListener('click', (event) => {
   if (event.target === dialog) dialog.close();
 });

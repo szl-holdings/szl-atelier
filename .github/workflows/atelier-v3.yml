@@ -119,6 +119,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          node --test frontier/atelier_v3/tests/provider_readback.test.cjs
           python - <<'PY'
           from pathlib import Path
           html = Path('frontier/atelier_v3/static/index.html').read_text()
