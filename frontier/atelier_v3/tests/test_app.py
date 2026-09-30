@@ -135,8 +135,9 @@ def test_source_receipt_contains_no_environment_values(monkeypatch) -> None:
 def test_security_headers_and_local_assets() -> None:
     response = client.get("/")
     assert response.status_code == 200
-    assert response.headers["x-frame-options"] == "DENY"
+    assert "x-frame-options" not in response.headers
     assert "default-src 'self'" in response.headers["content-security-policy"]
+    assert "frame-ancestors 'self' https://huggingface.co;" in response.headers["content-security-policy"]
     html = response.text
     assert "https://" not in html
     assert "http://" not in html
@@ -144,6 +145,17 @@ def test_security_headers_and_local_assets() -> None:
     assert "sessionStorage" not in html
     assert client.get("/app.js").status_code == 200
     assert client.get("/styles.css").status_code == 200
+
+
+def test_only_public_shell_allows_the_exact_hub_frame_origin() -> None:
+    shell = client.get("/?embed=true")
+    policy = shell.headers["content-security-policy"]
+    assert "frame-ancestors 'self' https://huggingface.co;" in policy
+    assert "*" not in policy
+    for path in ("/api/catalog", "/api/source", "/healthz", "/app.js", "/styles.css", "/absent"):
+        response = client.get(path)
+        assert response.headers["x-frame-options"] == "DENY"
+        assert "frame-ancestors 'none';" in response.headers["content-security-policy"]
 
 
 def test_provider_slug_and_kind_validation() -> None:
