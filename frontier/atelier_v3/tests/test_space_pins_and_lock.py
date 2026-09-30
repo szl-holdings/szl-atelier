@@ -93,3 +93,37 @@ def test_space_card_links_its_github_source() -> None:
     card = (ROOT / "SPACE_README.md").read_text(encoding="utf-8")
     assert "https://github.com/szl-holdings/szl-atelier" in card
     assert ".github/workflows/hf-space.yml" in card
+
+
+QUALIFICATION = WORKFLOWS / "atelier-v3.yml"
+PYTHON_VERSION = re.compile(r'^\s+python-version: "(?P<version>[^"]+)"$', re.MULTILINE)
+
+
+def space_base_python() -> str:
+    (line,) = from_lines(ROOT / "SPACE_DOCKERFILE")
+    match = DIGEST_FROM.fullmatch(line)
+    assert match, line
+    version = match["tag"].split("-", 1)[0]
+    assert re.fullmatch(r"\d+\.\d+\.\d+", version), f"Space base tag {match['tag']!r} names no exact Python"
+    return version
+
+
+@pytest.mark.parametrize("workflow", [QUALIFICATION, WRITER], ids=["qualification", "hub-writer"])
+def test_workflow_python_is_the_space_base_image_python(workflow: Path) -> None:
+    # Tests and the publisher run on the same interpreter the Space image ships.
+    versions = PYTHON_VERSION.findall(workflow.read_text(encoding="utf-8"))
+    assert versions, f"{workflow.name} sets no exact python-version"
+    assert set(versions) == {space_base_python()}, (workflow.name, versions)
+
+
+def test_qualification_runs_the_built_space_container() -> None:
+    text = QUALIFICATION.read_text(encoding="utf-8")
+    build = text.index("- name: Build non-root source and Space containers")
+    smoke = text.index("- name: Smoke the Space container")
+    assert build < smoke < text.index("- name: Verify clean candidate")
+    step = text[smoke:text.index("- name: Verify clean candidate")]
+    assert 'docker run --detach' in step
+    assert '"szl-atelier-space:${SOURCE_REVISION}"' in step
+    for contract in ("/healthz", "/readyz", "/api/source", '"READY"', '"MEASURED"', "SOURCE_REVISION"):
+        assert contract in step, contract
+    assert "docker rm --force" in step, "the smoke container must always be removed"

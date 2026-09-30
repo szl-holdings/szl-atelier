@@ -54,7 +54,7 @@ jobs:
       - name: Set up exact Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: "3.12.10"
+          python-version: "3.12.14"
           cache: pip
           cache-dependency-path: |
             frontier/atelier_v3/requirements.txt
@@ -218,6 +218,44 @@ jobs:
             --output /tmp/atelier-space-container
           docker build --file /tmp/atelier-space-container/Dockerfile --tag "szl-atelier-space:${SOURCE_REVISION}" /tmp/atelier-space-container
           test "$(docker image inspect --format '{{.Config.User}}' "szl-atelier-space:${SOURCE_REVISION}")" = "10001:10001"
+
+      - name: Smoke the Space container
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Run the exact image the Space builds and hold it to the publisher's
+          # runtime contract before any base-image or dependency change merges.
+          docker run --detach --name atelier-space-smoke \
+            --publish 127.0.0.1:17860:7860 \
+            "szl-atelier-space:${SOURCE_REVISION}" >/dev/null
+          trap 'docker logs atelier-space-smoke 2>&1 | tail -n 40 || true; docker rm --force atelier-space-smoke >/dev/null 2>&1 || true' EXIT
+          python - <<'PY'
+          import json, os, time, urllib.error, urllib.request
+
+          base = "http://127.0.0.1:17860"
+          expected = os.environ["SOURCE_REVISION"]
+
+          def read(path):
+              with urllib.request.urlopen(base + path, timeout=5) as response:
+                  return json.load(response)
+
+          deadline = time.monotonic() + 120
+          while True:
+              try:
+                  health = read("/healthz")
+                  break
+              except (urllib.error.URLError, ConnectionError, OSError):
+                  if time.monotonic() > deadline:
+                      raise SystemExit("Space container never answered /healthz")
+                  time.sleep(2)
+          readiness = read("/readyz")
+          source = read("/api/source").get("source") or {}
+          assert health.get("status") == "ok", health
+          assert readiness.get("status") == "READY", readiness
+          assert source.get("state") == "MEASURED", source
+          assert source.get("revision") == expected, (source, expected)
+          print(f"Space container smoke: PASS (revision {expected})")
+          PY
 
       - name: Verify clean candidate
         shell: bash
