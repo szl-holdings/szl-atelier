@@ -11,46 +11,44 @@ tags:
 
 # A11OY-MINI
 
-The command-center personality in a pocket quant. Doctrine v11, series-a tagged, still conversational.
+**Derived Chaski GGUF artifacts with dated envelope checks, observed semantic failures, and HOLD disposition.**
 
-**Family.** doctrine · **Evidence.** HUB · **Weights.** gguf · **Params.** GGUF
+Legacy Chaski GGUFs, the Chaski-R2 Q4_K_M text artifact and its BF16 projector have distinct lineage and qualification limits. The 2026-09-24 owner-local envelope result is 5/5 drafts and 6/6 refusal prefixes; the 2026-09-25 qualitative review records semantic failures.
 
-Hub: [SZLHOLDINGS/A11OY-MINI](https://huggingface.co/SZLHOLDINGS/A11OY-MINI)
+Review snapshot: **2026-09-30 UTC**. This is a documentation review. No new model evaluation, weight download, inference, signature verification, provider publication, runtime check, or release/client qualification was performed.
 
-## The cut
+## Artifact and source identity
 
-A11oy is a Space and a substrate. The mini is the voice you can actually load. Not the organ. Not the mesh.
+- Reviewed [model-card snapshot](https://huggingface.co/SZLHOLDINGS/A11OY-MINI/tree/7ea56236ea7988b3915b5ef07548cb2c3930a3cf): `7ea56236ea7988b3915b5ef07548cb2c3930a3cf`.
+- [Canonical source-card/software snapshot](https://github.com/szl-holdings/szl-forge/blob/5b3dfdf9beafe0d6d1e6043ca005ec4b17c45204/a11oy-mini/card/README.md): `szl-holdings/szl-forge@5b3dfdf9beafe0d6d1e6043ca005ec4b17c45204`. This is a source reference, not an attestation of Hub package parity or an approved runtime release.
+- Legacy Chaski F16/Q4_K_M GGUFs remain separate from the Chaski-R2 Q4_K_M text artifact and BF16 projector.
+- Historical inventory `c936dc749743c94586706345a0142c79094a581c` and observed artifact revision `0619dd65b92a135501af35b3c4e3b4e762be1d7d` are not the current card snapshot.
 
-A governed command voice that fits in llama.cpp.
+## Retained evidence and disposition
 
-### Silhouette → leave → SZL
+An owner-local artifact-bound observation on **2026-09-24** reported **5/5 draft envelopes** and **6/6 refusal prefixes** for the R2 Q4_K_M text artifact. Its record is `UNSIGNED_HONEST`, with `HOLD`, `publication_eligible=false`, `autonomy_eligible=false`, and `promotion_effect=NONE`.
 
-| Leader | Take, then tweak |
-|---|---|
-| Anthropic | A small Claude-shaped mouth with a much stricter constitution. |
-| NVIDIA | A NIM-less local runtime. |
-| Unsloth | GGUF path. |
+The retained **2026-09-25** coding-agent qualitative semantic review records `SEMANTIC_FAILURES_OBSERVED`: outputs treated artifact presence or training loss as evaluation and asserted unsupported job/completion states. It is not an exhaustive semantic scorer or an independent human evaluation; **semantic_pass_rate is null**. Other cases were not assigned semantic PASS. The envelope counts do not override these findings. No vision qualification follows.
 
-Nobody else ships this combination. That is the point of a one-of-one.
+Evidence files at the reviewed immutable model revision:
 
-## Intended use
+- [evidence/2026-09-24-native-cuda/receipt.json](https://huggingface.co/SZLHOLDINGS/A11OY-MINI/blob/7ea56236ea7988b3915b5ef07548cb2c3930a3cf/evidence/2026-09-24-native-cuda/receipt.json)
+- [evidence/2026-09-24-native-cuda/semantic_review.json](https://huggingface.co/SZLHOLDINGS/A11OY-MINI/blob/7ea56236ea7988b3915b5ef07548cb2c3930a3cf/evidence/2026-09-24-native-cuda/semantic_review.json)
 
-Local doctrine voice. Proposal-only if wired to tools.
+## Intended use and limits
 
-## Limitations
+Inspection of retained research artifacts and evidence; the documented disposition remains HOLD, without production or autonomy qualification.
 
-- Derived quant.
-- Not a11oy-v19-substrate.
+- HOLD; publication_eligible=false; autonomy_eligible=false; promotion_effect=NONE in the retained native observation and semantic review.
+- The 2026-09-25 qualitative review found artifact-presence-as-evaluation, training-loss-as-evaluation and unsupported job-state claims. No semantic pass rate is established.
+- Legacy GGUFs retain deprecated failed-parent lineage. R2 text checks do not qualify the BF16 vision projector or vision use.
+- The Sept 17 unbound gate, Sept 24 artifact-bound observation and current documentation snapshot are separate evidence identities.
+- Apache-2.0 is declared; no standalone LICENSE file is listed at the reviewed model revision. Artifact license coverage was not independently verified.
 
-## Honesty
+The source, model mirror, historical release, derived artifact, and served runtime are separate identities. A public file, a card edit, a matching aggregate result, or a recorded signature is not a new deployment or eligibility decision. Follow each retained record to its named revision and scope.
 
-| Claim | Label |
-|---|---|
-| This card's numbers | HUB |
-| Energy / joules | UNAVAILABLE unless a signed meter says MEASURED |
-| Λ uniqueness | Conjecture 1 OPEN — not a theorem |
-| GGUF as the signed object | FALSE |
+## License
 
-Doctrine v11 LOCKED · 749 declarations · 14 axioms · 163 sorries · locked-proven 8.
+Apache-2.0 is declared in repository metadata. No standalone LICENSE file is listed at the reviewed model revision; artifact license coverage was not independently verified.
 
-Apache-2.0. Copyright 2026 SZL Holdings · Stephen P. Lutar Jr. · ORCID [0009-0001-0110-4173](https://orcid.org/0009-0001-0110-4173).
+Lambda uniqueness remains Conjecture 1 (open). Historical receipts and failed outcomes are retained; this review does not upgrade them.
