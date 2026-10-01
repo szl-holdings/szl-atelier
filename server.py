@@ -275,7 +275,13 @@ def index():
 def public_asset(asset_path: str):
     if not asset_path or any(part.startswith(".") for part in Path(asset_path).parts):
         raise HTTPException(status_code=404, detail="NOT_FOUND")
-    candidate = (ROOT / asset_path).resolve()
+    # Normalise before anything touches the filesystem; a path that does not stay under ROOT
+    # after normalisation is a traversal attempt and is refused as NOT_FOUND.
+    root_prefix = str(ROOT) + os.sep
+    normalized = os.path.normpath(os.path.join(str(ROOT), asset_path))
+    if not normalized.startswith(root_prefix):
+        raise HTTPException(status_code=404, detail="NOT_FOUND")
+    candidate = Path(normalized).resolve()
     try:
         candidate.relative_to(ROOT)
     except ValueError:
