@@ -35,7 +35,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:  # pragma: no cover - the runtime-contract CI job installs only server deps
+    raise unittest.SkipTest("numpy not installed; kit/kernels conformance needs it (NOT_RUN here, not PASS)")
 
 from kit.kernels.doctrine import YUYAY_FLOORS
 from kit.kernels.lambda_gate import check_a5, evaluate_lambda, lambda_gate, uniform_weights, wgm
