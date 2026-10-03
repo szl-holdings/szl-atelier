@@ -17,6 +17,41 @@ const modeCopy = {
   operator: 'Runtime and provider evidence stays unavailable until explicitly measured and read back.',
 };
 
+function publicExperienceSnapshot() {
+  const root = document.documentElement;
+  const parsedZoom = Number.parseFloat(window.getComputedStyle(root).zoom);
+  const zoom = Number.isFinite(parsedZoom) && parsedZoom > 0 ? parsedZoom : 1;
+  const width = Math.max(1, Math.round(Number(window.visualViewport?.width) || 0),
+    Math.round(Number(window.innerWidth) || 0), Math.round(Number(root.clientWidth) || 0));
+  const height = Math.max(1, Math.round(Number(window.visualViewport?.height) || 0),
+    Math.round(Number(window.innerHeight) || 0), Math.round(Number(root.clientHeight) || 0));
+  const effectiveWidth = Math.max(280, Math.round(width / zoom));
+  const viewportTier = effectiveWidth < 480 ? 'phone'
+    : effectiveWidth < 768 ? 'compact'
+      : effectiveWidth < 1024 ? 'tablet'
+        : effectiveWidth < 1440 ? 'desktop'
+          : effectiveWidth < 1920 ? 'wide'
+            : effectiveWidth < 2560 ? 'theatre' : 'ultrawide';
+  const zoomTier = zoom >= 3 ? 'extreme' : zoom >= 1.5 ? 'high' : 'normal';
+  return Object.freeze({ width, height, effectiveWidth, zoom, zoomTier, viewportTier, audience: state.mode });
+}
+
+function syncPublicExperience() {
+  const snapshot = publicExperienceSnapshot();
+  const root = document.documentElement;
+  root.dataset.szlViewportTier = snapshot.viewportTier;
+  root.dataset.szlZoomTier = snapshot.zoomTier;
+  root.dataset.szlAudience = snapshot.audience;
+  root.dataset.szlPublicExperienceV3 = 'true';
+}
+
+window.SZLPublicExperience = Object.freeze({ snapshot: publicExperienceSnapshot });
+window.addEventListener('resize', syncPublicExperience);
+window.visualViewport?.addEventListener?.('resize', syncPublicExperience);
+const zoomObserver = new MutationObserver(syncPublicExperience);
+zoomObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
+syncPublicExperience();
+
 const byId = (id) => document.getElementById(id);
 const grid = byId('catalog-grid');
 const constellation = byId('constellation');
@@ -224,6 +259,7 @@ byId('audience-modes').addEventListener('click', (event) => {
   const button = event.target.closest('button[data-mode]');
   if (!button) return;
   state.mode = button.dataset.mode;
+  syncPublicExperience();
   document.querySelectorAll('#audience-modes button').forEach((candidate) => {
     candidate.setAttribute('aria-pressed', String(candidate === button));
   });

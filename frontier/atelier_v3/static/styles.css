@@ -59,6 +59,8 @@ a { color: var(--aqua); }
   background-size: 3rem 3rem;
   mask-image: linear-gradient(to bottom, #000, transparent 85%);
 }
+:root[data-szl-zoom-tier="high"] .ambient,
+:root[data-szl-zoom-tier="extreme"] .ambient { display: none; }
 
 .shell { width: min(100% - 2rem, 92rem); margin-inline: auto; }
 .masthead {

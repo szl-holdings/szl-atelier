@@ -22,10 +22,27 @@ function element() {
 async function fixture(catalog = { items: [] }) {
   const elements = new Map();
   const pending = [];
+  const root = { dataset: {} };
+  const windowListeners = {};
+  let cssZoom = 1;
+  let styleObserver = null;
+  class MutationObserver {
+    constructor(callback) { styleObserver = callback; }
+    observe() {}
+  }
+  const window = {
+    innerWidth: 1280, innerHeight: 900,
+    visualViewport: { width: 1280, height: 900, scale: 1 },
+    getComputedStyle: () => ({ zoom: String(cssZoom) }),
+    addEventListener(name, fn) { (windowListeners[name] ||= []).push(fn); },
+  };
+  window.visualViewport.addEventListener = window.addEventListener.bind(window);
   const get = (id) => { if (!elements.has(id)) elements.set(id, element()); return elements.get(id); };
   const context = vm.createContext({
     AbortController,
-    document: { getElementById: get, createElement: element, addEventListener() {}, querySelectorAll: () => [] },
+    MutationObserver,
+    document: { documentElement: root, getElementById: get, createElement: element, addEventListener() {}, querySelectorAll: () => [] },
+    window,
     fetch(url, options) {
       if (url === '/api/catalog') {
         if (catalog instanceof Error) return Promise.reject(catalog);
@@ -40,8 +57,34 @@ async function fixture(catalog = { items: [] }) {
   await flush();
   const item = (slug) => ({ slug, title: slug, kind: 'model', hub_slug: `SZLHOLDINGS/${slug}`,
     group: 'research', summary: 'fixture', source_repository: 'szl-holdings/fixture', evidence_state: 'DECLARED' });
-  return { get, pending, open: (slug) => context.openArtifact(item(slug)), measure: () => context.measureProvider(), render: () => context.render() };
+  return {
+    get, pending, root, window,
+    setZoom(value) { cssZoom = value; styleObserver?.(); },
+    setVisualWidth(value) { window.visualViewport.width = value; for (const listener of windowListeners.resize || []) listener(); },
+    open: (slug) => context.openArtifact(item(slug)),
+    measure: () => context.measureProvider(), render: () => context.render(),
+  };
 }
+
+test('public experience exposes a live reflow snapshot and audience state', async () => {
+  const f = await fixture();
+  assert.equal(f.root.dataset.szlPublicExperienceV3, 'true');
+  assert.equal(f.window.SZLPublicExperience.snapshot().effectiveWidth, 1280);
+  assert.equal(f.root.dataset.szlAudience, 'user');
+
+  f.setVisualWidth(320);
+  assert.equal(f.window.SZLPublicExperience.snapshot().effectiveWidth, 1280);
+  assert.equal(f.root.dataset.szlViewportTier, 'desktop');
+
+  f.setZoom(4);
+  assert.equal(f.window.SZLPublicExperience.snapshot().effectiveWidth, 320);
+  assert.equal(f.root.dataset.szlViewportTier, 'phone');
+  assert.equal(f.root.dataset.szlZoomTier, 'extreme');
+
+  f.get('audience-modes').listeners.click[0]({ target: { closest: () => ({ dataset: { mode: 'operator' } }) } });
+  assert.equal(f.root.dataset.szlAudience, 'operator');
+  assert.equal(f.window.SZLPublicExperience.snapshot().audience, 'operator');
+});
 
 function complete(request, name) {
   request.resolve({ ok: true, json: async () => ({ provider: { state: 'MEASURED', slug: name } }) });
