@@ -1,0 +1,374 @@
+{
+  "schema": "szl.hf-source-card-presentation/v1",
+  "source_repository": "szl-holdings/szl-atelier",
+  "source_revision_before_presentation": "cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1",
+  "scope": {
+    "unique_target_count": 5,
+    "model_targets": 5,
+    "space_targets": 0,
+    "auxiliary_copy_count": 0,
+    "all_estate_completion_claimed": false
+  },
+  "invariants": [
+    "Every source card retains its exact original YAML frontmatter and complete original post-frontmatter body.",
+    "The original source revision and SHA256 digests make preservation reviewable.",
+    "Presentation does not promote historical, synthetic, SAMPLE, HOLD, unknown, unavailable, or unqualified claims.",
+    "Existing publishers, credentials, artifact bytes, source binding, and publication authority remain unchanged.",
+    "Known alternate README sources are recorded; this is not a sole-writer or central-apply authorization."
+  ],
+  "presentation": {
+    "version": "SZL-CARD-PRESENTATION:v1",
+    "technical_start_marker": "<!-- SZL-CARD-TECHNICAL:v1:START -->",
+    "technical_end_marker": "<!-- SZL-CARD-TECHNICAL:v1:END -->",
+    "shared_mark_url": "https://raw.githubusercontent.com/szl-holdings/.github/main/profile/assets/szl/logos/szl_mark_holographic.svg",
+    "shared_mark_publication_dependency": "Canonical .github shared mark must be published before downstream card publication is represented as complete.",
+    "primary_try_url_policy": "Null unless an exact executable route is qualified; this update uses the existing Command Lab explorer."
+  },
+  "cards": [
+    {
+      "kind": "models",
+      "repo_id": "SZLHOLDINGS/TinyKhipu-Nano",
+      "source_repository": "szl-holdings/szl-atelier",
+      "source_revision_before_presentation": "cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1",
+      "source_path": "cards/TinyKhipu-Nano.md",
+      "original_git_blob": "4705ffdd9bcdaf48b94ca754505da271ce1536cc",
+      "original_file_sha256": "a61a49ceddf9d8de9a563ddad7142a452815131bf9823ee92e7705593b9f7857",
+      "original_frontmatter_sha256": "781514b6489673dc11e4e141f944d774c28761c8047cd40237d001ff7faa7a83",
+      "original_body_sha256": "5037b2d0d5c6d7761ff71709480e2f2edc54476d0b840081734245c9b73dbb4e",
+      "output_sha256": "754ea8425ebd1035ba69f62dc24881ac414b3ba903c0388d950b46b2759fb37e",
+      "original_bytes": 1715,
+      "output_bytes": 3272,
+      "frontmatter_preserved": true,
+      "complete_technical_body_preserved": true,
+      "publisher_repository": "szl-holdings/a11oy",
+      "publisher_workflow": ".github/workflows/atelier-hub-publish.yml",
+      "publisher_path": ".github/workflows/atelier-hub-publish.yml",
+      "publication_trigger": "EXISTING_A11OY_MANUAL_WORKFLOW_OR_WORKFLOW_FILE_MAIN_PUSH",
+      "artifact_type": "Atelier NumPy fixture archive",
+      "stage": "Software / synthetic reference",
+      "visible_limits": [
+        "This Atelier 4→6→2 fixture differs from the Khipu token-and-handle archive. Match the exact array schema, loader, and Hub revision before use.",
+        "Historical synthetic holdout claims do not establish generalization, a refusal guarantee, or the qualification of a 1.5B model.",
+        "The preserved Atelier description contains historical comparisons and lineage language; those statements are not independent evidence or a new evaluation."
+      ],
+      "primary_try_url": null,
+      "explore_url": "https://huggingface.co/spaces/SZLHOLDINGS/szl-command-lab",
+      "build_url": "https://github.com/szl-holdings/szl-atelier",
+      "evidence_url": "https://github.com/szl-holdings/szl-atelier/blob/cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1/cards/TinyKhipu-Nano.md",
+      "other_existing_readme_sources": [
+        {
+          "repository": "szl-holdings/szl-khipu",
+          "path": "hf/TinyKhipu-Nano/README.md",
+          "writer": "scripts/publish_hf.py"
+        },
+        {
+          "repository": "szl-holdings/szl-forge",
+          "path": "tinykhipu-nano/card/README.md",
+          "writer": "tools/publish_kernel_mirror_cards.py"
+        }
+      ],
+      "sole_writer_attested": false,
+      "central_apply_allowed": false,
+      "disposition": "READY_SOURCE_REVIEW",
+      "publication_state": "NOT_PUBLISHED_BY_THIS_CHANGE",
+      "auxiliary_source_copies": [],
+      "publisher_revision_examined": "5e014855a274825f4d46ce91cb3396cabd20f99a",
+      "hub_observation": {
+        "kind": "models",
+        "repo_id": "SZLHOLDINGS/TinyKhipu-Nano",
+        "hub_revision": "47ff3cc34ed8c0c1a255abff1f784d01c03e8b67",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/TinyKhipu-Nano/resolve/47ff3cc34ed8c0c1a255abff1f784d01c03e8b67/README.md",
+        "observed_at": "2026-10-04T16:08:25.273872+00:00",
+        "gated": false,
+        "http_status": 200,
+        "state": "EXACT_PUBLIC_CARD",
+        "sha256": "c5e9db56f7ab085b8e99e54fdb9dce81defdfbba0dc5770428f3166e98532eff",
+        "semantic_sha256": "7cd3f6588774b5541914815bd77485e139562dcbd8a3995cc7d59fc7353ab292",
+        "bytes": 5580
+      },
+      "original_source_matches_observed_hub_readme": false,
+      "provider_observation": {
+        "state": "NO_PROVIDER_LISTED",
+        "mapping": {},
+        "hub_revision": "47ff3cc34ed8c0c1a255abff1f784d01c03e8b67",
+        "observed_at": "2026-10-04T15:32:07.513623+00:00",
+        "source_url": "https://huggingface.co/api/models/SZLHOLDINGS/TinyKhipu-Nano?expand[]=inferenceProviderMapping&expand[]=sha",
+        "qualification_note": "No hosted neural-model qualification is inferred from this software/native/NumPy artifact.",
+        "interpretation": "Dated Hub listing observation; no hosted service, adoption, or model qualification is inferred."
+      }
+    },
+    {
+      "kind": "models",
+      "repo_id": "SZLHOLDINGS/ReceiptAgent-Nano",
+      "source_repository": "szl-holdings/szl-atelier",
+      "source_revision_before_presentation": "cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1",
+      "source_path": "cards/ReceiptAgent-Nano.md",
+      "original_git_blob": "1e176fa998d644105b9acaffbfe8c05b0e10dcff",
+      "original_file_sha256": "62b866bb2d508b9e4947e400f6225f6d0775417ce2aa9e0b134213e628a1d2ba",
+      "original_frontmatter_sha256": "781514b6489673dc11e4e141f944d774c28761c8047cd40237d001ff7faa7a83",
+      "original_body_sha256": "51a4499d23d491946d444f2f5470882c2572a4ec651beee669e72cbe5af046af",
+      "output_sha256": "4f64902a08162380d11f05a97f934fb63aa7616a5e5d6e8ee8e118a8d26f4324",
+      "original_bytes": 1701,
+      "output_bytes": 3206,
+      "frontmatter_preserved": true,
+      "complete_technical_body_preserved": true,
+      "publisher_repository": "szl-holdings/a11oy",
+      "publisher_workflow": ".github/workflows/atelier-hub-publish.yml",
+      "publisher_path": ".github/workflows/atelier-hub-publish.yml",
+      "publication_trigger": "EXISTING_A11OY_MANUAL_WORKFLOW_OR_WORKFLOW_FILE_MAIN_PUSH",
+      "artifact_type": "Atelier NumPy fixture archive",
+      "stage": "Software / synthetic reference",
+      "visible_limits": [
+        "This Atelier 4→10→4 silhouette differs from Khipu's 24-feature archive. Confirm the exact labels, array schema, loader, and revision.",
+        "The learned head is advisory; deterministic rule_check remains the authority for admission.",
+        "Historical comparisons and synthetic results in the preserved description do not establish a refusal guarantee, a retry policy, or 1.5B model qualification."
+      ],
+      "primary_try_url": null,
+      "explore_url": "https://huggingface.co/spaces/SZLHOLDINGS/szl-command-lab",
+      "build_url": "https://github.com/szl-holdings/szl-atelier",
+      "evidence_url": "https://github.com/szl-holdings/szl-atelier/blob/cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1/cards/ReceiptAgent-Nano.md",
+      "other_existing_readme_sources": [
+        {
+          "repository": "szl-holdings/szl-khipu",
+          "path": "hf/ReceiptAgent-Nano/README.md",
+          "writer": "scripts/publish_hf.py"
+        },
+        {
+          "repository": "szl-holdings/szl-forge",
+          "path": "receiptagent-nano/card/README.md",
+          "writer": "tools/publish_kernel_mirror_cards.py"
+        }
+      ],
+      "sole_writer_attested": false,
+      "central_apply_allowed": false,
+      "disposition": "READY_SOURCE_REVIEW",
+      "publication_state": "NOT_PUBLISHED_BY_THIS_CHANGE",
+      "auxiliary_source_copies": [],
+      "publisher_revision_examined": "5e014855a274825f4d46ce91cb3396cabd20f99a",
+      "hub_observation": {
+        "kind": "models",
+        "repo_id": "SZLHOLDINGS/ReceiptAgent-Nano",
+        "hub_revision": "dc10582bfe9d09dc935b0be0a6faa043c38f721c",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/ReceiptAgent-Nano/resolve/dc10582bfe9d09dc935b0be0a6faa043c38f721c/README.md",
+        "observed_at": "2026-10-04T16:08:11.519482+00:00",
+        "gated": false,
+        "http_status": 200,
+        "state": "EXACT_PUBLIC_CARD",
+        "sha256": "c3922d249296d636755832de5782620153cf458c50e7995f6241f4e09087b4e0",
+        "semantic_sha256": "c74be007efa366f4d70a41e4ec7864d04913374053627808c8abe98414a0ebfc",
+        "bytes": 6051
+      },
+      "original_source_matches_observed_hub_readme": false,
+      "provider_observation": {
+        "state": "NO_PROVIDER_LISTED",
+        "mapping": {},
+        "hub_revision": "dc10582bfe9d09dc935b0be0a6faa043c38f721c",
+        "observed_at": "2026-10-04T15:31:57.874465+00:00",
+        "source_url": "https://huggingface.co/api/models/SZLHOLDINGS/ReceiptAgent-Nano?expand[]=inferenceProviderMapping&expand[]=sha",
+        "qualification_note": "No hosted neural-model qualification is inferred from this software/native/NumPy artifact.",
+        "interpretation": "Dated Hub listing observation; no hosted service, adoption, or model qualification is inferred."
+      }
+    },
+    {
+      "kind": "models",
+      "repo_id": "SZLHOLDINGS/Moons-Nano",
+      "source_repository": "szl-holdings/szl-atelier",
+      "source_revision_before_presentation": "cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1",
+      "source_path": "cards/Moons-Nano.md",
+      "original_git_blob": "ed45e3d548f3673bfe164de4d11cb62d493a9735",
+      "original_file_sha256": "a65feea4a30878ebc07cd451bd228af8112225ca5a40bd2b497f0832508ab2bc",
+      "original_frontmatter_sha256": "22da86a14850207da1e2f90461d966ad2e1d1066e3a48c1a43d8ed5db418dc39",
+      "original_body_sha256": "906d82ec51fa012a9c46e520ebe5783112f8a8825d6226cab54ad58195075b43",
+      "output_sha256": "ae9590fc05859ea64ede781deae14bac2667afffc3b31ee88b2ac119fdb0fbbe",
+      "original_bytes": 1608,
+      "output_bytes": 3078,
+      "frontmatter_preserved": true,
+      "complete_technical_body_preserved": true,
+      "publisher_repository": "szl-holdings/a11oy",
+      "publisher_workflow": ".github/workflows/atelier-hub-publish.yml",
+      "publisher_path": ".github/workflows/atelier-hub-publish.yml",
+      "publication_trigger": "EXISTING_A11OY_MANUAL_WORKFLOW_OR_WORKFLOW_FILE_MAIN_PUSH",
+      "artifact_type": "Atelier NumPy fixture archive",
+      "stage": "Software / toy reference",
+      "visible_limits": [
+        "The retained MEASURED labels and holdout discussion describe historical Atelier observations; this card update performs no new evaluation.",
+        "The Atelier export and Khipu archive have separate evidence and schemas. Bind the exact archive and loader before reproducing a result.",
+        "This 2D toy does not qualify a product or larger model. Energy measurement remains UNAVAILABLE."
+      ],
+      "primary_try_url": null,
+      "explore_url": "https://huggingface.co/spaces/SZLHOLDINGS/szl-command-lab",
+      "build_url": "https://github.com/szl-holdings/szl-atelier",
+      "evidence_url": "https://github.com/szl-holdings/szl-atelier/blob/cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1/cards/Moons-Nano.md",
+      "other_existing_readme_sources": [
+        {
+          "repository": "szl-holdings/szl-khipu",
+          "path": "hf/Moons-Nano/README.md",
+          "writer": "scripts/publish_hf.py"
+        }
+      ],
+      "sole_writer_attested": false,
+      "central_apply_allowed": false,
+      "disposition": "READY_SOURCE_REVIEW",
+      "publication_state": "NOT_PUBLISHED_BY_THIS_CHANGE",
+      "auxiliary_source_copies": [],
+      "publisher_revision_examined": "5e014855a274825f4d46ce91cb3396cabd20f99a",
+      "hub_observation": {
+        "kind": "models",
+        "repo_id": "SZLHOLDINGS/Moons-Nano",
+        "hub_revision": "4631d0fb54ad90423c3ae76f812ff4d0e80fbfdf",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/Moons-Nano/resolve/4631d0fb54ad90423c3ae76f812ff4d0e80fbfdf/README.md",
+        "observed_at": "2026-10-04T16:08:11.517895+00:00",
+        "gated": false,
+        "http_status": 200,
+        "state": "EXACT_PUBLIC_CARD",
+        "sha256": "edae7af6588c44373933965c7b791b885522ade5bf30b3ee0506568d3f9f9648",
+        "semantic_sha256": "535cee484cbc1a37df69d4815b5b5c959168db9ea9f504c675e92f30ea39083b",
+        "bytes": 4901
+      },
+      "original_source_matches_observed_hub_readme": false,
+      "provider_observation": {
+        "state": "NO_PROVIDER_LISTED",
+        "mapping": {},
+        "hub_revision": "4631d0fb54ad90423c3ae76f812ff4d0e80fbfdf",
+        "observed_at": "2026-10-04T15:31:57.873579+00:00",
+        "source_url": "https://huggingface.co/api/models/SZLHOLDINGS/Moons-Nano?expand[]=inferenceProviderMapping&expand[]=sha",
+        "qualification_note": "No hosted neural-model qualification is inferred from this software/native/NumPy artifact.",
+        "interpretation": "Dated Hub listing observation; no hosted service, adoption, or model qualification is inferred."
+      }
+    },
+    {
+      "kind": "models",
+      "repo_id": "SZLHOLDINGS/MiniEmbed-Nano",
+      "source_repository": "szl-holdings/szl-atelier",
+      "source_revision_before_presentation": "cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1",
+      "source_path": "cards/MiniEmbed-Nano.md",
+      "original_git_blob": "2d7e6cb997262988ec410ea928f03e506c9fbd5e",
+      "original_file_sha256": "b29b609d094fa2bb0391c501f5907f40df3d6bccdc5cc75d18a467a55d5d9250",
+      "original_frontmatter_sha256": "22da86a14850207da1e2f90461d966ad2e1d1066e3a48c1a43d8ed5db418dc39",
+      "original_body_sha256": "35bb155954aa9d6dca9ab27004fd92692391598e95f7ee8d89cd501994d289d2",
+      "output_sha256": "bd0cfa811f7005e83430d5ecf365f6dc21bf68674d223f70480010a2112ec8ed",
+      "original_bytes": 1737,
+      "output_bytes": 3289,
+      "frontmatter_preserved": true,
+      "complete_technical_body_preserved": true,
+      "publisher_repository": "szl-holdings/a11oy",
+      "publisher_workflow": ".github/workflows/atelier-hub-publish.yml",
+      "publisher_path": ".github/workflows/atelier-hub-publish.yml",
+      "publication_trigger": "EXISTING_A11OY_MANUAL_WORKFLOW_OR_WORKFLOW_FILE_MAIN_PUSH",
+      "artifact_type": "Atelier NumPy embedding table",
+      "stage": "Software / reference",
+      "visible_limits": [
+        "This table is not a trained neural embedding model; it does not establish a comparison with a foundation embedding model.",
+        "The five-pair retrieval result is SAMPLE. Historical MEASURED and reproducibility labels below are retained source claims, not new independent validation.",
+        "Bind the exact archive, seed, normalization, loader, and revision before use. Khipu's reference card and this Atelier export have separate evidence."
+      ],
+      "primary_try_url": null,
+      "explore_url": "https://huggingface.co/spaces/SZLHOLDINGS/szl-command-lab",
+      "build_url": "https://github.com/szl-holdings/szl-atelier",
+      "evidence_url": "https://github.com/szl-holdings/szl-atelier/blob/cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1/cards/MiniEmbed-Nano.md",
+      "other_existing_readme_sources": [
+        {
+          "repository": "szl-holdings/szl-khipu",
+          "path": "hf/MiniEmbed-Nano/README.md",
+          "writer": "scripts/publish_hf.py"
+        }
+      ],
+      "sole_writer_attested": false,
+      "central_apply_allowed": false,
+      "disposition": "READY_SOURCE_REVIEW",
+      "publication_state": "NOT_PUBLISHED_BY_THIS_CHANGE",
+      "auxiliary_source_copies": [],
+      "publisher_revision_examined": "5e014855a274825f4d46ce91cb3396cabd20f99a",
+      "hub_observation": {
+        "kind": "models",
+        "repo_id": "SZLHOLDINGS/MiniEmbed-Nano",
+        "hub_revision": "70557d12b91ca556939e559e540b70fb3c2c9e5b",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/MiniEmbed-Nano/resolve/70557d12b91ca556939e559e540b70fb3c2c9e5b/README.md",
+        "observed_at": "2026-10-04T16:08:11.517062+00:00",
+        "gated": false,
+        "http_status": 200,
+        "state": "EXACT_PUBLIC_CARD",
+        "sha256": "6d39ae004414372df7190ddeb7cc1af47d37a0dc7649132468a8b34b21942074",
+        "semantic_sha256": "15cea418ad6333541b7cc1a5fd4c81f884068af300f86eb431350a923b34afed",
+        "bytes": 5099
+      },
+      "original_source_matches_observed_hub_readme": false,
+      "provider_observation": {
+        "state": "NO_PROVIDER_LISTED",
+        "mapping": {},
+        "hub_revision": "70557d12b91ca556939e559e540b70fb3c2c9e5b",
+        "observed_at": "2026-10-04T15:31:57.873108+00:00",
+        "source_url": "https://huggingface.co/api/models/SZLHOLDINGS/MiniEmbed-Nano?expand[]=inferenceProviderMapping&expand[]=sha",
+        "qualification_note": "No hosted neural-model qualification is inferred from this software/native/NumPy artifact.",
+        "interpretation": "Dated Hub listing observation; no hosted service, adoption, or model qualification is inferred."
+      }
+    },
+    {
+      "kind": "models",
+      "repo_id": "SZLHOLDINGS/szl-khipu-kernels",
+      "source_repository": "szl-holdings/szl-atelier",
+      "source_revision_before_presentation": "cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1",
+      "source_path": "cards/szl-khipu-kernels.md",
+      "original_git_blob": "d3a58567c67a503a3b7455372504fadfc28a522d",
+      "original_file_sha256": "0c79e4fa57e4d441e3f03b6855d57e567a814fecac84bc86e3d30c33b7eea511",
+      "original_frontmatter_sha256": "3e890d148d5569352894dee842f3ec405eb1f05664b89e6fd60683b9bc3cbaa1",
+      "original_body_sha256": "54ff073f51ca30906357e1f6d5245ef179987237337204e9c7234a4628ed5ec1",
+      "output_sha256": "dec0794f6db585bb00df0063dc6c1d5f17eea8bab1aad914300f244bfd0c9910",
+      "original_bytes": 1319,
+      "output_bytes": 2827,
+      "frontmatter_preserved": true,
+      "complete_technical_body_preserved": true,
+      "publisher_repository": "szl-holdings/a11oy",
+      "publisher_workflow": ".github/workflows/atelier-hub-publish.yml",
+      "publisher_path": ".github/workflows/atelier-hub-publish.yml",
+      "publication_trigger": "EXISTING_A11OY_MANUAL_WORKFLOW_OR_WORKFLOW_FILE_MAIN_PUSH",
+      "artifact_type": "Atelier Python kernel software",
+      "stage": "Software / reference",
+      "visible_limits": [
+        "This is a model-namespace software card. First-class native kernel release qualification and package API parity are UNKNOWN.",
+        "The preserved comparison and signing language does not establish a qualified build, CUDA performance, or publisher authorization.",
+        "Λ remains advisory with Conjecture 1 OPEN. Energy measurement is UNAVAILABLE; no trained-model qualification follows from software presence."
+      ],
+      "primary_try_url": null,
+      "explore_url": "https://huggingface.co/spaces/SZLHOLDINGS/szl-command-lab",
+      "build_url": "https://github.com/szl-holdings/szl-atelier",
+      "evidence_url": "https://github.com/szl-holdings/szl-atelier/blob/cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1/cards/szl-khipu-kernels.md",
+      "other_existing_readme_sources": [
+        {
+          "repository": "szl-holdings/szl-khipu",
+          "path": "hf/szl-khipu-kernels/README.md",
+          "writer": "scripts/publish_hf.py"
+        }
+      ],
+      "sole_writer_attested": false,
+      "central_apply_allowed": false,
+      "disposition": "READY_SOURCE_REVIEW",
+      "publication_state": "NOT_PUBLISHED_BY_THIS_CHANGE",
+      "auxiliary_source_copies": [],
+      "publisher_revision_examined": "5e014855a274825f4d46ce91cb3396cabd20f99a",
+      "hub_observation": {
+        "kind": "models",
+        "repo_id": "SZLHOLDINGS/szl-khipu-kernels",
+        "hub_revision": "594bc58eb0f691f53f8493fa032be9ee8aab9ff3",
+        "source_url": "https://huggingface.co/SZLHOLDINGS/szl-khipu-kernels/resolve/594bc58eb0f691f53f8493fa032be9ee8aab9ff3/README.md",
+        "observed_at": "2026-10-04T16:09:08.171327+00:00",
+        "gated": false,
+        "http_status": 200,
+        "state": "EXACT_PUBLIC_CARD",
+        "sha256": "47db3e857d6adf94fdf0e2be3f0e4c390a4eb2729fc6899683702a3f0e50b675",
+        "semantic_sha256": "c5f9ea596c890b68f1a87d8d4c1f00aa5a9942ed5a6afd05b6267775f4d45f9d",
+        "bytes": 3888
+      },
+      "original_source_matches_observed_hub_readme": false,
+      "provider_observation": {
+        "state": "NO_PROVIDER_LISTED",
+        "mapping": {},
+        "hub_revision": "594bc58eb0f691f53f8493fa032be9ee8aab9ff3",
+        "observed_at": "2026-10-04T15:32:49.689555+00:00",
+        "source_url": "https://huggingface.co/api/models/SZLHOLDINGS/szl-khipu-kernels?expand[]=inferenceProviderMapping&expand[]=sha",
+        "qualification_note": "No hosted neural-model qualification is inferred from this software/native/NumPy artifact.",
+        "interpretation": "Dated Hub listing observation; no hosted service, adoption, or model qualification is inferred."
+      }
+    }
+  ]
+}
