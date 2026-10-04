@@ -1,0 +1,47 @@
+{
+  "_notice": "SPDX-License-Identifier: Apache-2.0; (c) 2026 SZL Holdings",
+  "schema": "szl.hf.space-card-presentation.v1",
+  "source_repository": "szl-holdings/szl-atelier",
+  "cards": [
+    {
+      "kind": "spaces",
+      "repo_id": "SZLHOLDINGS/szl-atelier",
+      "source_repository": "szl-holdings/szl-atelier",
+      "source_revision_before_presentation": "f9c1edb264ceec21f73b837757c1ca6318957c0b",
+      "source_path": "frontier/atelier_v3/SPACE_README.md",
+      "source_url": "https://github.com/szl-holdings/szl-atelier/blob/f9c1edb264ceec21f73b837757c1ca6318957c0b/frontier/atelier_v3/SPACE_README.md",
+      "presentation": {
+        "title": "SZL Atelier",
+        "summary": "Explore models, datasets and Spaces through their source ownership and publication evidence. Atelier brings artifact records and bounded public provider observations into one inspectable interface.",
+        "artifact_type": "Artifact discovery and evidence review",
+        "stage": "Source-owned estate interface",
+        "build_url": "https://github.com/szl-holdings/szl-atelier",
+        "evidence_url": "https://github.com/szl-holdings/szl-atelier/actions/workflows/hf-space.yml",
+        "visible_limits": [
+          "Declared Hub identities and source records do not establish current runtime success or exact provider readback.",
+          "Public provider metadata readback is opt-in and restricted to curated SZLHOLDINGS identities.",
+          "This application does not execute models, mutate the Hub or grant release or action authority."
+        ]
+      },
+      "before_sha256": "c5c4da4c1075790286c74ab07f43eee996b56a869adddee0be0fc4d910a94914",
+      "after_sha256": "9e4a3a3551ab9638313364ce5896d96b1c096f21a1e69b41f9d1581d44a6f99d",
+      "front_matter_sha256": "4140e09f8a98f681264c16bf4b4bfac80693225ea649da0ac633ed39c3195bf8",
+      "preserved_body_sha256": "4a2f40e9c3bd127cdc2c510ffa4c4deb7a58d07aa03ace7dbec950e1fe394113",
+      "bytes_before": 1550,
+      "bytes_after": 2986,
+      "front_matter_preserved": true,
+      "original_body_preserved": true,
+      "publisher_repository": "szl-holdings/szl-atelier",
+      "publisher_workflow": ".github/workflows/hf-space.yml",
+      "publisher_entrypoint": "frontier/atelier_v3/publish_space.py",
+      "publisher_readme_mapping": "frontier/atelier_v3/PUBLICATION.json maps SPACE_README.md to README.md. build_publication.py copies all nine controlled source files and generates SOURCE_REVISION and PUBLICATION_RECEIPT.json for the existing publish_space.py writer.",
+      "publication_trigger": "Existing workflow_run after successful ci for a main push, with exact tested/current-main checks; existing workflow_dispatch retains its exact confirmation. No event is dispatched by this preparation.",
+      "publication_state_at_preparation": "SOURCE_CANDIDATE_ONLY_NO_HUB_EVENT_BY_THIS_LANE",
+      "publication_boundary": "The existing fixed-target publisher retains exact current-source checks, Hub parent-commit protection, immutable package/file readback, runtime convergence and application source probes. This card change does not invoke the writer or alter any model-card route, runtime code, catalog, frozen artifact or qualification label.",
+      "writer_or_workflow_changed": false,
+      "runtime_or_artifact_code_changed": false,
+      "central_apply_allowed": false,
+      "publisher_workflow_source_url": "https://github.com/szl-holdings/szl-atelier/blob/f9c1edb264ceec21f73b837757c1ca6318957c0b/.github/workflows/hf-space.yml"
+    }
+  ]
+}
