@@ -9,6 +9,30 @@ tags:
   - synthetic
 ---
 
+<!-- SZL-CARD-PRESENTATION:v1 -->
+<p><a href="https://huggingface.co/spaces/SZLHOLDINGS/szl-command-lab"><img src="https://raw.githubusercontent.com/szl-holdings/.github/main/profile/assets/szl/logos/szl_mark_holographic.svg" alt="SZL Holdings" width="112" /></a></p>
+
+# ReceiptAgent-Nano
+
+A four-feature NumPy silhouette for inspecting four-way policy decisions and escalation.
+
+**Artifact:** Atelier NumPy fixture archive · **Stage:** Software / synthetic reference
+
+[Explore in Command Lab](https://huggingface.co/spaces/SZLHOLDINGS/szl-command-lab) · [Build](https://github.com/szl-holdings/szl-atelier) · [Evidence](https://github.com/szl-holdings/szl-atelier/blob/cfcd7c3eda58f1b4aef2fbdb02a525d04522ade1/cards/ReceiptAgent-Nano.md)
+
+## Before you use it
+
+- This Atelier 4→10→4 silhouette differs from Khipu's 24-feature archive. Confirm the exact labels, array schema, loader, and revision.
+- The learned head is advisory; deterministic rule_check remains the authority for admission.
+- Historical comparisons and synthetic results in the preserved description do not establish a refusal guarantee, a retry policy, or 1.5B model qualification.
+
+<details>
+<summary>Technical details and evidence</summary>
+
+The original Atelier description is preserved below as historical source. Its architecture, comparison, measurement, and signing language does not qualify another archive or establish a new result.
+
+<!-- SZL-CARD-TECHNICAL:v1:START -->
+
 # ReceiptAgent-Nano
 
 ALLOW · DENY · ABSTAIN · ESCALATE. Escalation is a class, not a retry loop.
@@ -54,3 +78,7 @@ Fail-closed unit tests for the 4-way gate.
 Doctrine v11 LOCKED · 749 declarations · 14 axioms · 163 sorries · locked-proven 8.
 
 Apache-2.0. Copyright 2026 SZL Holdings · Stephen P. Lutar Jr. · ORCID [0009-0001-0110-4173](https://orcid.org/0009-0001-0110-4173).
+
+<!-- SZL-CARD-TECHNICAL:v1:END -->
+
+</details>
