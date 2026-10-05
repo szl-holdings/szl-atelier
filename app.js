@@ -130,8 +130,8 @@ function renderWalk() {
     <section class="row" style="justify-content:space-between;align-items:flex-end">
       <div>
         <p class="kicker">SZL Holdings · Hugging Face</p>
-        <h1 class="hero">Forty models. Walk them.</h1>
-        <p class="lede">${n} Hub ids. ${playable} playable here. Silhouette from Anthropic, NVIDIA, Unsloth — cut is original SZL.</p>
+        <h1 class="hero">${n} curated records. Walk them.</h1>
+        <p class="lede">${n} curated records. ${playable} playable here. Silhouette from Anthropic, NVIDIA, Unsloth — cut is original SZL.</p>
       </div>
       <div class="row">
         <a class="chip mute" href="#/grid">Grid</a>
@@ -285,7 +285,7 @@ function renderGrid() {
     groups.set(m.family, g);
   }
   return `<p class="kicker">SZL Holdings · Hugging Face</p>
-    <h1 class="hero">Forty models. Grid.</h1>
+    <h1 class="hero">${DATA.models.length} curated records. Grid.</h1>
     ${[...groups.entries()]
       .map(
         ([fam, list]) => `
@@ -342,9 +342,9 @@ function renderBench() {
 }
 
 function renderNew() {
-  return `<p class="kicker">Not Hub model ids</p>
+  return `<p class="kicker">Beyond the curated gallery</p>
     <h1 class="hero">A bunch of new ones</h1>
-    <p class="lede">The Hub still has forty model ids. Today’s new work is GitHub organs, datasets, and Spaces. Publishing the empty seat is honest. Inventing a forty-first checkpoint is not.</p>
+    <p class="lede">This gallery contains ${DATA.models.length} curated records. The <a href="https://huggingface.co/SZLHOLDINGS" target="_blank" rel="noreferrer">public Hub inventory</a> is tracked separately. Explore GitHub repositories, datasets, and Spaces below.</p>
     <div class="grid two" style="margin-top:2rem">
       ${DATA.estate
         .map(
