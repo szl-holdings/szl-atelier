@@ -24,6 +24,19 @@ datasets: [SZLHOLDINGS/szl-lake]
 
 # SZL Atelier
 
+<!-- szl:header v1 -->
+<!-- Native identity: szl-brand@4309f6fce89179331b0b3ed8c99494e76c5be256; Orbit v2 icon. -->
+<p>
+  <a href="https://github.com/szl-holdings">
+    <img src="https://raw.githubusercontent.com/szl-holdings/szl-brand/4309f6fce89179331b0b3ed8c99494e76c5be256/kit/logos/orbit-v2/suite/szl-icon-32.svg" alt="SZL Holdings — Orbit v2" width="32" height="32" />
+  </a>
+</p>
+
+**Control before action. Evidence after.**
+
+[Product](https://a-11-oy.com) · [Proof](https://a11oy.net) · [GitHub organization](https://github.com/szl-holdings)
+<!-- /szl:header -->
+
 This repository retains a legacy gallery of 40 curated records, GitHub-aligned Python, and browser kernel playgrounds. Its catalog is separate from the current [public SZLHOLDINGS Hub inventory](https://huggingface.co/SZLHOLDINGS).
 
 The active [SZLHOLDINGS/szl-atelier Space](https://huggingface.co/spaces/SZLHOLDINGS/szl-atelier) serves artifact discovery and evidence review from [`frontier/atelier_v3`](frontier/atelier_v3/README.md). Its [publication contract](frontier/atelier_v3/PUBLICATION.json) maps nine controlled files from that directory. The root gallery files documented below are outside that projection.
