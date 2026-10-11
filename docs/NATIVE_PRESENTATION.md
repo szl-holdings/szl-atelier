@@ -5,6 +5,13 @@ and `app.js`. The root gallery and `revival/` sources remain separate historical
 interfaces. The v3 `PUBLICATION.json` continues mapping the same nine source
 files; its publisher still owns generated source identity and delivery receipts.
 
+The HTML references the same `/styles.css` and `/app.js` routes with query
+versions equal to each file's SHA-256. Fresh HTML therefore requests its current
+asset versions instead of reusing the preceding cached URLs. The existing
+five-minute cache policy is unchanged; these query versions are source bindings,
+not a claim that historical asset bodies remain hosted. Recompute the two query
+values after changing either static file; the source tests reject stale values.
+
 ## Presentation and interaction
 
 The interface uses the approved native 32px Orbit icon, graphite and paper

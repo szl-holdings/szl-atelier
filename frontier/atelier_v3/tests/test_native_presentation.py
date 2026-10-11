@@ -7,6 +7,7 @@ import json
 import re
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parents[3]
 FRONT = ROOT / "frontier/atelier_v3"
@@ -49,3 +50,15 @@ def test_native_projection_needs_no_new_publication_slot_or_external_dependency(
     assert '<ul class="constellation"' in html
     assert '<noscript>' in html and 'href="/api/catalog"' in html
     assert 'href="/api/source"' in html
+
+
+def test_existing_asset_routes_are_versioned_by_the_exact_shipped_bytes():
+    html = (FRONT / "static/index.html").read_text()
+    for filename, attribute in (("styles.css", "href"), ("app.js", "src")):
+        urls = re.findall(rf'{attribute}="(/{re.escape(filename)}[^\"]*)"', html)
+        assert len(urls) == 1
+        url = urlsplit(urls[0])
+        assert url.path == f"/{filename}" and not url.netloc and not url.fragment
+        assert parse_qs(url.query) == {
+            "v": [hashlib.sha256((FRONT / "static" / filename).read_bytes()).hexdigest()]
+        }
