@@ -2,4 +2,4 @@
 -r frontier/atelier_v3/requirements-publish.txt
 httpx>=0.28.1,<1
 numpy>=2.5.4,<3
-pytest>=9.1.1,<10
+pytest>=9.2.0,<10
