@@ -66,3 +66,31 @@ def test_only_allowlisted_static_assets_are_served():
     assert client.get("/frontier-worker.js").status_code == 200
     assert client.get("/server.py").status_code == 404
     assert client.get("/.git/config").status_code == 404
+
+
+def test_frontier_receipt_rejects_ambiguous_json_numbers_and_keys():
+    ambiguous = (
+        '{"receipt":{"status":"PRODUCTION_PROVEN","status":"MEASURED_LOCAL","limitations":["bounded"]}}',
+        '{"receipt":{"status":"MEASURED_LOCAL","limitations":["bounded"],"metrics":{"score":NaN}}}',
+        '{"receipt":{"status":"MEASURED_LOCAL","limitations":["bounded"],"metrics":{"score":Infinity}}}',
+        '{"receipt":{"status":"MEASURED_LOCAL","limitations":["bounded"],"metrics":{"score":-Infinity}}}',
+        '{"receipt":{"status":"MEASURED_LOCAL","limitations":["bounded"],"metrics":{"score":1e999}}}',
+    )
+    for body in ambiguous:
+        response = client.post(
+            "/api/frontier/verify",
+            content=body,
+            headers={"content-type": "application/json"},
+        )
+        assert response.status_code == 400
+        assert response.json()["detail"] == "INVALID_JSON"
+
+
+def test_frontier_receipt_retains_finite_json_numbers():
+    response = client.post(
+        "/api/frontier/verify",
+        content='{"receipt":{"status":"MEASURED_LOCAL","limitations":["bounded"],"metrics":{"score":1e3}}}',
+        headers={"content-type": "application/json"},
+    )
+    assert response.status_code == 200
+    assert response.json()["verification_status"] == "VERIFIED_STRUCTURE"
