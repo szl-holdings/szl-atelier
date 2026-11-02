@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import platform
 from datetime import datetime, timezone
@@ -49,6 +50,35 @@ HASHED_ARTIFACTS = (
 )
 
 startup_errors: list[str] = []
+
+
+def _reject_duplicate_keys(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError("duplicate JSON object key")
+        value[key] = item
+    return value
+
+
+def _reject_non_finite(_value):
+    raise ValueError("non-finite JSON number")
+
+
+def _parse_finite_float(value):
+    number = float(value)
+    if not math.isfinite(number):
+        raise ValueError("non-finite JSON number")
+    return number
+
+
+def _strict_json(raw: bytes) -> Any:
+    return json.loads(
+        raw,
+        object_pairs_hook=_reject_duplicate_keys,
+        parse_constant=_reject_non_finite,
+        parse_float=_parse_finite_float,
+    )
 
 
 def load_json(name: str) -> Any:
@@ -228,8 +258,8 @@ async def verify_frontier_receipt(request: Request):
     if len(raw) > MAX_BODY_BYTES:
         raise HTTPException(status_code=413, detail="REQUEST_BODY_TOO_LARGE")
     try:
-        payload = json.loads(raw)
-    except (UnicodeDecodeError, JSONDecodeError):
+        payload = _strict_json(raw)
+    except (UnicodeDecodeError, ValueError):
         raise HTTPException(status_code=400, detail="INVALID_JSON") from None
 
     receipt = payload.get("receipt") if isinstance(payload, dict) else None
