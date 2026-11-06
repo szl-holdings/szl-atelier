@@ -78,7 +78,7 @@ class RecordingProvider:
     def space_info(self, *args, **kwargs):
         self.calls.append(("space_info", kwargs))
         self.callback("space_info")
-        return SimpleNamespace(sha=HUB if self.uploaded else PARENT)
+        return SimpleNamespace(sha=HUB if self.uploaded else PARENT, private=False)
 
     def list_repo_files(self, *args, **kwargs):
         self.calls.append(("list_repo_files", kwargs))

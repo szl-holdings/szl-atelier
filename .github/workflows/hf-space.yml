@@ -1,9 +1,13 @@
 name: hf-space
 
+# 2026-11-06: the automatic `workflow_run: [ci]` trigger is removed. The target
+# Space SZLHOLDINGS/szl-atelier is a Policy-FOLD Space (a11oy
+# publishing/space-fold-registry.json, destination https://a11oy.net/atelier/)
+# that was set private on 2026-11-04; every push-triggered publish since then
+# uploaded to a private Space and then timed out on the unauthenticated runtime
+# readback (20 min, BLOCKED). Manual, confirmation-gated dispatch remains until
+# the fold decision is final, mirroring the a11oy atelier-hub-publish writer.
 on:
-  workflow_run:
-    workflows: [ci]
-    types: [completed]
   workflow_dispatch:
     inputs:
       confirmation:
