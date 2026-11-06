@@ -1,0 +1,3 @@
+# Hash-locked install for .github/workflows/archive-revival-showcase-ci.yml (Python 3.12).
+#   uv pip compile --generate-hashes --python-version 3.12 requirements/ci/revival-test.in -o requirements/ci/revival-test.txt
+-r ../../requirements-revival-test.txt

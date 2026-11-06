@@ -16,6 +16,15 @@ SOURCE_REVISION="$(git rev-parse HEAD)" \
 
 Open `http://127.0.0.1:7860`.
 
+`requirements.txt` is a hash lock generated from `requirements.in` (the exact top-level pins), so pip installs it in hash-checking mode and both Dockerfiles pass `--require-hashes`. Edit `requirements.in`, then regenerate:
+
+```bash
+uv pip compile --generate-hashes --python-version 3.12 frontier/atelier_v3/requirements.in -o frontier/atelier_v3/requirements.txt
+uv pip compile --generate-hashes --python-version 3.12 requirements/ci/atelier-v3.in -o requirements/ci/atelier-v3.txt
+```
+
+The second lock is what `atelier-v3.yml` and `hf-space.yml` install; it is built on the first, so CI tests the versions the Space image ships. `tests/test_ci_lock_matches_space_lock.py` fails if the two locks drift apart, so regenerate both together.
+
 ## API
 
 | Route | Purpose |

@@ -27,6 +27,15 @@ Holdout 1.00 is SYNTHETIC (separable by design). Non-perfect holdout is MEASURED
 - `kernel_smoke.py` — fail-closed assertions.
 - `forge_nemo.py` — doctrine R1–R5 triage. NOT NVIDIA NeMo. NOT Nemotron.
 
+The first four smokes import `szl_khipu`, which is not on PyPI. Install it from its source repository (or put a checkout on `PYTHONPATH`), then run them from this directory:
+
+```bash
+python -m pip install "szl-khipu @ git+https://github.com/szl-holdings/szl-khipu"
+python yarqa_smoke.py && python maskmod_smoke.py && python ouroboros_smoke.py && python yuyay_smoke.py
+```
+
+`kernel_smoke.py` (self-contained) and `forge_nemo.py` (vendored `kernels/nemo_rules.py`) need only the standard library.
+
 ## `kernels/` — fail-closed organs (SOFTWARE, not SGD)
 
 Vendored from GitHub. These are the load path. Not Hub joblib. Not a 1.5B retrain.

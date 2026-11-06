@@ -9,9 +9,9 @@ WORKDIR /app
 
 RUN useradd --create-home --uid 1000 appuser
 
-COPY requirements.txt /app/requirements.txt
-RUN python -m pip install --upgrade pip \
-    && python -m pip install --requirement /app/requirements.txt
+# Hash-locked from requirements.txt by requirements/docker/runtime.in (see that file to regenerate).
+COPY requirements/docker/runtime.txt /tmp/runtime-requirements.txt
+RUN python -m pip install --require-hashes --requirement /tmp/runtime-requirements.txt
 
 COPY --chown=appuser:appuser . /app
 

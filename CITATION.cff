@@ -3,9 +3,8 @@ message: If you use this software, please cite it using the metadata from this f
 type: software
 title: szl-holdings/szl-atelier — SZL Atelier
 version: 0.1.0
-date-released: '2026-11-05'
 license: Apache-2.0
-url: https://huggingface.co/spaces/SZLHOLDINGS/szl-atelier
+url: https://github.com/szl-holdings/szl-atelier
 repository-code: https://github.com/szl-holdings/szl-atelier
 authors:
 - family-names: Lutar
@@ -21,7 +20,14 @@ keywords:
 - huggingface
 - spaces
 - model-cards
-identifiers:
-- type: doi
-  value: 10.5281/zenodo.19944926
-  description: Concept DOI for the canonical Ouroboros Thesis (always resolves to the latest version)
+references:
+- type: article
+  title: "Governed Post-Determinism: A Proof-Backed Substrate for Consequential AI"
+  authors:
+  - family-names: Lutar
+    given-names: Stephen P.
+    name-suffix: Jr.
+    orcid: https://orcid.org/0009-0001-0110-4173
+  year: 2026
+  doi: 10.5281/zenodo.19944926
+  notes: Concept DOI of the thesis series cited by the estate's doctrine labels (see szl-holdings/szl-papers). It identifies the thesis, not this software.
