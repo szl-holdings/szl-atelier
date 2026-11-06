@@ -430,7 +430,19 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
         exist_ok=True,
         token=token,
     )
-    before = api.space_info(TARGET, token=token, expand=["sha", "runtime", "sdk", "subdomain"])
+    before = api.space_info(
+        TARGET, token=token, expand=["sha", "runtime", "sdk", "subdomain", "private"]
+    )
+    if getattr(before, "private", None) is not False:
+        # A private Space cannot pass the unauthenticated runtime readback that
+        # closes this publication (hf.space answers 404 for private Spaces), so
+        # refuse before any provider mutation instead of burning the timeout.
+        raise PublishError(
+            f"target Space {TARGET} is private (visibility="
+            f"{getattr(before, 'private', 'UNAVAILABLE')}); exact runtime readback is "
+            "impossible and no upload was attempted. Restore public visibility or "
+            "retire this publisher per the estate fold registry."
+        )
     parent = getattr(before, "sha", None)
     if not isinstance(parent, str) or not SOURCE_RE.fullmatch(parent):
         raise PublishError("exact provider parent is unavailable; no upload attempted")
