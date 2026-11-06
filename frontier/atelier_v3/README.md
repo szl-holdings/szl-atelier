@@ -23,7 +23,7 @@ uv pip compile --generate-hashes --python-version 3.12 frontier/atelier_v3/requi
 uv pip compile --generate-hashes --python-version 3.12 requirements/ci/atelier-v3.in -o requirements/ci/atelier-v3.txt
 ```
 
-The second lock is what `atelier-v3.yml` and `hf-space.yml` install; it is built on the first, so CI tests the versions the Space image ships.
+The second lock is what `atelier-v3.yml` and `hf-space.yml` install; it is built on the first, so CI tests the versions the Space image ships. `tests/test_ci_lock_matches_space_lock.py` fails if the two locks drift apart, so regenerate both together.
 
 ## API
 
