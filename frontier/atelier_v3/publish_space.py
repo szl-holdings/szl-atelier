@@ -485,11 +485,14 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
 
 
 def terminal_error(message: str) -> str:
-    """Bound a failure reason for the public CI log; never echo credential-shaped text."""
-    bounded = message[:500]
-    if TOKEN_RE.search(bounded):
+    """Bound a failure reason for the public CI log; never echo credential-shaped text.
+
+    Scan the whole message before cutting it: a cut through a token leaves a
+    fragment too short for TOKEN_RE, which would then be printed.
+    """
+    if TOKEN_RE.search(message):
         return "credential-shaped material withheld from terminal output"
-    return bounded
+    return message[:500]
 
 
 def main() -> int:
@@ -505,17 +508,21 @@ def main() -> int:
     try:
         value = publish(args.source_sha, args.package, args.report, args.timeout_seconds)
     except Exception as exc:  # fail closed while preserving a secret-free terminal receipt
+        reason = str(exc)
         failure = {
             "schema": "szl.atelier-provider-readback/v1",
             "state": "BLOCKED",
             "source_sha": args.source_sha if SOURCE_RE.fullmatch(args.source_sha) else "INVALID",
             "target": TARGET,
             "error_type": type(exc).__name__,
-            "error": str(exc)[:500],
+            "error": reason[:500],
             "secrets_recorded": False,
         }
         failure["receipt_sha256"] = sha256(canonical_bytes(failure))
         try:
+            # safe_write scans only the cut reason, which can hide a token split by the cut.
+            if TOKEN_RE.search(reason):
+                raise PublishError("credential-shaped material reached publication report")
             safe_write(args.report, failure)
             report_state = "WRITTEN"
         except Exception:  # the terminal line below still states the bounded reason
@@ -523,7 +530,7 @@ def main() -> int:
         print(json.dumps({
             "status": "BLOCKED",
             "error_type": type(exc).__name__,
-            "error": terminal_error(str(exc)),
+            "error": terminal_error(reason),
             "report": report_state,
         }, sort_keys=True))
         return 2

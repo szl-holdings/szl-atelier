@@ -56,3 +56,15 @@ def test_credential_shaped_reason_is_withheld_and_never_persisted(monkeypatch, c
     assert terminal["report"] == "UNAVAILABLE"
     assert credential_shaped not in json.dumps(terminal)
     assert not report.exists()
+
+
+def test_credential_split_by_the_500_character_cut_is_withheld(monkeypatch, capsys, tmp_path: Path) -> None:
+    # The token starts at index 490, so the cut keeps "hf_" plus 7 characters: too short for
+    # TOKEN_RE. Scanning only the cut text would print and persist that fragment.
+    reason = "x" * 490 + "hf_" + "A" * 30
+    code, terminal, report = run_main(monkeypatch, capsys, tmp_path, publish_space.PublishError(reason))
+    assert code == 2
+    assert terminal["error"] == "credential-shaped material withheld from terminal output"
+    assert terminal["report"] == "UNAVAILABLE"
+    assert "hf_" not in json.dumps(terminal)
+    assert not report.exists()
