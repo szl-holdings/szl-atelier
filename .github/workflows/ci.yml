@@ -76,3 +76,42 @@ jobs:
           PY
       - name: Build Docker runtime
         run: docker build --tag "szl-atelier:${SOURCE_REVISION}" .
+      - name: Smoke the Docker runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The witness above runs on the runner's Python; this runs the image the
+          # Dockerfile ships and holds it to the readiness contract and to the
+          # interpreter RELEASE.json declares.
+          docker run --detach --name szl-atelier-smoke \
+            --publish 127.0.0.1:17861:7860 \
+            "szl-atelier:${SOURCE_REVISION}" >/dev/null
+          trap 'docker logs szl-atelier-smoke 2>&1 | tail -n 40 || true; docker rm --force szl-atelier-smoke >/dev/null 2>&1 || true' EXIT
+          python - <<'PY'
+          import json
+          import time
+          import urllib.error
+          import urllib.request
+
+          base = "http://127.0.0.1:17861"
+
+          def read(path):
+              with urllib.request.urlopen(base + path, timeout=5) as response:
+                  return json.load(response)
+
+          deadline = time.monotonic() + 120
+          while True:
+              try:
+                  ready = read("/readyz")
+                  break
+              except (urllib.error.URLError, ConnectionError, OSError):
+                  if time.monotonic() > deadline:
+                      raise SystemExit("Docker runtime never became ready on /readyz")
+                  time.sleep(2)
+          assert ready.get("status") == "ready" and ready.get("catalog_records") == 40, ready
+          build = read("/api/build-info")
+          declared = build["release"]["runtime_contract"]["language"]
+          served = "Python " + ".".join(build["python"].split(".")[:2])
+          assert declared == served, (declared, served)
+          print(f"Docker runtime smoke: PASS ({served}, {ready['catalog_records']} records)")
+          PY
