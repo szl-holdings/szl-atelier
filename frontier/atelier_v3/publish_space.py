@@ -484,6 +484,14 @@ def publish(source_sha: str, package: Path, report_path: Path, timeout_seconds: 
     return result
 
 
+def terminal_error(message: str) -> str:
+    """Bound a failure reason for the public CI log; never echo credential-shaped text."""
+    bounded = message[:500]
+    if TOKEN_RE.search(bounded):
+        return "credential-shaped material withheld from terminal output"
+    return bounded
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-sha", required=True)
@@ -509,9 +517,15 @@ def main() -> int:
         failure["receipt_sha256"] = sha256(canonical_bytes(failure))
         try:
             safe_write(args.report, failure)
-        except Exception:
-            pass
-        print(json.dumps({"status": "BLOCKED", "error_type": type(exc).__name__}, sort_keys=True))
+            report_state = "WRITTEN"
+        except Exception:  # the terminal line below still states the bounded reason
+            report_state = "UNAVAILABLE"
+        print(json.dumps({
+            "status": "BLOCKED",
+            "error_type": type(exc).__name__,
+            "error": terminal_error(str(exc)),
+            "report": report_state,
+        }, sort_keys=True))
         return 2
     print(json.dumps({
         "status": "PASS",
