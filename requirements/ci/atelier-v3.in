@@ -1,0 +1,5 @@
+# Hash-locked install for .github/workflows/atelier-v3.yml and hf-space.yml (Python 3.12).
+# Built on the Space's own lock so CI tests exactly the versions the Space image installs.
+#   uv pip compile --generate-hashes --python-version 3.12 requirements/ci/atelier-v3.in -o requirements/ci/atelier-v3.txt
+-r ../../frontier/atelier_v3/requirements.txt
+-r ../../frontier/atelier_v3/requirements-publish.txt

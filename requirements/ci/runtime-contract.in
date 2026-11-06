@@ -1,0 +1,3 @@
+# Hash-locked install for .github/workflows/ci.yml (runtime-contract job, Python 3.12).
+#   uv pip compile --generate-hashes --python-version 3.12 requirements/ci/runtime-contract.in -o requirements/ci/runtime-contract.txt
+-r ../../requirements-dev.txt

@@ -16,7 +16,13 @@ updates:
           - "*"
 
   - package-ecosystem: "pip"
-    directory: "/"
+    # "/" holds the human-edited ranges; the other three hold the hash locks that CI and the
+    # Dockerfiles install with --require-hashes (and the v3 Space pins), so their hashes stay current.
+    directories:
+      - "/"
+      - "/requirements/ci"
+      - "/requirements/docker"
+      - "/frontier/atelier_v3"
     schedule:
       interval: "weekly"
       day: "monday"
