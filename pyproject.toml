@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "szl-atelier"
+version = "0.1.0"
+description = "SZL Atelier — walk SZLHOLDINGS model cards. Public Space: SZLHOLDINGS/szl-atelier. Sibling of szl-forge, not a discarded hologram."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [{ name = "Stephen Lutar", email = "stephen@szlholdings.com" }]
+dependencies = ["fastapi>=0.162.0,<1", "uvicorn[standard]>=0.54.0,<1"]
+
+[project.urls]
+Homepage = "https://huggingface.co/spaces/SZLHOLDINGS/szl-atelier"
+Repository = "https://github.com/szl-holdings/szl-atelier"
+
+[tool.setuptools]
+py-modules = ["server"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = ["build", "dist", ".venv", "node_modules"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
