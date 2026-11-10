@@ -156,7 +156,7 @@ HUB = "b" * 40
 def provider_info(*, head=HUB, running=HUB, stage="RUNNING", sdk_object=False):
     raw = {"stage": stage, "sha": running}
     runtime = SimpleNamespace(stage=stage, raw=raw) if sdk_object else raw
-    return SimpleNamespace(sha=head, runtime=runtime, subdomain="szlholdings-szl-atelier")
+    return SimpleNamespace(sha=head, runtime=runtime, subdomain="szlholdings-szl-atelier", private=False)
 
 
 def short_runtime_window(monkeypatch) -> None:
@@ -283,3 +283,23 @@ def test_publish_binds_completion_to_uploaded_commit_and_package(monkeypatch, tm
     assert result["hub_content_commit"] == HUB
     assert result["package_receipt_file_sha256"] == measured["PUBLICATION_RECEIPT.json"]["sha256"]
     assert json.loads((tmp_path / "report.json").read_text()) == result
+
+
+@pytest.mark.parametrize("private", [True, None])
+def test_publish_refuses_private_target_before_any_mutation(monkeypatch, tmp_path: Path, private) -> None:
+    package = build_exact(tmp_path)
+    before = provider_info(head="c" * 40)
+    before.private = private
+    mutations = []
+    api = SimpleNamespace(
+        create_repo=lambda **_: None,
+        space_info=lambda *a, **k: before,
+        create_commit=lambda **kwargs: mutations.append(kwargs),
+        list_repo_files=lambda *a, **k: [],
+    )
+    monkeypatch.setenv("HF_TOKEN", "hf_" + "x" * 20)
+    monkeypatch.setattr(publish_space, "HfApi", lambda **_: api)
+    with pytest.raises(publish_space.PublishError, match="is private"):
+        publish_space.publish(SOURCE, package, tmp_path / "report.json", 60)
+    assert mutations == []
+    assert not (tmp_path / "report.json").exists()
