@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import http.client
 import json
 import os
 import re
@@ -170,7 +171,8 @@ def fetch_provider(kind: str, slug: str) -> ProviderResult:
                 payload=payload,
                 receipt_sha256=receipt(payload),
             )
-    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
+    except (urllib.error.HTTPError, urllib.error.URLError, http.client.HTTPException,
+            TimeoutError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
         public_error = f"{type(exc).__name__}: provider evidence unavailable"[:160]
         result = ProviderResult(
             state="UNAVAILABLE",
