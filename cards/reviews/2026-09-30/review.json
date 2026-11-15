@@ -102,7 +102,7 @@
       },
       "card": {
         "path": "cards/szl-blocked.md",
-        "sha256": "54981f47478e243f302772f97699ae2cd7565d23d73e95ae75e9a8df6d0ff76f"
+        "sha256": "3c30c1b64bbe1bb32f3031c8f2fb20dcaca2249748460a0099de7acebb345a47"
       },
       "baseline_provenance": {
         "path": "cards/reviews/2026-09-30/szl-blocked.MODEL_PROVENANCE.baseline.json",
@@ -195,7 +195,7 @@
       },
       "card": {
         "path": "cards/szl-provctl.md",
-        "sha256": "11971e13fdd4db2f092bf49b9929171b46ddb87b65430b399d0130ad8697e266"
+        "sha256": "9cb70ae97469bf33f5b8b1a8c591082fd3074b4b2bc3ff388172c9495463b54c"
       },
       "baseline_provenance": {
         "path": "cards/reviews/2026-09-30/szl-provctl.MODEL_PROVENANCE.baseline.json",
@@ -288,7 +288,7 @@
       },
       "card": {
         "path": "cards/szl-govsign.md",
-        "sha256": "cc0fbcbaceae44edf2e6beec1fc3481cfe3ac6f67c527454316e362d397bd116"
+        "sha256": "0b39a628890d2aad0d2f4da1f191fc4f653f9d984d43af9d2b85627113cac1b9"
       },
       "baseline_provenance": {
         "path": "cards/reviews/2026-09-30/szl-govsign.MODEL_PROVENANCE.baseline.json",
@@ -371,15 +371,15 @@
       },
       "card": {
         "path": "cards/szl-invariants.md",
-        "sha256": "507d3df2348f33159ef12de3f939550bd91fc7aa521fa12820b33ac23f718622"
+        "sha256": "71a56740d12d4b2d2f6e6c84e8b2f590282ce82396e6ac459a167d39b97b1850"
       },
       "baseline_provenance": {
         "path": "cards/reviews/2026-09-30/szl-invariants.MODEL_PROVENANCE.baseline.json",
-        "sha256": "61d363ab86cfb19410ecbebd4477e9cd235dfac3ee4bd49913fac2b41d0044dc"
+        "sha256": "c01473575194ef64b1d6ebfbee375f075288804362f45dfcf5b309b06d821e03"
       },
       "proposed_provenance": {
         "path": "cards/reviews/2026-09-30/szl-invariants.MODEL_PROVENANCE.proposed.json",
-        "sha256": "acdad7581fbd99471925fdb621a983716400eb7b07d4f2ff9a5a7006497d9bca"
+        "sha256": "cea4dac58912d096f8c2968db3580db4221267bdeaab297d2bb60827ea8fa504"
       },
       "protected_receipt": {
         "path_in_repo": "TRAINING_RECEIPT.json",
@@ -457,15 +457,15 @@
       },
       "card": {
         "path": "cards/szl-ouroboros.md",
-        "sha256": "c82cf445dc380e789e29b50b50ddb16d9e4ed5daa54574aff0a2379feebee60c"
+        "sha256": "07b6f9be61508ea44d0032ddcc39a127e55723cfa709fbb66b5a049b9fd465a6"
       },
       "baseline_provenance": {
         "path": "cards/reviews/2026-09-30/szl-ouroboros.MODEL_PROVENANCE.baseline.json",
-        "sha256": "21d6b40206b36821aa82c493f2f706fe2e2e4206841680194e23f5fc33b43786"
+        "sha256": "47cfa4e278d503ed76082f1dbf5b616a987f565d71724f85cd3aaf40e34aefb7"
       },
       "proposed_provenance": {
         "path": "cards/reviews/2026-09-30/szl-ouroboros.MODEL_PROVENANCE.proposed.json",
-        "sha256": "c5c34d1ae1826fbfa3de9f9272fd0e292bcade9d7bcbe8f7cffb929a8f14d740"
+        "sha256": "c3de470696becca6750af79f640a7b7ecb7f3189ad1d12189c95d1f69001614c"
       },
       "protected_receipt": {
         "path_in_repo": "TRAINING_RECEIPT.json",
@@ -546,15 +546,15 @@
       },
       "card": {
         "path": "cards/szl-formulas.md",
-        "sha256": "2ed3984ecfc15bc8e52be84c0c8348b4deca238c6a928edec3803e499c09622d"
+        "sha256": "a05b279919dfa376db66e2b6471bd5532274b90a4fbb3f55ad99406b667db9fe"
       },
       "baseline_provenance": {
         "path": "cards/reviews/2026-09-30/szl-formulas.MODEL_PROVENANCE.baseline.json",
-        "sha256": "9d556d9adb7c8e3347785b7d2e9664c61d190b0ede920c64cab8f4069aaf8682"
+        "sha256": "21facda77348076b8050d536d8babaa23d223f24a810a22fa1ee6872287feea1"
       },
       "proposed_provenance": {
         "path": "cards/reviews/2026-09-30/szl-formulas.MODEL_PROVENANCE.proposed.json",
-        "sha256": "a7d02aa15029e65565d717754de8cd82a5c566809adbb70f62a004c005ec9ac0"
+        "sha256": "487b78772dd9b2704e67f39dddaa2189fd10d447e23e0f02f88e023a023c8894"
       },
       "protected_receipt": {
         "path_in_repo": "TRAINING_RECEIPT.json",
