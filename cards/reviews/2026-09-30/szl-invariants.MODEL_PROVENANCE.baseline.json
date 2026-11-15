@@ -30,7 +30,7 @@
     "live_surface": "a11oy backbone /api/invariants (artifacts/api-server/src/routes/invariants.ts)",
     "chain_hashing": "artifacts/api-server/src/lib/runLedger.ts + receipts.ts (sha256 canonical, ed25519/SPKI keyId)",
     "lean_repo": "szl-holdings/lutar-lean",
-    "doi_lutar_lean": "10.5281/zenodo.20434308"
+    "doi_lutar_lean": "10.5281/zenodo.24239654"
   },
   "verification": {
     "tests": "14/14 passed",
