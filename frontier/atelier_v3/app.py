@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import http.client
 import json
+import math
 import os
 import re
 import threading
@@ -60,6 +61,26 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
         raise urllib.error.HTTPError(req.full_url, code, "redirect rejected", headers, fp)
+
+
+def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    value: dict[str, Any] = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError("duplicate provider JSON object key")
+        value[key] = item
+    return value
+
+
+def _reject_non_finite(_value: str) -> None:
+    raise ValueError("non-finite provider JSON number")
+
+
+def _parse_finite_float(value: str) -> float:
+    number = float(value)
+    if not math.isfinite(number):
+        raise ValueError("non-finite provider JSON number")
+    return number
 
 
 _cache_lock = threading.Lock()
@@ -159,7 +180,12 @@ def fetch_provider(kind: str, slug: str) -> ProviderResult:
             body = response.read(MAX_PROVIDER_BYTES + 1)
             if len(body) > MAX_PROVIDER_BYTES:
                 raise ValueError("provider response exceeded byte limit")
-            raw = json.loads(body.decode("utf-8"))
+            raw = json.loads(
+                body.decode("utf-8"),
+                object_pairs_hook=_reject_duplicate_keys,
+                parse_constant=_reject_non_finite,
+                parse_float=_parse_finite_float,
+            )
             if not isinstance(raw, dict):
                 raise ValueError("provider response was not an object")
             payload = normalize_provider(kind, slug, raw)
@@ -172,7 +198,7 @@ def fetch_provider(kind: str, slug: str) -> ProviderResult:
                 receipt_sha256=receipt(payload),
             )
     except (urllib.error.HTTPError, urllib.error.URLError, http.client.HTTPException,
-            TimeoutError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
+            TimeoutError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
         public_error = f"{type(exc).__name__}: provider evidence unavailable"[:160]
         result = ProviderResult(
             state="UNAVAILABLE",
