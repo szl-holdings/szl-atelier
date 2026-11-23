@@ -67,7 +67,7 @@ def test_interrupted_provider_is_unavailable(monkeypatch, wire, error_name):
     b'{"id":"SZLHOLDINGS/a11oy","gated":Infinity}',
     b'{"id":"SZLHOLDINGS/a11oy","gated":1e9999}',
     b'{"id":"SZLHOLDINGS/a11oy","sha":"bad","sha":"good"}',
-    b'{"id":"SZLHOLDINGS/a11oy","sha":"\ud800"}',
+    b'{"id":"SZLHOLDINGS/a11oy","sha":"\\ud800"}',
 ])
 def test_invalid_provider_json_refuses_measurement(monkeypatch, body):
     wire = b"HTTP/1.1 200 OK\r\nContent-Length: " + str(len(body)).encode() + b"\r\n\r\n" + body
