@@ -62,6 +62,24 @@ def test_interrupted_provider_is_unavailable(monkeypatch, wire, error_name):
     assert digest == module.receipt(value)
 
 
+@pytest.mark.parametrize("body", [
+    b'{"id":"SZLHOLDINGS/a11oy","gated":NaN}',
+    b'{"id":"SZLHOLDINGS/a11oy","gated":Infinity}',
+    b'{"id":"SZLHOLDINGS/a11oy","gated":1e9999}',
+    b'{"id":"SZLHOLDINGS/a11oy","sha":"bad","sha":"good"}',
+    b'{"id":"SZLHOLDINGS/a11oy","sha":"\\ud800"}',
+])
+def test_invalid_provider_json_refuses_measurement(monkeypatch, body):
+    wire = b"HTTP/1.1 200 OK\r\nContent-Length: " + str(len(body)).encode() + b"\r\n\r\n" + body
+    monkeypatch.setattr(module, "_cache", {})
+    monkeypatch.setattr(module.urllib.request, "build_opener", lambda *_: WireOpener(wire))
+    result = module.fetch_provider("space", "SZLHOLDINGS/a11oy")
+    assert result.state == "UNAVAILABLE"
+    assert result.payload is None
+    assert result.error is not None
+    assert "provider evidence unavailable" in result.error
+
+
 def test_complete_provider_response_remains_measured(monkeypatch):
     body = json.dumps({"id": "SZLHOLDINGS/a11oy", "sha": "a" * 40}).encode()
     wire = b"HTTP/1.1 200 OK\r\nContent-Length: " + str(len(body)).encode() + b"\r\n\r\n" + body
